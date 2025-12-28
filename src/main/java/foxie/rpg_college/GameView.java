@@ -30,7 +30,11 @@ public class GameView extends Canvas {
 
   public synchronized void runRenderCode(Consumer<Graphics2D> code) {
     Graphics2D g = this.backBuffer.createGraphics();
-    code.accept(g);
+    try {
+      code.accept(g);
+    } finally {
+      g.dispose();
+    }
 
     synchronized (this.swapBufferLock) {
       BufferedImage tmp = this.backBuffer;
