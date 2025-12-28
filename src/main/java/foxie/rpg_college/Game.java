@@ -1,8 +1,8 @@
 package foxie.rpg_college;
 
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
@@ -15,7 +15,7 @@ public class Game implements AutoCloseable {
   private boolean isRunning = false;
   private boolean isClosed = false;
 
-  private final Window window;
+  private final Frame window;
   private final BufferStrategy windowBufferStrategy;
 
   private World currentWorld = new World(this);
@@ -26,10 +26,11 @@ public class Game implements AutoCloseable {
   public static final int REFRESH_RATE = 30;
 
   public Game() {
-    this.window = new Window(null);
+    this.window = new Frame();
     this.window.setSize(this.getOutputWidth(), this.getOutputHeight());
-    this.window.setVisible(true);
     this.window.setFocusable(true);
+    this.window.setUndecorated(false);
+    this.window.setVisible(true);
 
     @SuppressWarnings("resource")
     final Game game = this;
