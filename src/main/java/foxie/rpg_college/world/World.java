@@ -55,10 +55,10 @@ public class World {
 
   private void drawBackground(Graphics2D g) {
     FloatRectangle visible = this.game.getCamera().getVisibleWorld();
-    Vec2 coord = visible.getTopLeftCorner();
+    Vec2 coord = visible.getTopLeftCorner().add(this.backgroundImageSize.mul(0.5f));
     Vec2 visibleSize = visible.getSize();
 
-    Vec2 imageCoord = coord.add(this.backgroundImageSize.mul(0.5f));
+    System.out.println("Visible world (" + coord.x() + ", " + coord.y() + ") sized (" + visibleSize.x() + ", " + visibleSize.y() + ")");
 
     // Image might be not ready, but lets ignore
     g.drawImage(
@@ -67,8 +67,8 @@ public class World {
       0, 0,
       (int) visibleSize.x(), (int) visibleSize.y(),
       // Source coords
-      (int) imageCoord.x(), (int) imageCoord.y(),
-      (int) visibleSize.x() + (int) imageCoord.x(), (int) visibleSize.y() + (int) imageCoord.y(),
+      (int) coord.x(), (int) coord.y(),
+      (int) visibleSize.x() + (int) coord.x(), (int) visibleSize.y() + (int) coord.y(),
       null
     );
   }

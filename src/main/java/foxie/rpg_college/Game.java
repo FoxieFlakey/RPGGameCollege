@@ -26,6 +26,7 @@ public class Game {
   private final Camera camera = new Camera(this.currentWorld.getWorldBound(), new Vec2(1280.0f, 720.0f));
 
   public static final int TICK_RATE = 20;
+  public static final int REFRESH_RATE = 30;
 
   // This has to be called from within Java's swing thread
   public Game() {
@@ -98,6 +99,7 @@ public class Game {
     return this.camera;
   }
 
+  private boolean positive = true;
   public void run() {
     if (!SwingUtilities.isEventDispatchThread()) {
       throw new RuntimeException("Attempting to run Game from wrong thread");
@@ -107,8 +109,28 @@ public class Game {
       throw new IllegalStateException("Game already running");
     }
     this.isRunning = true;
+    
+    // Want to regularly repaints the game's output
+    Timer renderTimer = new Timer(1000 / REFRESH_RATE, (e) -> {
+      this.gameView.repaint();
+    });
+    renderTimer.start();
 
     Timer timer = new Timer(1000 / TICK_RATE, (e) -> {
+      Vec2 newPos = this.camera.getPosition();
+      if (positive) {
+        newPos = newPos.add(new Vec2(20.0f, 0.0f));
+      } else {
+        newPos = newPos.add(new Vec2(-20.0f, 0.0f));
+      }
+
+      if (newPos.x() > 200.0) {
+        this.positive = false;
+      } else if (newPos.x() < -200.0) {
+        this.positive = true;
+      }
+      this.camera.setPosition(newPos);
+
       this.tick();
     });
     timer.start();

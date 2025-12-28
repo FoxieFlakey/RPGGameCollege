@@ -48,4 +48,8 @@ public class Camera {
   public void setPosition(Vec2 newPos) {
     this.pos = this.possiblePosition.clampCoordinate(newPos);
   }
+
+  public Vec2 getPosition() {
+    return this.pos;
+  }
 }
