@@ -9,15 +9,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import foxie.rpg_college.world.World;
 
 public class Game {
   private final JFrame window;
   private final GameView gameView;
-  private boolean isRunning = false;
+  private boolean isRendering = false;
 
   private final JPanel gamePanel;
   private final JPanel actionPanel;
@@ -28,12 +26,7 @@ public class Game {
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
 
-  // This has to be called from within Java's swing thread
   public Game() {
-    if (!SwingUtilities.isEventDispatchThread()) {
-      throw new RuntimeException("Attempting to construct Game from wrong thread");
-    }
-
     /**
      * The hierrarchy of the window is
      * root
@@ -44,7 +37,7 @@ public class Game {
      *     -> Game control (controls for the game, like attack, defense, etc)
      */
 
-    this.gameView = new GameView(this);
+    this.gameView = new GameView(1280, 720);
 
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -69,9 +62,10 @@ public class Game {
     this.gamePanel.setLayout(new BoxLayout(this.gamePanel, BoxLayout.Y_AXIS));
     this.gamePanel.add(this.gameView);
     
-    this.gameView.setMinimumSize(new Dimension(1280, 720));
-    this.gameView.setPreferredSize(new Dimension(1280, 720));
-    this.gameView.setMaximumSize(new Dimension(1280, 720));
+    Dimension gameViewDimension = new Dimension(this.gameView.getViewWidth(), this.gameView.getViewHeight());
+    this.gameView.setMinimumSize(gameViewDimension);
+    this.gameView.setPreferredSize(gameViewDimension);
+    this.gameView.setMaximumSize(gameViewDimension);
     
     this.camera.setPosition(new Vec2(0.0f, 0.0f));
 
@@ -100,40 +94,31 @@ public class Game {
   }
 
   private boolean positive = true;
-  public void run() {
-    if (!SwingUtilities.isEventDispatchThread()) {
-      throw new RuntimeException("Attempting to run Game from wrong thread");
+  public void render() {
+    if (this.isRendering) {
+      throw new IllegalStateException("Cannot render inside another render");
+    }
+    this.isRendering = true;
+
+    Vec2 newPos = this.camera.getPosition();
+    if (positive) {
+      newPos = newPos.add(new Vec2(20.0f, 0.0f));
+    } else {
+      newPos = newPos.add(new Vec2(-20.0f, 0.0f));
     }
 
-    if (this.isRunning) {
-      throw new IllegalStateException("Game already running");
+    if (newPos.x() > 200.0) {
+      this.positive = false;
+    } else if (newPos.x() < -200.0) {
+      this.positive = true;
     }
-    this.isRunning = true;
-    
-    // Want to regularly repaints the game's output
-    Timer renderTimer = new Timer(1000 / REFRESH_RATE, (e) -> {
-      this.gameView.repaint();
+    this.camera.setPosition(newPos);
+
+    this.gameView.runRenderCode((g) -> {
+      this.currentWorld.render(g);
     });
-    renderTimer.start();
 
-    Timer timer = new Timer(1000 / TICK_RATE, (e) -> {
-      Vec2 newPos = this.camera.getPosition();
-      if (positive) {
-        newPos = newPos.add(new Vec2(20.0f, 0.0f));
-      } else {
-        newPos = newPos.add(new Vec2(-20.0f, 0.0f));
-      }
-
-      if (newPos.x() > 200.0) {
-        this.positive = false;
-      } else if (newPos.x() < -200.0) {
-        this.positive = true;
-      }
-      this.camera.setPosition(newPos);
-
-      this.tick();
-    });
-    timer.start();
+    this.isRendering = false;
   }
 
   void tick() {

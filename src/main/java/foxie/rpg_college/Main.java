@@ -10,14 +10,16 @@ import javax.swing.SwingUtilities;
 public class Main {
   public static void main(String[] args) {
     System.out.println("Hello World!");
-    try {
-      SwingUtilities.invokeAndWait(() -> {
-        new Game().run();
-      });
-    } catch (InvocationTargetException e) {
-      System.err.println("Error running game: ");
-      e.printStackTrace();
-    } catch (InterruptedException _) {
+    Game game = new Game();
+
+    while (true) {
+      game.render();
+
+      try {
+        Thread.sleep(1000 / 60);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 }

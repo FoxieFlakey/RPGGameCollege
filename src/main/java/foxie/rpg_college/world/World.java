@@ -1,7 +1,6 @@
 package foxie.rpg_college.world;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -73,11 +72,7 @@ public class World {
     );
   }
 
-  public void render(Graphics graphics) {
-    if (!(graphics instanceof Graphics2D)) {
-      throw new RuntimeException("Cannot render to non Graphics2D target");
-    }
-    Graphics2D g = (Graphics2D) graphics;
+  public void render(Graphics2D g) {
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
