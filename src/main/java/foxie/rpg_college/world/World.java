@@ -57,8 +57,6 @@ public class World {
     Vec2 coord = visible.getTopLeftCorner().add(this.backgroundImageSize.mul(0.5f));
     Vec2 visibleSize = visible.getSize();
 
-    System.out.println("Visible world (" + coord.x() + ", " + coord.y() + ") sized (" + visibleSize.x() + ", " + visibleSize.y() + ")");
-
     // Image might be not ready, but lets ignore
     g.drawImage(
       this.backgroundImage,
