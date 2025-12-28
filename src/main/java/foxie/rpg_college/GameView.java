@@ -5,6 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class GameView extends Canvas {
+  private final Game game;
+
+  public GameView(Game game) {
+    this.game = game;
+  }
+
   @Override
   public void paint(Graphics g) {
     int width = this.getWidth();
@@ -15,7 +21,6 @@ public class GameView extends Canvas {
     g.setColor(Color.GRAY);
     g.fillRect(0, 0, width, height);
 
-    g.setColor(Color.PINK);
-    g.drawRect(10, 10, width - 20, height - 20);
+    this.game.getCurrentWorld().render(g);;
   }
 }

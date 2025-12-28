@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import foxie.rpg_college.world.World;
+
 public class Game {
   private final JFrame window;
   private final GameView gameView;
@@ -19,6 +21,9 @@ public class Game {
 
   private final JPanel gamePanel;
   private final JPanel actionPanel;
+
+  private World currentWorld = new World(this);
+  private final Camera camera = new Camera(this.currentWorld.getWorldBound(), new Vec2(1280.0f, 720.0f));
 
   public static final int TICK_RATE = 20;
 
@@ -38,7 +43,7 @@ public class Game {
      *     -> Game control (controls for the game, like attack, defense, etc)
      */
 
-    this.gameView = new GameView();
+    this.gameView = new GameView(this);
 
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
@@ -67,6 +72,8 @@ public class Game {
     this.gameView.setPreferredSize(new Dimension(1280, 720));
     this.gameView.setMaximumSize(new Dimension(1280, 720));
     
+    this.camera.setPosition(new Vec2(0.0f, 0.0f));
+
     this.actionPanel.setLayout(new FlowLayout());
     this.actionPanel.setMinimumSize(new Dimension(0, 100));
     this.actionPanel.setPreferredSize(new Dimension(0, 100));
@@ -81,6 +88,14 @@ public class Game {
     this.actionPanel.add(button);
     
     this.gamePanel.add(this.actionPanel);
+  }
+
+  public World getCurrentWorld() {
+    return this.currentWorld;
+  }
+
+  public Camera getCamera() {
+    return this.camera;
   }
 
   public void run() {
