@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
@@ -21,6 +22,8 @@ public class Game implements AutoCloseable {
   private World currentWorld = new World(this);
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
   private final Camera camera = new Camera(this.currentWorld.getWorldBound(), new Vec2(1280.0f, 720.0f));
+
+  public final Mouse mouseState;
 
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
@@ -41,6 +44,8 @@ public class Game implements AutoCloseable {
         game.isClosed = true;
       }
     });
+
+    this.mouseState = new Mouse(this.window);
 
     this.window.createBufferStrategy(2);
     this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
@@ -83,10 +88,19 @@ public class Game implements AutoCloseable {
     }
     this.isRunning = true;
 
+    this.mouseState.updateState();
+
+    this.handleInput();
     this.tick();
     this.render();
 
     this.isRunning = false;
+  }
+
+  void handleInput() {
+    if (this.mouseState.getButtonState(Mouse.Button.Left) == Mouse.State.Clicked) {
+      System.out.println("Left button clicked");
+    }
   }
 
   void render() {
