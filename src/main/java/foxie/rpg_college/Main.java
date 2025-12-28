@@ -1,9 +1,5 @@
 package foxie.rpg_college;
 
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.SwingUtilities;
-
 /**
  * Hello world!
  */
