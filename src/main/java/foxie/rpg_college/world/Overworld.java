@@ -108,9 +108,11 @@ public class Overworld extends World {
     g.fillRect(x, y, width, height);
 
     // Now the world itself
+    this.renderEntities(g, deltaTime);
   }
 
   @Override
   public void tick(float deltaTime) {
+    this.tickEntities(deltaTime);
   }
 }

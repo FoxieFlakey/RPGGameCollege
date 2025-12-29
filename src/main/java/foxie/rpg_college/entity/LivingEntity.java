@@ -1,13 +1,7 @@
 package foxie.rpg_college.entity;
 
-import foxie.rpg_college.world.World;
-
 public abstract class LivingEntity extends Entity {
   private float healthPoint;
-  
-  public LivingEntity(World world) {
-    super(world);
-  }
 
   public boolean isDead() {
     return this.healthPoint < 0.0f;

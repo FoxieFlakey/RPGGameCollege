@@ -23,7 +23,8 @@ public class Game implements AutoCloseable {
   private final BufferStrategy windowBufferStrategy;
 
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
-  private final Player player = new Player(new Overworld(this), new Vec2(1280.0f, 720.0f));
+  private final Overworld overworld = new Overworld(this);
+  private final Player player = new Player(overworld, new Vec2(1280.0f, 720.0f));
 
   private float lastRenderTime = Util.getTime();
 
@@ -55,6 +56,8 @@ public class Game implements AutoCloseable {
 
     this.window.createBufferStrategy(2);
     this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
+
+    this.overworld.addEntity(this.player);
   }
 
   @Override
@@ -119,7 +122,6 @@ public class Game implements AutoCloseable {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
       this.player.getWorld().render(g, deltaTime);
-      this.player.render(g, deltaTime);
     } finally {
       g.dispose();
     }
@@ -142,7 +144,6 @@ public class Game implements AutoCloseable {
 
   void tick(float deltaTime) {
     // Tick the world and stuffs :3
-    this.player.tick(deltaTime);
     this.player.getWorld().tick(deltaTime);
   }
 }

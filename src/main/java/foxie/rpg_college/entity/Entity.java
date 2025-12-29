@@ -1,6 +1,7 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.concurrent.atomic.AtomicLong;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.Vec2;
@@ -11,10 +12,23 @@ public abstract class Entity {
   // of the entity
 
   private Vec2 position = new Vec2(0.0f, 0.0f);
-  private World currentWorld;
+  private World currentWorld = null;
+  
+  public final long id;
+  private static final AtomicLong ID_COUNTER = new AtomicLong(0);
 
-  public Entity(World world) {
-    this.currentWorld = world;
+  public Entity() {
+    this.id = Entity.ID_COUNTER.getAndUpdate(x -> {
+      if (x == Long.MAX_VALUE) {
+        return Long.MAX_VALUE;
+      } else {
+        return x + 1;
+      }
+    });
+
+    if (this.id == Long.MAX_VALUE) {
+      throw new RuntimeException("Counter for entity ID overflowed!");
+    }
   }
 
   public Vec2 getPos() {
@@ -29,6 +43,8 @@ public abstract class Entity {
     return this.currentWorld;
   }
 
+  // Be careful, THIS DOES NOT add/remove
+  // itself from corresponding world
   public void setWorld(World world) {
     this.currentWorld = world;
   }

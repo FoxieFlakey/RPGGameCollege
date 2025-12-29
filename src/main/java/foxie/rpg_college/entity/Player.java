@@ -19,7 +19,6 @@ public class Player extends LivingEntity {
   public final Camera camera;
 
   public Player(World world, Vec2 viewSize) {
-    super(world);
     this.camera = new Camera(world.getWorldBound(), viewSize);
   }
 
