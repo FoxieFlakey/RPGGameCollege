@@ -96,26 +96,26 @@ public class Game implements AutoCloseable {
     this.mouseState.updateState();
     this.keyboardState.updateState();
 
-    this.handleInput();
-    this.tick();
-    this.render();
+
+    float now = Util.getTime();
+    float deltaTime = now - this.lastRenderTime;
+    this.lastRenderTime = now;
+
+    this.handleInput(deltaTime);
+    this.tick(deltaTime);
+    this.render(deltaTime);
 
     this.isRunning = false;
   }
 
-  void handleInput() {
+  void handleInput(float deltaTime) {
     if (this.mouseState.getButtonState(Mouse.Button.Left) == Mouse.State.Clicked) {
       System.out.println("Left button clicked");
     }
+    this.player.handleInput(deltaTime);
   }
 
-  void render() {
-    float now = Util.getTime();
-    float deltaTime = now - this.lastRenderTime;
-    this.lastRenderTime = now;
-    
-    this.player.handleInput(deltaTime);
-
+  void render(float deltaTime) {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
       this.currentWorld.render(g);
@@ -139,7 +139,8 @@ public class Game implements AutoCloseable {
     } while (this.windowBufferStrategy.contentsLost());
   }
 
-  void tick() {
+  void tick(float deltaTime) {
     // Tick the world and stuffs :3
+    this.player.tick(deltaTime);
   }
 }
