@@ -16,7 +16,7 @@ public class CollisionBox {
     // The 'pos' in this class is actually top left of the box not center
     Vec2 corrected = new Vec2(
       pos.x() - this.size.x() * 0.5f,
-      pos.y() + this.size.y() * 0.5f
+      pos.y() - this.size.y() * 0.5f
     );
     this.pos = corrected;
   }
@@ -25,7 +25,7 @@ public class CollisionBox {
     // The 'pos' in this class is actually top left of the box not center
     Vec2 corrected = new Vec2(
       this.pos.x() + this.size.x() * 0.5f,
-      this.pos.y() - this.size.y() * 0.5f
+      this.pos.y() + this.size.y() * 0.5f
     );
     return corrected;
   }
