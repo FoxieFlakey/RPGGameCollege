@@ -14,9 +14,38 @@ public abstract class World {
   private final FloatRectangle bound;
   private final HashMap<Long, Entity> entities = new HashMap<>();
 
+  private final CollisionBox[] worldBorder;
+  private final static float BORDER_DEPTH = 200000000.0f;
+  private final static float BORDER_INNER_DEPTH = 50.0f;
+
   public World(Game game, FloatRectangle bound) {
     this.game = game;
     this.bound = bound;
+
+    float left = this.bound.getTopLeftCorner().x();
+    float right = this.bound.getBottomRightCorner().x();
+    float top = this.bound.getTopLeftCorner().y();
+    float bottom = this.bound.getBottomRightCorner().y();
+
+    float width = this.bound.getSize().x();
+    float height = this.bound.getSize().y();
+
+    Vec2 center = new Vec2(
+      (left + right) * 0.5f,
+      (top + bottom) * 0.5f
+    );
+    
+    this.worldBorder = new CollisionBox[] {
+      // The top part of world
+      new CollisionBox(new Vec2(center.x(), top - World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f)),
+      // The bottom part of world
+      new CollisionBox(new Vec2(center.x(), bottom + World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f)),
+
+      // Left part of world
+      new CollisionBox(new Vec2(left - World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f)),
+      // Right part of world
+      new CollisionBox(new Vec2(right + World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f))
+    };
   }
 
   public final Game getGame() {
@@ -72,6 +101,13 @@ public abstract class World {
 
           CollisionBox otherBox = other.getCollisionBox().get();
           
+          if (thisBox.checkCollisionAndFix(otherBox)) {
+            e.onCollision();
+          }
+        }
+        
+        // Check collision against world border
+        for (CollisionBox otherBox : this.worldBorder) {
           if (thisBox.checkCollisionAndFix(otherBox)) {
             e.onCollision();
           }

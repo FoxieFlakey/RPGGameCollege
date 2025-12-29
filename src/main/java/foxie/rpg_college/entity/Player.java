@@ -29,6 +29,13 @@ public class Player extends LivingEntity {
     
     Vec2 translation = new Vec2(0.0f, 0.0f);
     float moveSpeed = 100.0f; // 20 pixels per second
+    if (keyboard.getState(Button.Control).isNowPressed()) {
+      moveSpeed *= 3.0f;
+    }
+
+    if (keyboard.getState(Button.P) == Keyboard.State.Clicked) {
+      System.out.println("Coord: " + this.getPos().x() + ", " + this.getPos().y());
+    }
 
     if (keyboard.getState(Button.W).isNowPressed()) {
       translation = translation.add(new Vec2(0.0f, -moveSpeed * deltaTime));

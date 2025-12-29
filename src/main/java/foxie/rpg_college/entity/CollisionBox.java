@@ -31,6 +31,7 @@ public class CollisionBox {
   }
 
   // Returns true if collision is fixed a.k.a there was collision
+  // this only fixes current box's position. Not touching other
   public boolean checkCollisionAndFix(CollisionBox other) {
     if (!this.isCollided(other)) {
       return false;
