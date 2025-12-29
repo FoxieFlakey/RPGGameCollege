@@ -10,7 +10,7 @@ public abstract class Entity {
   // Position would be, at center of hitbox/collisionbox
   // of the entity
 
-  private Vec2 position;
+  private Vec2 position = new Vec2(0.0f, 0.0f);
   private World currentWorld;
 
   public Entity(World world) {
