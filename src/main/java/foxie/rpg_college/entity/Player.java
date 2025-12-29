@@ -46,7 +46,8 @@ public class Player extends LivingEntity {
       translation = translation.add(new Vec2(moveSpeed * deltaTime, 0.0f));
     }
 
-    this.setPos(this.camera.getPosition().add(translation));
+    this.setPos(this.getPos().add(translation));
+    this.camera.setPosition(this.getPos());
   }
 
   @Override
