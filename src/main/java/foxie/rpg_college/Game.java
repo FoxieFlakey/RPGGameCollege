@@ -12,6 +12,7 @@ import java.util.Optional;
 import foxie.rpg_college.entity.Player;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
@@ -22,7 +23,7 @@ public class Game implements AutoCloseable {
   private final BufferStrategy windowBufferStrategy;
 
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
-  private final Player player = new Player(new World(this), new Vec2(1280.0f, 720.0f));
+  private final Player player = new Player(new Overworld(this), new Vec2(1280.0f, 720.0f));
 
   private float lastRenderTime = Util.getTime();
 
