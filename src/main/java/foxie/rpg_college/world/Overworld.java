@@ -13,6 +13,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.Cat;
 import foxie.rpg_college.entity.Wall;
 
 public class Overworld extends World {
@@ -54,7 +55,11 @@ public class Overworld extends World {
 
     wall = new Wall();
     this.addEntity(wall);
-    wall.setPos(new Vec2(20.0f, -200.0f));
+    wall.setPos(new Vec2(20.0f, -500.0f));
+
+    Cat cat = new Cat();
+    this.addEntity(cat);
+    cat.setPos(new Vec2(0.0f, 0.0f));
   }
 
   private void drawBackground(Graphics2D g) {
