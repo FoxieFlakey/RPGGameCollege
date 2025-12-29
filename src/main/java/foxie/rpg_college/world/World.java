@@ -1,7 +1,7 @@
 package foxie.rpg_college.world;
 
 import java.awt.Graphics2D;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
@@ -12,7 +12,7 @@ import foxie.rpg_college.entity.Entity;
 public abstract class World {
   private final Game game;
   private final FloatRectangle bound;
-  private final HashMap<Long, Entity> entities = new HashMap<>();
+  private final LinkedHashMap<Long, Entity> entities = new LinkedHashMap<>();
 
   private final CollisionBox[] worldBorder;
   private final static float BORDER_DEPTH = 200000000.0f;
@@ -77,45 +77,61 @@ public abstract class World {
     entity.setWorld(null);
   }
 
+  void checkCollisionInner(Entity e, Entity other, CollisionBox thisBox) {
+    if (other.getCollisionBox().isEmpty() || other == e) {
+      return;
+    }
+
+    if (other.canCollideWith(e) == false || e.canCollideWith(other) == false) {
+      // Prefer collision not happening if there conflicting
+      // answers
+      return;
+    }
+
+    CollisionBox otherBox = other.getCollisionBox().get();
+    
+    if (thisBox.checkCollisionAndFix(otherBox)) {
+      e.onCollision();
+    }
+  }
+
+  void checkCollision(Entity e) {
+    if (e.getCollisionBox().isEmpty()) {
+      return;
+    }
+
+    CollisionBox thisBox = e.getCollisionBox().get();
+    if (thisBox.isUnmoveable()) {
+      // Current entity cannot be moved by collision, skip
+      return;
+    }
+
+    // Try fix the collision with other entities
+    for (Entity other : this.entities.values()) {
+      checkCollisionInner(e, other, thisBox);
+    }
+
+    for (Entity other : this.entities.reversed().values()) {
+      checkCollisionInner(e, other, thisBox);
+    }
+    
+    // Check collision against world border
+    for (CollisionBox otherBox : this.worldBorder) {
+      if (thisBox.checkCollisionAndFix(otherBox)) {
+        e.onCollision();
+      }
+    }
+  }
+
   protected void tickEntities(float deltaTime) {
-    // Try resolve collision in 3 times
-    for (int i = 0; i < 3; i++) {
+    // Try resolve collision in 4 times (2 forward and 2 reverse iteration)
+    for (int i = 0; i < 2; i++) {
       for (Entity e : this.entities.values()) {
-        if (e.getCollisionBox().isEmpty()) {
-          continue;
-        }
+        checkCollision(e);
+      }
 
-        CollisionBox thisBox = e.getCollisionBox().get();
-        if (thisBox.isUnmoveable()) {
-          // Current entity cannot be moved by collision, skip
-          continue;
-        }
-
-        // Try fix the collision with other entities
-        for (Entity other : this.entities.values()) {
-          if (other.getCollisionBox().isEmpty() || other == e) {
-            continue;
-          }
-
-          if (other.canCollideWith(e) == false || e.canCollideWith(other) == false) {
-            // Prefer collision not happening if there conflicting
-            // answers
-            continue;
-          }
-
-          CollisionBox otherBox = other.getCollisionBox().get();
-          
-          if (thisBox.checkCollisionAndFix(otherBox)) {
-            e.onCollision();
-          }
-        }
-        
-        // Check collision against world border
-        for (CollisionBox otherBox : this.worldBorder) {
-          if (thisBox.checkCollisionAndFix(otherBox)) {
-            e.onCollision();
-          }
-        }
+      for (Entity e : this.entities.reversed().values()) {
+        checkCollision(e);
       }
     }
 
