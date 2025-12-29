@@ -21,9 +21,8 @@ public class Game implements AutoCloseable {
   private final Frame window;
   private final BufferStrategy windowBufferStrategy;
 
-  private World currentWorld = new World(this);
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
-  private final Player player = new Player(this.currentWorld, new Vec2(1280.0f, 720.0f));
+  private final Player player = new Player(new World(this), new Vec2(1280.0f, 720.0f));
 
   private float lastRenderTime = Util.getTime();
 
@@ -68,7 +67,7 @@ public class Game implements AutoCloseable {
   }
 
   public World getCurrentWorld() {
-    return this.currentWorld;
+    return this.player.getWorld();
   }
 
   public Camera getCamera() {
@@ -118,7 +117,8 @@ public class Game implements AutoCloseable {
   void render(float deltaTime) {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
-      this.currentWorld.render(g);
+      this.player.getWorld().render(g, deltaTime);
+      this.player.render(g, deltaTime);
     } finally {
       g.dispose();
     }
@@ -142,5 +142,6 @@ public class Game implements AutoCloseable {
   void tick(float deltaTime) {
     // Tick the world and stuffs :3
     this.player.tick(deltaTime);
+    this.player.getWorld().tick(deltaTime);
   }
 }

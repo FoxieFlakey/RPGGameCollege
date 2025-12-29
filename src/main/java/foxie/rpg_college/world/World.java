@@ -82,7 +82,7 @@ public class World {
     return this.game;
   }
 
-  public void render(Graphics2D g) {
+  public void render(Graphics2D g, float deltaTime) {
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
@@ -110,5 +110,9 @@ public class World {
     g.fillRect(x, y, width, height);
 
     // Now the world itself
+  }
+
+  public void tick(float deltaTime) {
+    
   }
 }
