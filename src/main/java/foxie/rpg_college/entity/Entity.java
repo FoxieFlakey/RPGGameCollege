@@ -1,6 +1,7 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import foxie.rpg_college.Camera;
@@ -37,6 +38,10 @@ public abstract class Entity {
 
   public void setPos(Vec2 pos) {
     this.position = this.currentWorld.validatePos(pos);
+
+    if (this.getCollisionBox().isPresent()) {
+      this.getCollisionBox().get().setPos(pos);
+    }
   }
 
   public final World getWorld() {
@@ -48,7 +53,17 @@ public abstract class Entity {
   public void setWorld(World world) {
     this.currentWorld = world;
   }
+  
+  public void onCollision() {
+    this.setPos(this.getCollisionBox().get().getPos());
+  }
+  
+  // This prefer 'false', so if there two entities
+  // one say true other say false, the result is false
+  // which mean no collision happens
+  public abstract boolean canCollideWith(Entity other);
 
+  public abstract Optional<CollisionBox> getCollisionBox();
   public abstract boolean isVisible(Camera cam);
   public abstract void render(Graphics2D g, float deltaTime);
   public abstract void tick(float deltaTime);

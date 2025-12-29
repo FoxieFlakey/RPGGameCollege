@@ -58,6 +58,7 @@ public class Game implements AutoCloseable {
     this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
 
     this.overworld.addEntity(this.player);
+    this.player.setPos(new Vec2(0.0f, 300.0f));
   }
 
   @Override

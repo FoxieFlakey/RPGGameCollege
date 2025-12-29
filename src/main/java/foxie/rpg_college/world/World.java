@@ -6,6 +6,7 @@ import java.util.HashMap;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.CollisionBox;
 import foxie.rpg_college.entity.Entity;
 
 public abstract class World {
@@ -48,6 +49,36 @@ public abstract class World {
   }
 
   protected void tickEntities(float deltaTime) {
+    // Try resolve collision in 3 times
+    for (int i = 0; i < 3; i++) {
+      for (Entity e : this.entities.values()) {
+        if (e.getCollisionBox().isEmpty()) {
+          continue;
+        }
+
+        CollisionBox thisBox = e.getCollisionBox().get();
+
+        // Try fix the collision with other entities
+        for (Entity other : this.entities.values()) {
+          if (other.getCollisionBox().isEmpty() || other == e) {
+            continue;
+          }
+
+          if (other.canCollideWith(e) == false || e.canCollideWith(other) == false) {
+            // Prefer collision not happening if there conflicting
+            // answers
+            continue;
+          }
+
+          CollisionBox otherBox = other.getCollisionBox().get();
+          
+          if (thisBox.checkCollisionAndFix(otherBox)) {
+            e.onCollision();
+          }
+        }
+      }
+    }
+
     for (Entity e : this.entities.values()) {
       e.tick(deltaTime);
     }

@@ -18,6 +18,18 @@ public record FloatRectangle(
     );
   }
 
+  public boolean isIntersects(FloatRectangle other) {
+    Vec2 thisTopLeft = this.getTopLeftCorner();
+    Vec2 thisBottomRight = this.getBottomRightCorner();
+    Vec2 otherTopLeft = other.getTopLeftCorner();
+    Vec2 otherBottomRight = other.getBottomRightCorner();
+
+    boolean noOverlapX = thisBottomRight.x() <= otherTopLeft.x() || otherBottomRight.x() <= thisTopLeft.x();
+    boolean noOverlapY = thisBottomRight.y() <= otherTopLeft.y() || otherBottomRight.y() <= thisTopLeft.y();
+
+    return !(noOverlapX || noOverlapY);
+  }
+
   // Check if this rectangle can fit another rectangle
   // sized width and height
   public boolean canFit(Vec2 size) {

@@ -2,6 +2,7 @@ package foxie.rpg_college.entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Optional;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
@@ -12,11 +13,12 @@ import foxie.rpg_college.world.World;
 
 public class Player extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
-    60.0f,
+    240.0f,
     120.0f
   );
 
   public final Camera camera;
+  private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Player.SIZE);
 
   public Player(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getWorldBound(), viewSize);
@@ -76,6 +78,10 @@ public class Player extends LivingEntity {
       width, height,
       5, 5
     );
+
+    g.setColor(Color.GREEN);
+    Vec2 posTransformed = this.getWorld().getGame().getCamera().translateWorldToAWTGraphicsCoord(this.getPos());
+    g.fillOval((int) posTransformed.x(), (int) posTransformed.y(), 10, 10);
   }
 
   @Override
@@ -93,5 +99,15 @@ public class Player extends LivingEntity {
   public void setWorld(World world) {
     super.setWorld(world);
     this.camera.setBound(world.getWorldBound());
+  }
+
+  @Override
+  public Optional<CollisionBox> getCollisionBox() {
+    return Optional.of(this.collisionBox);
+  }
+
+  @Override
+  public boolean canCollideWith(Entity other) {
+    return true;
   }
 }

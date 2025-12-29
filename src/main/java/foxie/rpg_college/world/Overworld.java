@@ -1,6 +1,5 @@
 package foxie.rpg_college.world;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -14,6 +13,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.Wall;
 
 public class Overworld extends World {
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
@@ -47,6 +47,14 @@ public class Overworld extends World {
     super(game, bound);
     this.backgroundImageSize = backgroundImageSize;
     this.backgroundImage = backgroundImage;
+
+    Wall wall = new Wall();
+    this.addEntity(wall);
+    wall.setPos(new Vec2(0.0f, 0.0f));
+
+    wall = new Wall();
+    this.addEntity(wall);
+    wall.setPos(new Vec2(20.0f, -200.0f));
   }
 
   private void drawBackground(Graphics2D g) {
@@ -79,34 +87,11 @@ public class Overworld extends World {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    Game game = this.getGame();
-
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 
     this.drawBackground(g);
-
-    FloatRectangle box = new FloatRectangle(
-      new Vec2(200.0f, 150.0f),
-      new Vec2(20.0f, 50.0f)
-    );
-
-    FloatRectangle boxInGraphics = new FloatRectangle(
-      game.getCamera().translateWorldToAWTGraphicsCoord(box.getTopLeftCorner()),
-      game.getCamera().translateWorldToAWTGraphicsCoord(box.getBottomRightCorner())
-    );
-
-    Vec2 boxPos = boxInGraphics.getTopLeftCorner();
-    Vec2 boxSize = boxInGraphics.getSize();
-
-    int x = (int) boxPos.x();
-    int y = (int) boxPos.y();
-    int width = (int) boxSize.x();
-    int height = (int) boxSize.y();
-
-    g.setColor(Color.PINK);
-    g.fillRect(x, y, width, height);
-
+  
     // Now the world itself
     this.renderEntities(g, deltaTime);
   }
