@@ -6,10 +6,15 @@ import foxie.rpg_college.Vec2;
 public class CollisionBox {
   private Vec2 pos;
   private Vec2 size;
+  private boolean isUnmoveable = false;
 
   public CollisionBox(Vec2 pos, Vec2 size) {
     this.size = size;
     this.setPos(pos);
+  }
+  public CollisionBox(Vec2 pos, Vec2 size, boolean isUnmoveable) {
+    this(pos, size);
+    this.isUnmoveable = isUnmoveable;
   }
 
   public void setPos(Vec2 pos) {
@@ -33,6 +38,10 @@ public class CollisionBox {
   // Returns true if collision is fixed a.k.a there was collision
   // this only fixes current box's position. Not touching other
   public boolean checkCollisionAndFix(CollisionBox other) {
+    if (this.isUnmoveable) {
+      throw new IllegalStateException("Attempt to fix position for unmoveable box");
+    }
+
     if (!this.isCollided(other)) {
       return false;
     }
@@ -81,5 +90,9 @@ public class CollisionBox {
     );
 
     return thisRect.isIntersects(otherRect);
+  }
+
+  public boolean isUnmoveable() {
+    return this.isUnmoveable;
   }
 }

@@ -86,6 +86,10 @@ public abstract class World {
         }
 
         CollisionBox thisBox = e.getCollisionBox().get();
+        if (thisBox.isUnmoveable()) {
+          // Current entity cannot be moved by collision, skip
+          continue;
+        }
 
         // Try fix the collision with other entities
         for (Entity other : this.entities.values()) {

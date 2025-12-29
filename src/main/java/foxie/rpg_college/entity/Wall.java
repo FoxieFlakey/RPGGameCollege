@@ -11,7 +11,7 @@ import foxie.rpg_college.Vec2;
 public class Wall extends Entity {
   private static final Vec2 SIZE = new Vec2(180.0f, 100.0f);
   
-  private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), SIZE, true);
 
   @Override
   public Optional<CollisionBox> getCollisionBox() {
@@ -59,11 +59,5 @@ public class Wall extends Entity {
 
   @Override
   public void tick(float deltaTime) {
-  }
-
-  @Override
-  public void onCollision() {
-    // Wall does not move
-    this.collisionBox.setPos(this.getPos());
   }
 }
