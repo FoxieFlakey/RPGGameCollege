@@ -16,7 +16,6 @@ import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 
 public class Overworld extends World {
-  private final FloatRectangle bound;
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
   
   private final Image backgroundImage;
@@ -70,12 +69,12 @@ public class Overworld extends World {
 
   @Override
   public Vec2 validatePos(Vec2 pos) {
-    return this.bound.clampCoordinate(pos);
+    return this.getWorldBound().clampCoordinate(pos);
   }
 
   @Override
   public boolean isValidPos(Vec2 pos) {
-    return this.bound.contains(pos);
+    return this.getWorldBound().contains(pos);
   }
 
   @Override
