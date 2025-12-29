@@ -55,10 +55,15 @@ public class Player extends LivingEntity {
       this.getPos().add(Player.SIZE.mul(0.5f))
     );
 
-    int x = (int) playerCharacterBox.getTopLeftCorner().x();
-    int y = (int) playerCharacterBox.getTopLeftCorner().y();
-    int width = (int) playerCharacterBox.getSize().x();
-    int height = (int) playerCharacterBox.getSize().y();
+    FloatRectangle transformed = new FloatRectangle(
+      this.camera.translateWorldToAWTGraphicsCoord(playerCharacterBox.getTopLeftCorner()),
+      this.camera.translateWorldToAWTGraphicsCoord(playerCharacterBox.getBottomRightCorner())
+    );
+
+    int x = (int) transformed.getTopLeftCorner().x();
+    int y = (int) transformed.getTopLeftCorner().y();
+    int width = (int) transformed.getSize().x();
+    int height = (int) transformed.getSize().y();
 
     g.setColor(Color.ORANGE);
     g.fillRoundRect(
