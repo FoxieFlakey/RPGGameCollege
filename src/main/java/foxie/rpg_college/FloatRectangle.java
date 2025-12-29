@@ -47,5 +47,14 @@ public record FloatRectangle(
       Math.clamp(coord.y(), topLeft.y(), bottomRight.y())
     );
   }
+
+  public boolean contains(Vec2 pos) {
+    Vec2 topLeft = this.getTopLeftCorner();
+    Vec2 bottomRight = this.getBottomRightCorner();
+
+    return
+      topLeft.x() <= pos.x() && pos.x() <= bottomRight.x() &&
+      topLeft.y() <= pos.y() && pos.y() <= bottomRight.y();
+  }
 }
 

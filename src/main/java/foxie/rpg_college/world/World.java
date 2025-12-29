@@ -70,6 +70,18 @@ public class World {
     );
   }
 
+  public Vec2 validatePos(Vec2 pos) {
+    return this.bound.clampCoordinate(pos);
+  }
+
+  public boolean isValidPos(Vec2 pos) {
+    return this.bound.contains(pos);
+  }
+
+  public Game getGame() {
+    return this.game;
+  }
+
   public void render(Graphics2D g) {
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);

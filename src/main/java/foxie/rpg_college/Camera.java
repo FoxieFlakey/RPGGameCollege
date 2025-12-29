@@ -10,8 +10,8 @@ package foxie.rpg_college;
 //
 // The center of camera would be middle of output screen
 public class Camera {
-  private final FloatRectangle possiblePosition;
-  private final Vec2 viewSize;
+  private FloatRectangle possiblePosition;
+  private Vec2 viewSize;
   private Vec2 pos = new Vec2(0.0f, 0.0f);
 
   public Camera(FloatRectangle worldBound, Vec2 viewSize) {
@@ -22,13 +22,7 @@ public class Camera {
     }
 
     this.viewSize = viewSize;
-
-    Vec2 topLeft = worldBound.getTopLeftCorner();
-    Vec2 bottomRight = worldBound.getBottomRightCorner();
-    this.possiblePosition = new FloatRectangle(
-      topLeft.add(this.viewSize.mul(0.5f)),
-      bottomRight.sub(this.viewSize.mul(0.5f))
-    );
+    this.setBound(worldBound);
   }
 
   public FloatRectangle getVisibleWorld() {
@@ -51,5 +45,17 @@ public class Camera {
 
   public Vec2 getPosition() {
     return this.pos;
+  }
+
+  public void setBound(FloatRectangle worldBound) {
+    Vec2 topLeft = worldBound.getTopLeftCorner();
+    Vec2 bottomRight = worldBound.getBottomRightCorner();
+    this.possiblePosition = new FloatRectangle(
+      topLeft.add(this.viewSize.mul(0.5f)),
+      bottomRight.sub(this.viewSize.mul(0.5f))
+    );
+
+    // Fix the position
+    this.setPosition(this.pos);
   }
 }

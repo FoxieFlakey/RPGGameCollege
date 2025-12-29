@@ -9,9 +9,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import foxie.rpg_college.entity.Player;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
-import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
@@ -23,7 +23,7 @@ public class Game implements AutoCloseable {
 
   private World currentWorld = new World(this);
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
-  private final Camera camera = new Camera(this.currentWorld.getWorldBound(), new Vec2(1280.0f, 720.0f));
+  private final Player player = new Player(this.currentWorld, new Vec2(1280.0f, 720.0f));
 
   private float lastRenderTime = Util.getTime();
 
@@ -72,7 +72,7 @@ public class Game implements AutoCloseable {
   }
 
   public Camera getCamera() {
-    return this.camera;
+    return this.player.camera;
   }
 
   public int getOutputHeight() {
@@ -113,27 +113,8 @@ public class Game implements AutoCloseable {
     float now = Util.getTime();
     float deltaTime = now - this.lastRenderTime;
     this.lastRenderTime = now;
-
-    Vec2 translation = new Vec2(0.0f, 0.0f);
-    float moveSpeed = 100.0f; // 20 pixels per second
-
-    if (this.keyboardState.getState(Button.W).isNowPressed()) {
-      translation = translation.add(new Vec2(0.0f, -moveSpeed * deltaTime));
-    }
     
-    if (this.keyboardState.getState(Button.A).isNowPressed()) {
-      translation = translation.add(new Vec2(-moveSpeed * deltaTime, 0.0f));
-    }
-
-    if (this.keyboardState.getState(Button.S).isNowPressed()) {
-      translation = translation.add(new Vec2(0.0f, moveSpeed * deltaTime));
-    }
-
-    if (this.keyboardState.getState(Button.D).isNowPressed()) {
-      translation = translation.add(new Vec2(moveSpeed * deltaTime, 0.0f));
-    }
-
-    this.camera.setPosition(this.camera.getPosition().add(translation));
+    this.player.handleInput(deltaTime);
 
     Graphics2D g = this.gameBuffer.createGraphics();
     try {

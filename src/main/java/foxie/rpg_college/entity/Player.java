@@ -1,0 +1,87 @@
+package foxie.rpg_college.entity;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import foxie.rpg_college.Camera;
+import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Vec2;
+import foxie.rpg_college.input.Keyboard;
+import foxie.rpg_college.input.Keyboard.Button;
+import foxie.rpg_college.world.World;
+
+public class Player extends LivingEntity {
+  private static final Vec2 SIZE = new Vec2(
+    20.0f,
+    60.0f
+  );
+
+  public final Camera camera;
+
+  public Player(World world, Vec2 viewSize) {
+    super(world);
+    this.camera = new Camera(world.getWorldBound(), viewSize);
+  }
+
+  public void handleInput(float deltaTime) {
+    Keyboard keyboard = this.getWorld().getGame().keyboardState;
+    
+    Vec2 translation = new Vec2(0.0f, 0.0f);
+    float moveSpeed = 100.0f; // 20 pixels per second
+
+    if (keyboard.getState(Button.W).isNowPressed()) {
+      translation = translation.add(new Vec2(0.0f, -moveSpeed * deltaTime));
+    }
+    
+    if (keyboard.getState(Button.A).isNowPressed()) {
+      translation = translation.add(new Vec2(-moveSpeed * deltaTime, 0.0f));
+    }
+
+    if (keyboard.getState(Button.S).isNowPressed()) {
+      translation = translation.add(new Vec2(0.0f, moveSpeed * deltaTime));
+    }
+
+    if (keyboard.getState(Button.D).isNowPressed()) {
+      translation = translation.add(new Vec2(moveSpeed * deltaTime, 0.0f));
+    }
+
+    this.camera.setPosition(this.camera.getPosition().add(translation));
+  }
+
+  @Override
+  public void render(Graphics2D g, float deltaTime) {
+    FloatRectangle playerCharacterBox = new FloatRectangle(
+      this.getPos().sub(Player.SIZE.mul(0.5f)),
+      this.getPos().add(Player.SIZE.mul(0.5f))
+    );
+
+    int x = (int) playerCharacterBox.getTopLeftCorner().x();
+    int y = (int) playerCharacterBox.getTopLeftCorner().y();
+    int width = (int) playerCharacterBox.getSize().x();
+    int height = (int) playerCharacterBox.getSize().y();
+
+    g.setColor(Color.ORANGE);
+    g.fillRoundRect(
+      x, y,
+      width, height,
+      5, 5
+    );
+  }
+
+  @Override
+  public void tick(float deltaTime) {
+    
+  }
+
+  @Override
+  public boolean isVisible(Camera cam) {
+    // Player is always visible
+    return true;
+  }
+
+  @Override
+  public void setWorld(World world) {
+    super.setWorld(world);
+    this.camera.setBound(world.getWorldBound());
+  }
+}
