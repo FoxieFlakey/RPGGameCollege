@@ -12,8 +12,8 @@ import foxie.rpg_college.world.World;
 
 public class Player extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
-    20.0f,
-    60.0f
+    60.0f,
+    120.0f
   );
 
   public final Camera camera;
@@ -45,7 +45,13 @@ public class Player extends LivingEntity {
       translation = translation.add(new Vec2(moveSpeed * deltaTime, 0.0f));
     }
 
-    this.camera.setPosition(this.camera.getPosition().add(translation));
+    this.setPos(this.camera.getPosition().add(translation));
+  }
+
+  @Override
+  public void setPos(Vec2 pos) {
+    super.setPos(pos);
+    this.camera.setPosition(pos);
   }
 
   @Override
