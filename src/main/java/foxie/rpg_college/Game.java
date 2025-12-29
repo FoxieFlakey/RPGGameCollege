@@ -9,7 +9,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
@@ -23,7 +25,10 @@ public class Game implements AutoCloseable {
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
   private final Camera camera = new Camera(this.currentWorld.getWorldBound(), new Vec2(1280.0f, 720.0f));
 
+  private float lastRenderTime = Util.getTime();
+
   public final Mouse mouseState;
+  public final Keyboard keyboardState;
 
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
@@ -46,6 +51,7 @@ public class Game implements AutoCloseable {
     });
 
     this.mouseState = new Mouse(this.window);
+    this.keyboardState = new Keyboard(this.window);
 
     this.window.createBufferStrategy(2);
     this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
@@ -81,7 +87,6 @@ public class Game implements AutoCloseable {
     return ret;
   }
 
-  private boolean positive = true;
   public void runOnce() {
     if (this.isRunning) {
       throw new IllegalStateException("Cannot run game inside running game");
@@ -89,6 +94,7 @@ public class Game implements AutoCloseable {
     this.isRunning = true;
 
     this.mouseState.updateState();
+    this.keyboardState.updateState();
 
     this.handleInput();
     this.tick();
@@ -104,19 +110,30 @@ public class Game implements AutoCloseable {
   }
 
   void render() {
-    Vec2 newPos = this.camera.getPosition();
-    if (positive) {
-      newPos = newPos.add(new Vec2(20.0f, 0.0f));
-    } else {
-      newPos = newPos.add(new Vec2(-20.0f, 0.0f));
+    float now = Util.getTime();
+    float deltaTime = now - this.lastRenderTime;
+    this.lastRenderTime = now;
+
+    Vec2 translation = new Vec2(0.0f, 0.0f);
+    float moveSpeed = 100.0f; // 20 pixels per second
+
+    if (this.keyboardState.getState(Button.W).isNowPressed()) {
+      translation = translation.add(new Vec2(0.0f, -moveSpeed * deltaTime));
+    }
+    
+    if (this.keyboardState.getState(Button.A).isNowPressed()) {
+      translation = translation.add(new Vec2(-moveSpeed * deltaTime, 0.0f));
     }
 
-    if (newPos.x() > 200.0) {
-      this.positive = false;
-    } else if (newPos.x() < -200.0) {
-      this.positive = true;
+    if (this.keyboardState.getState(Button.S).isNowPressed()) {
+      translation = translation.add(new Vec2(0.0f, moveSpeed * deltaTime));
     }
-    this.camera.setPosition(newPos);
+
+    if (this.keyboardState.getState(Button.D).isNowPressed()) {
+      translation = translation.add(new Vec2(moveSpeed * deltaTime, 0.0f));
+    }
+
+    this.camera.setPosition(this.camera.getPosition().add(translation));
 
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
