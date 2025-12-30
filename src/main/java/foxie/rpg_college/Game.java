@@ -68,7 +68,7 @@ public class Game implements AutoCloseable {
     this.currentScreen = new InGame(this);
 
     this.overworld.addEntity(this.player);
-    this.player.setPos(new Vec2(0.0f, 300.0f));
+    this.player.setPos(new Vec2(-100.0f, 300.0f));
   }
 
   @Override

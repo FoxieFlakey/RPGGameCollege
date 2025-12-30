@@ -56,8 +56,11 @@ public class Overworld extends World {
     this.addTile(new IVec2(1, 0), game.TILES.WALL_TILE);
     this.addTile(new IVec2(0, 0), game.TILES.WALL_TILE);
     this.addTile(new IVec2(0, 1), game.TILES.WALL_TILE);
-    this.addTile(new IVec2(0, 2), game.TILES.WALL_TILE);
-    this.addTile(new IVec2(0, 5), game.TILES.WALL_TILE);
+    // Gap
+    // Gap
+    this.addTile(new IVec2(0, 4), game.TILES.WALL_TILE);
+    // Gap
+    this.addTile(new IVec2(0, 6), game.TILES.WALL_TILE);
     this.addTile(new IVec2(0, 7), game.TILES.WALL_TILE);
     this.addTile(new IVec2(0, 8), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1, 8), game.TILES.WALL_TILE);
@@ -66,6 +69,13 @@ public class Overworld extends World {
     this.addTile(new IVec2(4, 8), game.TILES.WALL_TILE);
     this.addTile(new IVec2(5, 8), game.TILES.WALL_TILE);
     this.addTile(new IVec2(6, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 7), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 6), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 5), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 4), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 3), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 2), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 1), game.TILES.WALL_TILE);
 
     // Add test for lava tile
     this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);

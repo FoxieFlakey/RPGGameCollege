@@ -81,7 +81,6 @@ public class Player extends LivingEntity {
       Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(this.getPos());
       Vec2 lookToScreenCoord = mouse.getButtonPosition().sub(playerScreenCoord);
 
-      System.out.println("Viewing angle: " + lookToScreenCoord.calculateAngle());
       this.setRotation(lookToScreenCoord.calculateAngle());
     }
   }
