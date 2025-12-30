@@ -129,18 +129,14 @@ public abstract class World {
     }
 
     CollisionBox thisBox = e.getCollisionBox().get();
-    if (thisBox.isUnmoveable()) {
-      // Current entity cannot be moved by collision, skip
-      return;
-    }
-
-    // Check collision against all tiles
-    this.checkCollisionWithTiles(e, thisBox);
 
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
       checkCollisionInner(e, other, thisBox);
     }
+    
+    // Check collision against all tiles
+    this.checkCollisionWithTiles(e, thisBox);
 
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
