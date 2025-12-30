@@ -2,6 +2,7 @@ package foxie.rpg_college.world;
 
 import java.awt.Graphics2D;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 import java.util.Map.Entry;
 
 import foxie.rpg_college.FloatRectangle;
@@ -175,6 +176,10 @@ public abstract class World {
     for (Entity e : this.entities.values()) {
       e.render(g, deltaTime);
     }
+  }
+
+  public Optional<Tile> getTileAt(IVec2 pos) {
+    return Optional.ofNullable(this.tiles.get(pos));
   }
 
   public abstract Vec2 validatePos(Vec2 pos);

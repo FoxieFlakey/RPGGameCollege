@@ -55,8 +55,10 @@ public class Cat extends LivingEntity {
   }
 
   @Override
-  public void tick(float deltaTime) {
-    
+  public Vec2 getLegPos() {
+    return new Vec2(
+      this.getPos().x(),
+      this.getPos().y() - Cat.SIZE.y() * 0.5f
+    );
   }
-  
 }

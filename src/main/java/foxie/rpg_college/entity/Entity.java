@@ -32,7 +32,7 @@ public abstract class Entity {
     }
   }
 
-  public Vec2 getPos() {
+  public final Vec2 getPos() {
     return this.position;
   }
 
@@ -57,7 +57,7 @@ public abstract class Entity {
   public void onCollision() {
     this.setPos(this.getCollisionBox().get().getPos());
   }
-  
+
   // This prefer 'false', so if there two entities
   // one say true other say false, the result is false
   // which mean no collision happens

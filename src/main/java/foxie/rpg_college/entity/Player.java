@@ -87,11 +87,6 @@ public class Player extends LivingEntity {
   }
 
   @Override
-  public void tick(float deltaTime) {
-    
-  }
-
-  @Override
   public boolean isVisible(Camera cam) {
     // Player is always visible
     return true;
@@ -111,5 +106,13 @@ public class Player extends LivingEntity {
   @Override
   public boolean canCollideWith(Entity other) {
     return true;
+  }
+
+  @Override
+  public Vec2 getLegPos() {
+    return new Vec2(
+      this.getPos().x(),
+      this.getPos().y() + Player.SIZE.y() * 0.5f
+    );
   }
 }
