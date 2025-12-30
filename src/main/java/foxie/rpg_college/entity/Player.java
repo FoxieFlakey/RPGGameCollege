@@ -18,7 +18,7 @@ public class Player extends LivingEntity {
   );
 
   public final Camera camera;
-  private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Player.SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), Player.SIZE);
 
   public Player(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getWorldBound(), viewSize);

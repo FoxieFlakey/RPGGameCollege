@@ -42,14 +42,14 @@ public abstract class World {
     
     this.worldBorder = new CollisionBox[] {
       // The top part of world
-      new CollisionBox(new Vec2(center.x(), top - World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f)),
+      new CollisionBox(new Vec2(center.x(), top - World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f), true),
       // The bottom part of world
-      new CollisionBox(new Vec2(center.x(), bottom + World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f)),
+      new CollisionBox(new Vec2(center.x(), bottom + World.BORDER_DEPTH * 0.5f), new Vec2(width + World.BORDER_DEPTH * 2.0f, World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f), true),
 
       // Left part of world
-      new CollisionBox(new Vec2(left - World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f)),
+      new CollisionBox(new Vec2(left - World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f), true),
       // Right part of world
-      new CollisionBox(new Vec2(right + World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f))
+      new CollisionBox(new Vec2(right + World.BORDER_DEPTH * 0.5f, center.y()), new Vec2(World.BORDER_DEPTH + World.BORDER_INNER_DEPTH * 2.0f, height + World.BORDER_DEPTH * 2.0f), true)
     };
   }
 
@@ -105,11 +105,12 @@ public abstract class World {
     
     if (thisBox.checkCollisionAndFix(otherBox)) {
       e.onCollision();
+      other.onCollision();
     }
   }
 
   void checkCollisionWithTiles(Entity e, CollisionBox thisBox) {
-    CollisionBox tempBox = new CollisionBox(new Vec2(0.0f, 0.0f), Tile.SIZE);
+    CollisionBox tempBox = new CollisionBox(new Vec2(0.0f, 0.0f), Tile.SIZE, true);
     for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       if (!coordAndTile.getValue().isCollisionEnabled()) {
         continue;
@@ -140,9 +141,6 @@ public abstract class World {
     for (Entity other : this.entities.values()) {
       checkCollisionInner(e, other, thisBox);
     }
-
-    // Check collision against all tiles again
-    this.checkCollisionWithTiles(e, thisBox);
 
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {

@@ -11,7 +11,7 @@ import foxie.rpg_college.tile.Tile;
 
 public class Cat extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
-  private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Cat.SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), Cat.SIZE);
 
   public Cat() {
     this.setHealth(this.getMaxHealth());
