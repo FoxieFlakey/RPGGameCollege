@@ -129,12 +129,14 @@ public abstract class World {
     }
 
     CollisionBox thisBox = e.getCollisionBox().get();
+    // Check collision against all tiles
+    this.checkCollisionWithTiles(e, thisBox);
 
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
       checkCollisionInner(e, other, thisBox);
     }
-    
+
     // Check collision against all tiles
     this.checkCollisionWithTiles(e, thisBox);
 
@@ -155,7 +157,7 @@ public abstract class World {
       e.tick(deltaTime);
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
       for (Entity e : this.entities.values()) {
         checkCollision(e);
       }
