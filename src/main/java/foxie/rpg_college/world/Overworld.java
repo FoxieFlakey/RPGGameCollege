@@ -14,7 +14,7 @@ import foxie.rpg_college.Game;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Cat;
-import foxie.rpg_college.entity.Wall;
+import foxie.rpg_college.tile.Wall;
 
 public class Overworld extends World {
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
@@ -49,13 +49,11 @@ public class Overworld extends World {
     this.backgroundImageSize = backgroundImageSize;
     this.backgroundImage = backgroundImage;
 
-    Wall wall = new Wall();
-    this.addEntity(wall);
-    wall.setPos(new Vec2(0.0f, 0.0f));
+    Wall wall = new Wall(game);
+    this.addTile(new Vec2(0.0f, 0.0f), wall);
 
-    wall = new Wall();
-    this.addEntity(wall);
-    wall.setPos(new Vec2(20.0f, -500.0f));
+    wall = new Wall(game);
+    this.addTile(new Vec2(20.0f, -500.0f), wall);
 
     Cat cat = new Cat();
     this.addEntity(cat);

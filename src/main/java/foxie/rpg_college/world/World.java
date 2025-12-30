@@ -2,17 +2,20 @@ package foxie.rpg_college.world;
 
 import java.awt.Graphics2D;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.CollisionBox;
 import foxie.rpg_college.entity.Entity;
+import foxie.rpg_college.tile.Tile;
 
 public abstract class World {
   private final Game game;
   private final FloatRectangle bound;
   private final LinkedHashMap<Long, Entity> entities = new LinkedHashMap<>();
+  private final LinkedHashMap<Vec2, Tile> tiles = new LinkedHashMap<>();
 
   private final CollisionBox[] worldBorder;
   private final static float BORDER_DEPTH = 200000000.0f;
@@ -55,6 +58,14 @@ public abstract class World {
   public final FloatRectangle getWorldBound() {
     return this.bound;
   }
+
+  public void addTile(Vec2 coord, Tile tile) {
+    if (this.tiles.containsKey(coord)) {
+      throw new IllegalStateException("Attempting to add more than one tile to same coord");
+    }
+
+    this.tiles.put(coord, tile);
+  }
   
   public void addEntity(Entity entity) {
     if (this.entities.containsKey(entity.id)) {
@@ -96,6 +107,7 @@ public abstract class World {
   }
 
   void checkCollision(Entity e) {
+    CollisionBox tempBox = new CollisionBox(new Vec2(0.0f, 0.0f), Tile.SIZE);
     if (e.getCollisionBox().isEmpty()) {
       return;
     }
@@ -114,6 +126,18 @@ public abstract class World {
     for (Entity other : this.entities.reversed().values()) {
       checkCollisionInner(e, other, thisBox);
     }
+
+    // Check collision against all tiles
+    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+      if (!coordAndTile.getValue().isCollisionEnabled()) {
+        continue;
+      }
+
+      tempBox.setPos(coordAndTile.getKey());
+      if (thisBox.checkCollisionAndFix(tempBox)) {
+        e.onCollision();
+      }
+    }
     
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
@@ -124,6 +148,10 @@ public abstract class World {
   }
 
   protected void tickEntities(float deltaTime) {
+    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+      coordAndTile.getValue().tick(deltaTime, coordAndTile.getKey());
+    }
+
     // Try resolve collision in 4 times (2 forward and 2 reverse iteration)
     for (int i = 0; i < 2; i++) {
       for (Entity e : this.entities.values()) {
@@ -141,6 +169,10 @@ public abstract class World {
   }
 
   protected void renderEntities(Graphics2D g, float deltaTime) {
+    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+      coordAndTile.getValue().render(g, deltaTime, coordAndTile.getKey());
+    }
+
     for (Entity e : this.entities.values()) {
       e.render(g, deltaTime);
     }
