@@ -107,8 +107,21 @@ public abstract class World {
     }
   }
 
-  void checkCollision(Entity e) {
+  void checkCollisionWithTiles(Entity e, CollisionBox thisBox) {
     CollisionBox tempBox = new CollisionBox(new Vec2(0.0f, 0.0f), Tile.SIZE);
+    for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
+      if (!coordAndTile.getValue().isCollisionEnabled()) {
+        continue;
+      }
+
+      tempBox.setPos(Tile.fromTileCoordToWorldCoord(coordAndTile.getKey()));
+      if (thisBox.checkCollisionAndFix(tempBox)) {
+        e.onCollision();
+      }
+    }
+  }
+
+  void checkCollision(Entity e) {
     if (e.getCollisionBox().isEmpty()) {
       return;
     }
@@ -120,25 +133,15 @@ public abstract class World {
     }
 
     // Check collision against all tiles
-    for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
-      if (!coordAndTile.getValue().isCollisionEnabled()) {
-        continue;
-      }
-
-      tempBox.setPos(Tile.fromTileCoordToWorldCoord(coordAndTile.getKey()));
-      if (thisBox.checkCollisionAndFix(tempBox)) {
-        e.onCollision();
-      }
-    }
+    this.checkCollisionWithTiles(e, thisBox);
 
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
       checkCollisionInner(e, other, thisBox);
     }
 
-    for (Entity other : this.entities.reversed().values()) {
-      checkCollisionInner(e, other, thisBox);
-    }
+    // Check collision against all tiles again
+    this.checkCollisionWithTiles(e, thisBox);
 
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
@@ -157,13 +160,10 @@ public abstract class World {
       e.tick(deltaTime);
     }
 
-    // Try resolve collision in 2 times both forward and backward
-    for (Entity e : this.entities.values()) {
-      checkCollision(e);
-    }
-
-    for (Entity e : this.entities.reversed().values()) {
-      checkCollision(e);
+    for (int i = 0; i < 3; i++) {
+      for (Entity e : this.entities.values()) {
+        checkCollision(e);
+      }
     }
   }
 
