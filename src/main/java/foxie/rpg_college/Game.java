@@ -131,9 +131,6 @@ public class Game implements AutoCloseable {
   }
 
   void handleInput(float deltaTime) {
-    if (this.mouseState.getButtonState(Mouse.Button.Left) == Mouse.State.Clicked) {
-      System.out.println("Left button clicked");
-    }
     this.player.handleInput(deltaTime);
   }
 

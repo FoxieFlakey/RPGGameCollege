@@ -9,7 +9,6 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
-import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
 public class Player extends LivingEntity {
