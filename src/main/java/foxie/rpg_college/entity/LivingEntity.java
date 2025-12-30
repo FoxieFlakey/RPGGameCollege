@@ -13,6 +13,13 @@ public abstract class LivingEntity extends Entity {
   // from fire source like lava or fire
   private float burnTimer = -1.0f;
 
+  private float flashDuration = 0.0f;
+  private float flashPeriod = 0.0f;
+  private boolean flashState = false;
+
+  public static final float FLASH_DURATION = 1.2f;
+  public static final float FLASH_PERIOD = 0.1f;
+
   public boolean canBurn() {
     return burnTimer <= 0.0f;
   }
@@ -43,6 +50,28 @@ public abstract class LivingEntity extends Entity {
     }
 
     this.setHealth(this.healthPoint - damage);
+    this.flash();
+  }
+
+  public void flash() {
+    this.flashDuration = LivingEntity.FLASH_DURATION;
+    this.flashPeriod = LivingEntity.FLASH_PERIOD;
+    this.flashState = true;
+  }
+
+  public boolean isFlashing() {
+    return this.flashDuration > 0.0f;
+  }
+
+  // This one should be used in render code
+  // to either render unflashed (which is false)
+  // or flashed (very bright version, which is true)
+  public boolean getFlashState() {
+    if (!this.isFlashing()) {
+      return false;
+    }
+    
+    return this.flashState;
   }
 
   @Override
@@ -62,6 +91,16 @@ public abstract class LivingEntity extends Entity {
           this.burnTimer = Lava.BURN_PERIOD;
           this.doDamage(Lava.DAMAGE);
         }
+      }
+    }
+
+    if (this.isFlashing()) {
+      this.flashPeriod -= deltaTime;
+      this.flashDuration -= deltaTime;
+
+      if (this.flashPeriod < 0.0f) {
+        this.flashPeriod = LivingEntity.FLASH_PERIOD;
+        this.flashState = !this.flashState;
       }
     }
   }

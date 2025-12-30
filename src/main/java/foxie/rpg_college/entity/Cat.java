@@ -46,7 +46,16 @@ public class Cat extends LivingEntity {
     int width = (int) renderBox.getSize().x();
     int height = (int) renderBox.getSize().y();
 
-    g.setColor(Color.BLUE);
+    Color color = new Color(0.00f, 0.00f, 0.60f, 1.00f);
+    if (this.getFlashState()) {
+      color = new Color(0.00f, 0.00f, 0.90f, 1.00f);
+    }
+
+    if (this.isDead()) {
+      color = new Color(0.00f, 0.00f, 0.30f, 1.00f);
+    }
+
+    g.setColor(color);
     g.fillRoundRect(
       x, y,
       width, height,

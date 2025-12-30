@@ -88,10 +88,16 @@ public class Player extends LivingEntity {
     int width = (int) renderBox.getSize().x();
     int height = (int) renderBox.getSize().y();
 
-    g.setColor(Color.ORANGE);
-    if (this.isDead()) {
-      g.setColor(Color.BLACK);
+    Color color = new Color(0.98f, 0.63f, 0.28f, 1.00f);
+    if (this.getFlashState()) {
+      color = new Color(1.00f, 0.93f, 0.58f, 1.00f);
     }
+
+    if (this.isDead()) {
+      color = new Color(0.68f, 0.33f, 0.00f, 1.00f);
+    }
+
+    g.setColor(color);
 
     g.fillRoundRect(
       x, y,
