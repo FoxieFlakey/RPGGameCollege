@@ -22,7 +22,7 @@ public class Player extends LivingEntity {
 
   public Player(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getWorldBound(), viewSize);
-    this.setHealth(100.0f);
+    this.setHealth(this.getMaxHealth());
   }
 
   public void handleInput(float deltaTime) {
@@ -62,6 +62,11 @@ public class Player extends LivingEntity {
   public void setPos(Vec2 pos) {
     super.setPos(pos);
     this.camera.setPosition(pos);
+  }
+
+  @Override
+  public float getMaxHealth() {
+    return 100.0f;
   }
 
   @Override

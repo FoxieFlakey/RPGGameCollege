@@ -12,6 +12,8 @@ import java.util.Optional;
 import foxie.rpg_college.entity.Player;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.ui.InGame;
+import foxie.rpg_college.ui.Screen;
 import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
@@ -25,6 +27,7 @@ public class Game implements AutoCloseable {
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
   private final Overworld overworld = new Overworld(this);
   private final Player player = new Player(overworld, new Vec2(1280.0f, 720.0f));
+  private final Screen currentScreen;
 
   private float lastRenderTime = Util.getTime();
 
@@ -59,6 +62,7 @@ public class Game implements AutoCloseable {
 
     this.overworld.addEntity(this.player);
     this.player.setPos(new Vec2(0.0f, 300.0f));
+    this.currentScreen = new InGame(this);
   }
 
   @Override
@@ -73,6 +77,14 @@ public class Game implements AutoCloseable {
 
   public World getCurrentWorld() {
     return this.player.getWorld();
+  }
+
+  public Player getPlayer() {
+    return this.player;
+  }
+
+  public Screen getScreen() {
+    return this.currentScreen;
   }
 
   public Camera getCamera() {
@@ -123,6 +135,7 @@ public class Game implements AutoCloseable {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
       this.player.getWorld().render(g, deltaTime);
+      this.currentScreen.render(g, deltaTime);
     } finally {
       g.dispose();
     }

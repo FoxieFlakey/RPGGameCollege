@@ -30,5 +30,7 @@ public abstract class LivingEntity extends Entity {
 
     this.setHealth(this.healthPoint - damage);
   }
+
+  public abstract float getMaxHealth();
 }
 

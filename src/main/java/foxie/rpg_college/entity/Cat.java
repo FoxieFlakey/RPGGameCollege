@@ -13,7 +13,12 @@ public class Cat extends LivingEntity {
   private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Cat.SIZE);
 
   public Cat() {
-    this.setHealth(20.0f);
+    this.setHealth(this.getMaxHealth());
+  }
+
+  @Override
+  public float getMaxHealth() {
+    return 20.0f;
   }
 
   @Override
