@@ -65,20 +65,12 @@ public class Player extends LivingEntity {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle playerCharacterBox = new FloatRectangle(
-      this.getPos().sub(Player.SIZE.mul(0.5f)),
-      this.getPos().add(Player.SIZE.mul(0.5f))
-    );
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Player.SIZE);
 
-    FloatRectangle transformed = new FloatRectangle(
-      this.camera.translateWorldToAWTGraphicsCoord(playerCharacterBox.getTopLeftCorner()),
-      this.camera.translateWorldToAWTGraphicsCoord(playerCharacterBox.getBottomRightCorner())
-    );
-
-    int x = (int) transformed.getTopLeftCorner().x();
-    int y = (int) transformed.getTopLeftCorner().y();
-    int width = (int) transformed.getSize().x();
-    int height = (int) transformed.getSize().y();
+    int x = (int) renderBox.getTopLeftCorner().x();
+    int y = (int) renderBox.getTopLeftCorner().y();
+    int width = (int) renderBox.getSize().x();
+    int height = (int) renderBox.getSize().y();
 
     g.setColor(Color.ORANGE);
     g.fillRoundRect(

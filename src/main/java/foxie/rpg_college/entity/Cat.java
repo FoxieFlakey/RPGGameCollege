@@ -29,20 +29,12 @@ public class Cat extends LivingEntity {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle box = new FloatRectangle(
-      this.getPos().sub(Cat.SIZE.mul(0.5f)),
-      this.getPos().add(Cat.SIZE.mul(0.5f))
-    );
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Cat.SIZE);
 
-    FloatRectangle transformedBox = new FloatRectangle(
-      this.getWorld().getGame().getCamera().translateWorldToAWTGraphicsCoord(box.getTopLeftCorner()),
-      this.getWorld().getGame().getCamera().translateWorldToAWTGraphicsCoord(box.getBottomRightCorner())
-    );
-
-    int x = (int) transformedBox.getTopLeftCorner().x();
-    int y = (int) transformedBox.getTopLeftCorner().y();
-    int width = (int) transformedBox.getSize().x();
-    int height = (int) transformedBox.getSize().y();
+    int x = (int) renderBox.getTopLeftCorner().x();
+    int y = (int) renderBox.getTopLeftCorner().y();
+    int width = (int) renderBox.getSize().x();
+    int height = (int) renderBox.getSize().y();
 
     g.setColor(Color.BLUE);
     g.fillRoundRect(
