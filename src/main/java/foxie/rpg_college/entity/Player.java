@@ -9,6 +9,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
+import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
 public class Player extends LivingEntity {
@@ -32,6 +33,13 @@ public class Player extends LivingEntity {
       this.setHealth(this.getMaxHealth());
       this.setPos(new Vec2(0.0f, 0.0f));
       return;
+    }
+
+    if (keyboard.getState(Button.C) == Keyboard.State.Clicked) {
+      // Spawn cat
+      Cat cat = new Cat();
+      this.getWorld().addEntity(cat);
+      cat.setPos(this.getLegPos());
     }
 
     if (this.isDead()) {

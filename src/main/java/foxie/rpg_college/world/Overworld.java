@@ -14,8 +14,6 @@ import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.Cat;
-import foxie.rpg_college.tile.Tile;
 
 public class Overworld extends World {
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
@@ -71,10 +69,6 @@ public class Overworld extends World {
 
     // Add test for lava tile
     this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);
-
-    Cat cat = new Cat();
-    this.addEntity(cat);
-    cat.setPos(new Vec2(Tile.SIZE.x() * 10, 0.0f));
   }
 
   private void drawBackground(Graphics2D g) {
