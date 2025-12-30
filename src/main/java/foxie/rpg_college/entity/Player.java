@@ -86,10 +86,6 @@ public class Player extends LivingEntity {
       width, height,
       5, 5
     );
-
-    g.setColor(Color.GREEN);
-    Vec2 posTransformed = this.getWorld().getGame().getCamera().translateWorldToAWTGraphicsCoord(this.getPos());
-    g.fillOval((int) posTransformed.x(), (int) posTransformed.y(), 10, 10);
   }
 
   @Override
