@@ -12,6 +12,10 @@ public class Cat extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(20.0f, 20.0f);
   private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Cat.SIZE);
 
+  public Cat() {
+    this.setHealth(20.0f);
+  }
+
   @Override
   public boolean canCollideWith(Entity other) {
     return true;

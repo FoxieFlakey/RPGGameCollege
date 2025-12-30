@@ -22,6 +22,7 @@ public class Player extends LivingEntity {
 
   public Player(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getWorldBound(), viewSize);
+    this.setHealth(100.0f);
   }
 
   public void handleInput(float deltaTime) {

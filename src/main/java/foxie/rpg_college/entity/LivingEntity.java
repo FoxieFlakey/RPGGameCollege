@@ -1,7 +1,7 @@
 package foxie.rpg_college.entity;
 
 public abstract class LivingEntity extends Entity {
-  private float healthPoint;
+  private float healthPoint = 0.0f;
 
   public boolean isDead() {
     return this.healthPoint <= 0.0f;
