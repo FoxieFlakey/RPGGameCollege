@@ -119,15 +119,6 @@ public abstract class World {
       return;
     }
 
-    // Try fix the collision with other entities
-    for (Entity other : this.entities.values()) {
-      checkCollisionInner(e, other, thisBox);
-    }
-
-    for (Entity other : this.entities.reversed().values()) {
-      checkCollisionInner(e, other, thisBox);
-    }
-
     // Check collision against all tiles
     for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       if (!coordAndTile.getValue().isCollisionEnabled()) {
@@ -139,7 +130,16 @@ public abstract class World {
         e.onCollision();
       }
     }
-    
+
+    // Try fix the collision with other entities
+    for (Entity other : this.entities.values()) {
+      checkCollisionInner(e, other, thisBox);
+    }
+
+    for (Entity other : this.entities.reversed().values()) {
+      checkCollisionInner(e, other, thisBox);
+    }
+
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
       if (thisBox.checkCollisionAndFix(otherBox)) {
@@ -153,19 +153,17 @@ public abstract class World {
       coordAndTile.getValue().tick(deltaTime, coordAndTile.getKey());
     }
 
-    // Try resolve collision in 4 times (2 forward and 2 reverse iteration)
-    for (int i = 0; i < 2; i++) {
-      for (Entity e : this.entities.values()) {
-        checkCollision(e);
-      }
-
-      for (Entity e : this.entities.reversed().values()) {
-        checkCollision(e);
-      }
-    }
-
     for (Entity e : this.entities.values()) {
       e.tick(deltaTime);
+    }
+
+    // Try resolve collision in 2 times both forward and backward
+    for (Entity e : this.entities.values()) {
+      checkCollision(e);
+    }
+
+    for (Entity e : this.entities.reversed().values()) {
+      checkCollision(e);
     }
   }
 
