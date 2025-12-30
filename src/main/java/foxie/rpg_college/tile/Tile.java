@@ -3,6 +3,7 @@ package foxie.rpg_college.tile;
 import java.awt.Graphics2D;
 
 import foxie.rpg_college.Game;
+import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 
 // A tile instance is reused multiple time
@@ -20,9 +21,16 @@ public abstract class Tile {
   public final Game getGame() {
     return this.game;
   }
+
+  public static Vec2 fromTileCoordToWorldCoord(IVec2 coord) {
+    return new Vec2(
+      (float) coord.x() * Tile.SIZE.x(),
+      (float) coord.y() * Tile.SIZE.y()
+    );
+  }
   
   public abstract boolean isCollisionEnabled();
   public abstract boolean canBeTicked();
-  public abstract void render(Graphics2D g, float deltaTime, Vec2 position);
-  public abstract void tick(float deltaTime, Vec2 position);
+  public abstract void render(Graphics2D g, float deltaTime, IVec2 position);
+  public abstract void tick(float deltaTime, IVec2 position);
 }

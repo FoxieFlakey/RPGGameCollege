@@ -7,9 +7,10 @@ import java.util.Optional;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.tile.Tile;
 
 public class Cat extends LivingEntity {
-  private static final Vec2 SIZE = new Vec2(20.0f, 20.0f);
+  private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
   private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.0f, 0.0f), Cat.SIZE);
 
   public Cat() {

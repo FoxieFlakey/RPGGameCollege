@@ -13,8 +13,8 @@ import foxie.rpg_college.world.World;
 
 public class Player extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
-    60.0f,
-    120.0f
+    50.0f,
+    100.0f
   );
 
   public final Camera camera;

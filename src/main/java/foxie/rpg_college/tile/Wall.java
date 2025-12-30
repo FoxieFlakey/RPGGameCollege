@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
-import foxie.rpg_college.Vec2;
+import foxie.rpg_college.IVec2;
 
 public class Wall extends Tile {
   public Wall(Game game) {
@@ -13,10 +13,10 @@ public class Wall extends Tile {
   }
 
   @Override
-  public void render(Graphics2D g, float deltaTime, Vec2 position) {
+  public void render(Graphics2D g, float deltaTime, IVec2 position) {
     FloatRectangle wallBox = new FloatRectangle(
-      position.sub(Tile.SIZE.mul(0.5f)),
-      position.add(Tile.SIZE.mul(0.5f))
+      Tile.fromTileCoordToWorldCoord(position).sub(Tile.SIZE.mul(0.5f)),
+      Tile.fromTileCoordToWorldCoord(position).add(Tile.SIZE.mul(0.5f))
     );
 
     FloatRectangle transformed = new FloatRectangle(
@@ -38,7 +38,7 @@ public class Wall extends Tile {
   }
 
   @Override
-  public void tick(float deltaTime, Vec2 position) {
+  public void tick(float deltaTime, IVec2 position) {
   }
 
   @Override

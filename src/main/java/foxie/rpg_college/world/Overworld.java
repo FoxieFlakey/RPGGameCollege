@@ -11,9 +11,11 @@ import javax.imageio.ImageIO;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
+import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Cat;
+import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.tile.Wall;
 
 public class Overworld extends World {
@@ -49,15 +51,28 @@ public class Overworld extends World {
     this.backgroundImageSize = backgroundImageSize;
     this.backgroundImage = backgroundImage;
 
-    Wall wall = new Wall(game);
-    this.addTile(new Vec2(0.0f, 0.0f), wall);
-
-    wall = new Wall(game);
-    this.addTile(new Vec2(20.0f, -500.0f), wall);
+    this.addTile(new IVec2(6, 0), new Wall(game));
+    this.addTile(new IVec2(5, 0), new Wall(game));
+    this.addTile(new IVec2(4, 0), new Wall(game));
+    this.addTile(new IVec2(3, 0), new Wall(game));
+    this.addTile(new IVec2(2, 0), new Wall(game));
+    this.addTile(new IVec2(1, 0), new Wall(game));
+    this.addTile(new IVec2(0, 0), new Wall(game));
+    this.addTile(new IVec2(0, 1), new Wall(game));
+    this.addTile(new IVec2(0, 2), new Wall(game));
+    this.addTile(new IVec2(0, 5), new Wall(game));
+    this.addTile(new IVec2(0, 7), new Wall(game));
+    this.addTile(new IVec2(0, 8), new Wall(game));
+    this.addTile(new IVec2(1, 8), new Wall(game));
+    this.addTile(new IVec2(2, 8), new Wall(game));
+    this.addTile(new IVec2(3, 8), new Wall(game));
+    this.addTile(new IVec2(4, 8), new Wall(game));
+    this.addTile(new IVec2(5, 8), new Wall(game));
+    this.addTile(new IVec2(6, 8), new Wall(game));
 
     Cat cat = new Cat();
     this.addEntity(cat);
-    cat.setPos(new Vec2(0.0f, 0.0f));
+    cat.setPos(new Vec2(Tile.SIZE.x() * 10, 0.0f));
   }
 
   private void drawBackground(Graphics2D g) {

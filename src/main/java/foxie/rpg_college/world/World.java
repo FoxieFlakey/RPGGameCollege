@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
+import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.CollisionBox;
 import foxie.rpg_college.entity.Entity;
@@ -15,7 +16,7 @@ public abstract class World {
   private final Game game;
   private final FloatRectangle bound;
   private final LinkedHashMap<Long, Entity> entities = new LinkedHashMap<>();
-  private final LinkedHashMap<Vec2, Tile> tiles = new LinkedHashMap<>();
+  private final LinkedHashMap<IVec2, Tile> tiles = new LinkedHashMap<>();
 
   private final CollisionBox[] worldBorder;
   private final static float BORDER_DEPTH = 200000000.0f;
@@ -59,7 +60,7 @@ public abstract class World {
     return this.bound;
   }
 
-  public void addTile(Vec2 coord, Tile tile) {
+  public void addTile(IVec2 coord, Tile tile) {
     if (this.tiles.containsKey(coord)) {
       throw new IllegalStateException("Attempting to add more than one tile to same coord");
     }
@@ -128,12 +129,12 @@ public abstract class World {
     }
 
     // Check collision against all tiles
-    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+    for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       if (!coordAndTile.getValue().isCollisionEnabled()) {
         continue;
       }
 
-      tempBox.setPos(coordAndTile.getKey());
+      tempBox.setPos(Tile.fromTileCoordToWorldCoord(coordAndTile.getKey()));
       if (thisBox.checkCollisionAndFix(tempBox)) {
         e.onCollision();
       }
@@ -148,7 +149,7 @@ public abstract class World {
   }
 
   protected void tickEntities(float deltaTime) {
-    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+    for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       coordAndTile.getValue().tick(deltaTime, coordAndTile.getKey());
     }
 
@@ -169,7 +170,7 @@ public abstract class World {
   }
 
   protected void renderEntities(Graphics2D g, float deltaTime) {
-    for (Entry<Vec2, Tile> coordAndTile : this.tiles.entrySet()) {
+    for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       coordAndTile.getValue().render(g, deltaTime, coordAndTile.getKey());
     }
 
