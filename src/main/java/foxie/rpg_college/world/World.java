@@ -1,6 +1,9 @@
 package foxie.rpg_college.world;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Map.Entry;
@@ -171,6 +174,24 @@ public abstract class World {
 
     for (Entity e : this.entities.values()) {
       e.render(g, deltaTime);
+      
+      // Render direction which the entity viewing
+      Vec2 entityPosOnScreen = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos());
+      IVec2 start = entityPosOnScreen.round();
+      IVec2 end = entityPosOnScreen.add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f)).round();
+
+      Stroke oldStroke = g.getStroke();
+      
+      g.setColor(Color.GREEN);
+      g.setStroke(new BasicStroke(5.0f));
+      g.drawLine(
+        start.x(),
+        start.y(),
+        end.x(),
+        end.y()
+      );
+
+      g.setStroke(oldStroke);
     }
   }
 

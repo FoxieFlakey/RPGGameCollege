@@ -32,4 +32,14 @@ public record Vec2(
       Math.round(this.y)
     );
   }
+
+  // In this one angle of 0 points upward
+  public static Vec2 unitVectorOfAngle(float angle) {
+    angle = Util.normalizeAngle(angle - 90.0f);
+
+    return new Vec2(
+      (float) Math.cos(Math.toRadians(angle)),
+      (float) Math.sin(Math.toRadians(angle))
+    );
+  }
 }

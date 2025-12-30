@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import foxie.rpg_college.Camera;
+import foxie.rpg_college.Orientation;
+import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.world.World;
 
@@ -14,6 +16,7 @@ public abstract class Entity {
 
   private Vec2 position = new Vec2(0.0f, 0.0f);
   private World currentWorld = null;
+  private float rotation = 90.0f;
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
@@ -56,6 +59,18 @@ public abstract class Entity {
   
   public void onCollision() {
     this.setPos(this.getCollisionBox().get().getPos());
+  }
+
+  public final float getRotation() {
+    return this.rotation;
+  }
+  
+  public void setRotation(float rotation) {
+    this.rotation = Util.normalizeAngle(rotation);
+  }
+
+  public final Orientation getOrientation() {
+    return Orientation.fromDegrees(this.rotation);
   }
 
   // This prefer 'false', so if there two entities
