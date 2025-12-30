@@ -56,7 +56,7 @@ public class InGame extends Screen {
     g.fillRect(
       (int) healthBar.x(),
       (int) healthBar.y(),
-      (int) (healthBarSize.x() - healthPercent),
+      (int) (healthBarSize.x() * healthPercent),
       (int) healthBarSize.y()
     );
 
