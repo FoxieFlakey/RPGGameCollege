@@ -17,7 +17,22 @@ public class Mouse implements AutoCloseable {
     Clicked,
     Unclicked,
     Hold,
-    Unhold
+    Unhold;
+
+    public boolean isNowPressed() {
+      switch (this) {
+        case Clicked:
+          return true;
+        case Hold:
+          return true;
+        case Unclicked:
+          return false;
+        case Unhold:
+          return false;
+      }
+
+      throw new RuntimeException("unreachable");
+    }
   }
 
   // Shared with listener

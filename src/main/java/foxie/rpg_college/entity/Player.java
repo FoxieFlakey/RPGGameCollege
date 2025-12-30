@@ -8,6 +8,7 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.input.Keyboard;
+import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
 
@@ -27,6 +28,8 @@ public class Player extends LivingEntity {
 
   public void handleInput(float deltaTime) {
     Keyboard keyboard = this.getWorld().getGame().keyboardState;
+    Mouse mouse = this.getWorld().getGame().mouseState;
+
     if (keyboard.getState(Button.R) == Keyboard.State.Clicked) {
       // Respawn player
       this.setHealth(this.getMaxHealth());
@@ -73,6 +76,14 @@ public class Player extends LivingEntity {
     }
 
     this.setPos(this.getPos().add(translation));
+
+    if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
+      Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(this.getPos());
+      Vec2 lookToScreenCoord = mouse.getButtonPosition().sub(playerScreenCoord);
+
+      System.out.println("Viewing angle: " + lookToScreenCoord.calculateAngle());
+      this.setRotation(lookToScreenCoord.calculateAngle());
+    }
   }
 
   @Override

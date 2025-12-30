@@ -33,7 +33,32 @@ public record Vec2(
     );
   }
 
+  public float magnitude() {
+    return (float) Math.sqrt(Math.pow(this.x(), 2) + Math.pow(this.y(), 2));
+  }
+
+  public Vec2 normalize() {
+    float magnitude = this.magnitude();
+    return new Vec2(
+      this.x() / magnitude,
+      this.y() / magnitude
+    );
+  }
+
+  public float calculateAngle() {
+    Vec2 normalized = this.normalize();
+    double angleRadians = Math.atan2(normalized.y(), normalized.x());
+    double angleDegrees = Math.toDegrees(angleRadians);
+    double shiftedAngle = angleDegrees + 90.0f;
+
+    return Util.normalizeAngle((float) shiftedAngle);
+  }
+
   // In this one angle of 0 points upward
+  // upward is negative
+  //
+  // Following AWT's coordinates where zero, zero is top left
+  // and bottom right is positve X, positive Y
   public static Vec2 unitVectorOfAngle(float angle) {
     angle = Util.normalizeAngle(angle - 90.0f);
 
