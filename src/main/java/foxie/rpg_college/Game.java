@@ -12,6 +12,7 @@ import java.util.Optional;
 import foxie.rpg_college.entity.Player;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.tile.TileList;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
 import foxie.rpg_college.world.Overworld;
@@ -25,14 +26,15 @@ public class Game implements AutoCloseable {
   private final BufferStrategy windowBufferStrategy;
 
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
-  private final Overworld overworld = new Overworld(this);
-  private final Player player = new Player(overworld, new Vec2(1280.0f, 720.0f));
+  private final Overworld overworld;
+  private final Player player;
   private final Screen currentScreen;
-
+  
   private float lastRenderTime = Util.getTime();
-
+  
   public final Mouse mouseState;
   public final Keyboard keyboardState;
+  public final TileList TILES;
 
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
@@ -56,13 +58,17 @@ public class Game implements AutoCloseable {
 
     this.mouseState = new Mouse(this.window);
     this.keyboardState = new Keyboard(this.window);
-
+    
     this.window.createBufferStrategy(2);
     this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
+    
+    this.TILES = new TileList(this);
+    this.overworld = new Overworld(this);
+    this.player = new Player(this.overworld, new Vec2(1280.0f, 720.0f));
+    this.currentScreen = new InGame(this);
 
     this.overworld.addEntity(this.player);
     this.player.setPos(new Vec2(0.0f, 300.0f));
-    this.currentScreen = new InGame(this);
   }
 
   @Override

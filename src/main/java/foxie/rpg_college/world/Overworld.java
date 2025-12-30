@@ -16,7 +16,6 @@ import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Cat;
 import foxie.rpg_college.tile.Tile;
-import foxie.rpg_college.tile.Wall;
 
 public class Overworld extends World {
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
@@ -51,24 +50,27 @@ public class Overworld extends World {
     this.backgroundImageSize = backgroundImageSize;
     this.backgroundImage = backgroundImage;
 
-    this.addTile(new IVec2(6, 0), new Wall(game));
-    this.addTile(new IVec2(5, 0), new Wall(game));
-    this.addTile(new IVec2(4, 0), new Wall(game));
-    this.addTile(new IVec2(3, 0), new Wall(game));
-    this.addTile(new IVec2(2, 0), new Wall(game));
-    this.addTile(new IVec2(1, 0), new Wall(game));
-    this.addTile(new IVec2(0, 0), new Wall(game));
-    this.addTile(new IVec2(0, 1), new Wall(game));
-    this.addTile(new IVec2(0, 2), new Wall(game));
-    this.addTile(new IVec2(0, 5), new Wall(game));
-    this.addTile(new IVec2(0, 7), new Wall(game));
-    this.addTile(new IVec2(0, 8), new Wall(game));
-    this.addTile(new IVec2(1, 8), new Wall(game));
-    this.addTile(new IVec2(2, 8), new Wall(game));
-    this.addTile(new IVec2(3, 8), new Wall(game));
-    this.addTile(new IVec2(4, 8), new Wall(game));
-    this.addTile(new IVec2(5, 8), new Wall(game));
-    this.addTile(new IVec2(6, 8), new Wall(game));
+    this.addTile(new IVec2(6, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(5, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(4, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(3, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(2, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 1), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 2), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 5), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 7), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(2, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(3, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(4, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(5, 8), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(6, 8), game.TILES.WALL_TILE);
+
+    // Add test for lava tile
+    this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);
 
     Cat cat = new Cat();
     this.addEntity(cat);

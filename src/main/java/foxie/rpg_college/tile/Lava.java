@@ -7,9 +7,19 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 
-public class Wall extends Tile {
-  public Wall(Game game) {
+public class Lava extends Tile {
+  public Lava(Game game) {
     super(game);
+  }
+
+  @Override
+  public boolean isCollisionEnabled() {
+    return false;
+  }
+
+  @Override
+  public boolean canBeTicked() {
+    return false;
   }
 
   @Override
@@ -21,25 +31,11 @@ public class Wall extends Tile {
     int width = (int) renderBox.getSize().x();
     int height = (int) renderBox.getSize().y();
 
-    g.setColor(Color.GRAY);
-    g.fillRoundRect(
-      x, y,
-      width, height,
-      15, 15
-    );
+    g.setColor(Color.RED);
+    g.fillRect(x, y, width, height);
   }
 
   @Override
-  public void tick(float deltaTime, IVec2 position) {
-  }
-
-  @Override
-  public boolean isCollisionEnabled() {
-    return true;
-  }
-
-  @Override
-  public boolean canBeTicked() {
-    return false;
+  public void tick(float deltaTime, IVec2 position) { 
   }
 }
