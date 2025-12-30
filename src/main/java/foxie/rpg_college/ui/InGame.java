@@ -44,6 +44,10 @@ public class InGame extends Screen {
 
     // Create the empty health bar
     g.setColor(new Color(0.7f, 0.4f, 0.4f, 1.0f));
+    if (player.isDead()) {
+      g.setColor(new Color(0.3f, 0.0f, 0.0f, 1.0f));
+    }
+
     g.fillRect(
       (int) healthBar.x(),
       (int) healthBar.y(),

@@ -8,7 +8,7 @@ import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 
 public class Lava extends Tile {
-  public static final float DAMAGE = 5.0f;
+  public static final float DAMAGE = 15.0f;
   public static final float BURN_PERIOD = 1.0f;
 
   public Lava(Game game) {

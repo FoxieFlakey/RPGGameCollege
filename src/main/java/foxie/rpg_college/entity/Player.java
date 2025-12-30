@@ -27,6 +27,17 @@ public class Player extends LivingEntity {
 
   public void handleInput(float deltaTime) {
     Keyboard keyboard = this.getWorld().getGame().keyboardState;
+    if (keyboard.getState(Button.R) == Keyboard.State.Clicked) {
+      // Respawn player
+      this.setHealth(this.getMaxHealth());
+      this.setPos(new Vec2(0.0f, 0.0f));
+      return;
+    }
+
+    if (this.isDead()) {
+      // Dead cannot do anything
+      return;
+    }
     
     Vec2 translation = new Vec2(0.0f, 0.0f);
     float moveSpeed = 100.0f; // 20 pixels per second
@@ -55,7 +66,6 @@ public class Player extends LivingEntity {
     }
 
     this.setPos(this.getPos().add(translation));
-    this.camera.setPosition(this.getPos());
   }
 
   @Override
@@ -79,6 +89,10 @@ public class Player extends LivingEntity {
     int height = (int) renderBox.getSize().y();
 
     g.setColor(Color.ORANGE);
+    if (this.isDead()) {
+      g.setColor(Color.BLACK);
+    }
+
     g.fillRoundRect(
       x, y,
       width, height,
