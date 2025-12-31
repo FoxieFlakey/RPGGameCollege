@@ -26,12 +26,27 @@ public class Arrow extends Entity {
   
   @Override
   public boolean canCollideWith(Entity other) {
+    if (other instanceof Arrow) {
+      // Arrow dont collide with arrow
+      return false;
+    }
+    
     if (other == shooter) {
       // Do not damage the shoter
       return false;
     }
     
-    return !(other instanceof Arrow);
+    if (other instanceof LivingEntity) {
+      LivingEntity living = (LivingEntity) other;
+      if (living.isDead()) {
+        // Dont collide with dead entity
+        return false;
+      }
+      return true;
+    }
+    
+    // Everything else arrow does not affect
+    return false;
   }
 
   @Override
@@ -70,8 +85,12 @@ public class Arrow extends Entity {
     this.setPos(this.getPos().add(velocity));
     
     if (this.timeToLive < 0.0f) {
-      this.getWorld().removeEntity(this);
+      this.die();
     }
+  }
+  
+  void die() {
+    this.getWorld().removeEntity(this);
   }
 
   @Override
@@ -89,14 +108,14 @@ public class Arrow extends Entity {
     
     // Arrow collided a target
     this.collisionBox = Optional.empty();
+    this.velocity = 0.0f;
   }
   
   @Override
   public void onEntityCollision(Entity other) {
-    if (other instanceof LivingEntity) {
-      LivingEntity living = (LivingEntity) other;
-      living.doDamage(this.damage);
-    }
+    LivingEntity living = (LivingEntity) other;
+    living.doDamage(this.damage);
+    this.die();
   }
   
   @Override
