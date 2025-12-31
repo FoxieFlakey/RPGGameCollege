@@ -39,6 +39,12 @@ public record Vec2(
 
   public Vec2 normalize() {
     float magnitude = this.magnitude();
+    if (Util.isZero(magnitude)) {
+      // Zero vector, there no magnitude
+      // it points to nowhere, give 0
+      return this;
+    }
+    
     return new Vec2(
       this.x() / magnitude,
       this.y() / magnitude

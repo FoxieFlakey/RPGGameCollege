@@ -11,6 +11,15 @@ public class Util {
     return ((float) System.nanoTime()) / 1_000_000_000.0f;
   }
 
+  public static boolean isZero(double n) {
+    // Looks unnecessary but.. floats and doubles
+    // well can't exactly represent. So lets use this
+    // Float and double only work sanely if its not equality
+    // comparisons
+    double sign = Math.signum(n);
+    return sign > -1.0f && sign < 1.0f;
+  }
+
   public static float normalizeAngle(float degree) {
     degree %= 360.0f;
 
