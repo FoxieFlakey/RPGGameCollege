@@ -21,6 +21,9 @@ public class Player extends LivingEntity {
 
   public final Camera camera;
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), Player.SIZE);
+  
+  private float fireArrowCooldown = -1.0f;
+  private float spawnCatCooldown = -1.0f;
 
   public Player(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getRenderBound(), viewSize);
@@ -30,6 +33,16 @@ public class Player extends LivingEntity {
   public void handleInput(float deltaTime) {
     Keyboard keyboard = this.getWorld().getGame().keyboardState;
     Mouse mouse = this.getWorld().getGame().mouseState;
+    
+    this.fireArrowCooldown -= deltaTime;
+    if (this.fireArrowCooldown < 0.0f) {
+      this.fireArrowCooldown = -1.0f;
+    }
+    
+    this.spawnCatCooldown -= deltaTime;
+    if (this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = -1.0f;
+    }
 
     if (keyboard.getState(Button.R) == Keyboard.State.Clicked) {
       // Respawn player
@@ -39,14 +52,18 @@ public class Player extends LivingEntity {
       return;
     }
 
-    if (keyboard.getState(Button.C) == Keyboard.State.Clicked) {
+    if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = 0.1f;
+      
       // Spawn cat
       Cat cat = new Cat();
       this.getWorld().addEntity(cat);
       cat.setPos(this.getLegPos());
     }
     
-    if (mouse.getButtonState(Mouse.Button.Left) == Mouse.State.Clicked) {
+    if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = 0.1f;
+      
       // Spawn cat
       Cat cat = new Cat();
       this.getWorld().addEntity(cat);
@@ -58,7 +75,9 @@ public class Player extends LivingEntity {
       return;
     }
     
-    if (keyboard.getState(Button.Q) == Keyboard.State.Clicked) {
+    if (keyboard.getState(Button.Q).isNowPressed() && this.fireArrowCooldown < 0.0f) {
+      this.fireArrowCooldown = 0.1f;
+      
       // Spawn arrow
       Arrow arrow = new Arrow(this);
       this.getWorld().addEntity(arrow);
