@@ -207,4 +207,9 @@ public class Player extends LivingEntity {
       bottomRightCollision
     );
   }
+  
+  @Override
+  public void die() {
+    // Player cannot die
+  }
 }

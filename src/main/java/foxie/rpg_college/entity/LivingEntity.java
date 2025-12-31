@@ -18,6 +18,8 @@ public abstract class LivingEntity extends Entity {
   private float flashDuration = -1.0f;
   private float flashPeriod = -1.0f;
   private boolean flashState = false;
+  
+  private float timeToDie = 5.0f;
 
   public static final float FLASH_DURATION = 1.2f;
   public static final float FLASH_PERIOD = 0.1f;
@@ -114,10 +116,22 @@ public abstract class LivingEntity extends Entity {
         this.flashState = !this.flashState;
       }
     }
+    
+    if (this.isDead()) {
+      this.timeToDie -= deltaTime;
+      
+      if (this.timeToDie < 0.0f) {
+        this.die();
+      }
+    }
   }
 
   public Vec2 getLegPos() {
     return this.getLegBox().getCenter();
+  }
+  
+  public void die() {
+    this.getWorld().removeEntity(this);
   }
   
   @Override
