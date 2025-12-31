@@ -15,8 +15,8 @@ public abstract class LivingEntity extends Entity {
   // from fire source like lava or fire
   private float burnTimer = -1.0f;
 
-  private float flashDuration = 0.0f;
-  private float flashPeriod = 0.0f;
+  private float flashDuration = -1.0f;
+  private float flashPeriod = -1.0f;
   private boolean flashState = false;
 
   public static final float FLASH_DURATION = 1.2f;
@@ -59,6 +59,12 @@ public abstract class LivingEntity extends Entity {
     this.flashDuration = LivingEntity.FLASH_DURATION;
     this.flashPeriod = LivingEntity.FLASH_PERIOD;
     this.flashState = true;
+  }
+  
+  public void resetFlash() {
+    this.flashState = false;
+    this.flashDuration = -1.0f;
+    this.flashPeriod = -1.0f;
   }
 
   public boolean isFlashing() {

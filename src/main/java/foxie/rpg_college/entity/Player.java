@@ -35,6 +35,7 @@ public class Player extends LivingEntity {
       // Respawn player
       this.setHealth(this.getMaxHealth());
       this.setPos(new Vec2(0.0f, 0.0f));
+      this.resetFlash();
       return;
     }
 
