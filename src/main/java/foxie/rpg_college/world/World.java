@@ -145,6 +145,11 @@ public abstract class World {
         continue;
       }
 
+      if (e.getCollisionBox().isEmpty()) {
+        // Entity decided that it don't want colliding anymore
+        return;
+      }
+
       tempBox.setPos(Tile.fromTileCoordToWorldCoord(coordAndTile.getKey()));
       if (thisBox.checkCollisionAndFix(tempBox)) {
         e.onCollision();
@@ -165,6 +170,11 @@ public abstract class World {
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
       checkCollisionInner(e, other, thisBox);
+      
+      if (e.getCollisionBox().isEmpty() || other.getCollisionBox().isEmpty()) {
+        // Either entity decided that it don't want colliding anymore
+        continue;
+      }
     }
 
     // Check collision against all tiles
@@ -173,6 +183,11 @@ public abstract class World {
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
       if (thisBox.checkCollisionAndFix(otherBox)) {
+        if (e.getCollisionBox().isEmpty()) {
+          // Entity decided that it don't want colliding anymore
+          return;
+        }
+        
         e.onCollision();
       }
     }
@@ -231,6 +246,11 @@ public abstract class World {
     for (int i = 0; i < 5; i++) {
       for (Entity e : this.entities.values()) {
         checkCollision(e);
+        
+        if (e.getCollisionBox().isEmpty()) {
+          // Entity decided that it don't want colliding anymore
+          return;
+        }
       }
     }
   }
