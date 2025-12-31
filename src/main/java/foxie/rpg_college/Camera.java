@@ -38,6 +38,10 @@ public class Camera {
   public Vec2 translateWorldToAWTGraphicsCoord(Vec2 coord) {
     return coord.sub(this.getVisibleWorld().getTopLeftCorner());
   }
+  
+  public Vec2 translateAWTGraphicsToWorldCoord(Vec2 coord) {
+    return coord.add(this.getVisibleWorld().getTopLeftCorner());
+  }
 
   public void setPosition(Vec2 newPos) {
     this.pos = this.possiblePosition.clampCoordinate(newPos);

@@ -45,6 +45,13 @@ public class Player extends LivingEntity {
       this.getWorld().addEntity(cat);
       cat.setPos(this.getLegPos());
     }
+    
+    if (mouse.getButtonState(Mouse.Button.Left) == Mouse.State.Clicked) {
+      // Spawn cat
+      Cat cat = new Cat();
+      this.getWorld().addEntity(cat);
+      cat.setPos(this.camera.translateAWTGraphicsToWorldCoord(mouse.getButtonPosition()));
+    }
 
     if (this.isDead()) {
       // Dead cannot do anything
