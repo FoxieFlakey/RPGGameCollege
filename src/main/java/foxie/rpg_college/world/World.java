@@ -169,10 +169,15 @@ public abstract class World {
 
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
+      if (e.getCollisionBox().isEmpty()) {
+        // Entity decided it doesnt want colliding
+        return;
+      }
+      
       checkCollisionInner(e, other, thisBox);
       
-      if (e.getCollisionBox().isEmpty() || other.getCollisionBox().isEmpty()) {
-        // Either entity decided that it don't want colliding anymore
+      if (other.getCollisionBox().isEmpty()) {
+        // Other entity decided that it don't want colliding anymore
         continue;
       }
     }
@@ -249,7 +254,7 @@ public abstract class World {
         
         if (e.getCollisionBox().isEmpty()) {
           // Entity decided that it don't want colliding anymore
-          return;
+          continue;
         }
       }
     }
