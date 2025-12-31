@@ -4,6 +4,7 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 
 public class Mouse implements AutoCloseable {
@@ -47,9 +48,18 @@ public class Mouse implements AutoCloseable {
   private final Listener listener = new Listener(this);
   private final Window window;
 
-  public Mouse(Window window) {
+  private FloatRectangle watchedArea;
+  private Vec2 mapWatchedArea;
+
+  public Mouse(Window window, FloatRectangle watchedArea, Vec2 mapToArea) {
     this.window = window;
+    this.watchedArea = watchedArea;
+    this.mapWatchedArea = mapToArea;
     window.addMouseListener(this.listener);
+  }
+  
+  public void setWatchedArea(FloatRectangle watchedArea) {
+    this.watchedArea = watchedArea;
   }
 
   public void updateState() {
@@ -96,17 +106,32 @@ public class Mouse implements AutoCloseable {
     public Listener(Mouse owner) {
       this.owner = owner;
     }
+    
+    boolean isInteresting(MouseEvent e) {
+      return this.owner.watchedArea.contains(new Vec2((float) e.getX(), (float) e.getY()));
+    }
 
     void updatePosition(MouseEvent e) {
+      if (!this.isInteresting(e)) {
+        return;
+      }
+      
+      Vec2 raw = new Vec2((float) e.getX(), (float) e.getY());
+      Vec2 offseted = raw.sub(this.owner.watchedArea.getTopLeftCorner());
+      
       this.owner.positionNow = new Vec2(
-        (float) e.getX(),
-        (float) e.getY()
+        (offseted.x() / this.owner.watchedArea.getSize().x()) * this.owner.mapWatchedArea.x(),
+        (offseted.y() / this.owner.watchedArea.getSize().y()) * this.owner.mapWatchedArea.y()
       );
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
       synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
+        
         this.owner.buttonStateNow[0] = false;
         this.owner.buttonStateNow[1] = false;
         this.owner.buttonStateNow[2] = false;
@@ -131,6 +156,10 @@ public class Mouse implements AutoCloseable {
     @Override
     public void mousePressed(MouseEvent e) {
       synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
+        
         this.updateButton(e, true);
         this.updatePosition(e);
       }
@@ -139,6 +168,10 @@ public class Mouse implements AutoCloseable {
     @Override
     public void mouseReleased(MouseEvent e) {
       synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
+        
         this.updateButton(e, false);
         this.updatePosition(e);
       }
@@ -147,6 +180,9 @@ public class Mouse implements AutoCloseable {
     @Override
     public void mouseMoved(MouseEvent e) {
       synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
         this.updatePosition(e);
       }
     }
