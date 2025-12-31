@@ -63,6 +63,7 @@ public class Player extends LivingEntity {
       Arrow arrow = new Arrow(this);
       this.getWorld().addEntity(arrow);
       arrow.setPos(this.getPos());
+      arrow.setRotation(this.getRotation());
     }
     
     Vec2 translation = new Vec2(0.0f, 0.0f);
