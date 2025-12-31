@@ -5,9 +5,12 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import foxie.rpg_college.Camera;
+import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
 public abstract class Entity {
@@ -82,4 +85,6 @@ public abstract class Entity {
   public abstract boolean isVisible(Camera cam);
   public abstract void render(Graphics2D g, float deltaTime);
   public abstract void tick(float deltaTime);
+  public abstract void onTileStep(Tile tile, IVec2 tileCoord);
+  public abstract FloatRectangle getBoxToBeCheckedForTileStep();
 }

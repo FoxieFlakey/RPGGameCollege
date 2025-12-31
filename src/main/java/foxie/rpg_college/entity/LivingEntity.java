@@ -3,6 +3,7 @@ package foxie.rpg_college.entity;
 import java.util.Optional;
 
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Lava;
 import foxie.rpg_college.tile.Tile;
@@ -74,25 +75,28 @@ public abstract class LivingEntity extends Entity {
     
     return this.flashState;
   }
+  
+  @Override
+  public void onTileStep(Tile tile, IVec2 tileCoord) {
+    // Harm the living entity when stepped on lava
+    if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
+      if (this.canBurn()) {
+        this.burnTimer = Lava.BURN_PERIOD;
+        this.doDamage(Lava.DAMAGE);
+      }
+    }
+  }
+  
+  @Override
+  public final FloatRectangle getBoxToBeCheckedForTileStep() {
+    return this.getLegBox();
+  }
 
   @Override
   public void tick(float deltaTime) {
     burnTimer -= deltaTime;
     if (burnTimer < 0.0f) {
       this.burnTimer = -1.0f;
-    }
-
-    Optional<Tile> maybeTile = this.getWorld().getTileAt(EntityHelper.fromWorldCoordToTileCoord(this.getLegPos()));
-    if (maybeTile.isPresent()) {
-      Tile tile = maybeTile.get();
-      
-      // Harm the living entity when stepped on lava
-      if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
-        if (this.canBurn()) {
-          this.burnTimer = Lava.BURN_PERIOD;
-          this.doDamage(Lava.DAMAGE);
-        }
-      }
     }
 
     if (this.isFlashing()) {

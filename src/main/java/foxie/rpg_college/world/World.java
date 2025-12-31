@@ -155,6 +155,42 @@ public abstract class World {
     for (Entry<IVec2, Tile> coordAndTile : this.tiles.entrySet()) {
       coordAndTile.getValue().tick(deltaTime, coordAndTile.getKey());
     }
+    
+    for (Entity e : this.entities.values()) {
+      FloatRectangle checkBounds = e.getBoxToBeCheckedForTileStep();
+      Vec2 topLeft = checkBounds.getTopLeftCorner().div(Tile.SIZE.x());
+      Vec2 bottomRight = checkBounds.getBottomRightCorner().div(Tile.SIZE.x());
+      
+      IVec2 tileToCheckStart = new IVec2(
+        (int) Math.floor((double) topLeft.x()) - 1,
+        (int) Math.floor((double) topLeft.y()) - 1
+      );
+      IVec2 tileToCheckEnd = new IVec2(
+        (int) Math.ceil((double) bottomRight.x()) + 1,
+        (int) Math.ceil((double) bottomRight.y()) + 1
+      );
+      
+      for (int y = tileToCheckStart.y(); y < tileToCheckEnd.y(); y++) {
+        for (int x = tileToCheckStart.x(); x < tileToCheckEnd.x(); x++) {
+          IVec2 coord = new IVec2(x, y);
+          Optional<Tile> tileOptional = this.getTileAt(coord);
+          if (tileOptional.isEmpty()) {
+            continue;
+          }
+          
+          Tile tile = tileOptional.get();
+          Vec2 tileCoord = Tile.fromTileCoordToWorldCoord(coord);
+          FloatRectangle tileRect = new FloatRectangle(
+            tileCoord.sub(Tile.SIZE.mul(0.5f)),
+            tileCoord.add(Tile.SIZE.mul(0.5f))
+          );
+          
+          if (tileRect.isIntersects(checkBounds)) {
+            e.onTileStep(tile, coord);
+          }
+        }
+      }
+    }
 
     for (Entity e : this.entities.values()) {
       e.tick(deltaTime);
