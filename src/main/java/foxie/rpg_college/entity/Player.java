@@ -159,10 +159,17 @@ public class Player extends LivingEntity {
   }
 
   @Override
-  public Vec2 getLegPos() {
-    return new Vec2(
-      this.getPos().x(),
-      this.getPos().y() + Player.SIZE.y() * 0.5f
+  public FloatRectangle getLegBox() {
+    FloatRectangle collision = this.collisionBox.asRect();
+    Vec2 topLeftCollision = collision.getTopLeftCorner();
+    Vec2 bottomRightCollision = collision.getBottomRightCorner();
+    
+    return new FloatRectangle(
+      new Vec2(
+        topLeftCollision.x(),
+        bottomRightCollision.y() - Player.SIZE.y() * 0.5f
+      ),
+      bottomRightCollision
     );
   }
 }

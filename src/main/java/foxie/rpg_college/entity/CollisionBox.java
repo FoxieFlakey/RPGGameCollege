@@ -138,4 +138,11 @@ public class CollisionBox {
   public boolean isUnmoveable() {
     return this.isUnmoveable;
   }
+  
+  public FloatRectangle asRect() {
+    return new FloatRectangle(
+      this.pos,
+      this.pos.add(this.size)
+    );
+  }
 }

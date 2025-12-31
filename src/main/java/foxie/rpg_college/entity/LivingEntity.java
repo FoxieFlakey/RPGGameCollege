@@ -2,6 +2,7 @@ package foxie.rpg_college.entity;
 
 import java.util.Optional;
 
+import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Lava;
 import foxie.rpg_college.tile.Tile;
@@ -105,7 +106,11 @@ public abstract class LivingEntity extends Entity {
     }
   }
 
-  public abstract Vec2 getLegPos();
+  public Vec2 getLegPos() {
+    return this.getLegBox().getCenter();
+  }
+  
+  public abstract FloatRectangle getLegBox();
   public abstract float getMaxHealth();
 }
 

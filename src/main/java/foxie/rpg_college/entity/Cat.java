@@ -64,6 +64,11 @@ public class Cat extends LivingEntity {
   }
 
   @Override
+  public FloatRectangle getLegBox() {
+    return this.collisionBox.asRect();
+  }
+  
+  @Override
   public Vec2 getLegPos() {
     return new Vec2(
       this.getPos().x(),

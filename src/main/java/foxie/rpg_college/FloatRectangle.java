@@ -59,6 +59,10 @@ public record FloatRectangle(
       Math.clamp(coord.y(), topLeft.y(), bottomRight.y())
     );
   }
+  
+  public Vec2 getCenter() {
+    return this.getTopLeftCorner().add(this.getSize().mul(0.5f));
+  }
 
   public boolean contains(Vec2 pos) {
     Vec2 topLeft = this.getTopLeftCorner();
