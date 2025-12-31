@@ -16,8 +16,19 @@ public class Arrow extends Entity {
   private Optional<CollisionBox> collisionBox = Optional.of(new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), Arrow.SIZE));
   private float damage = 5.0f;
   
+  private final Entity shooter;
+  
+  public Arrow(Entity shooter) {
+    this.shooter = shooter;
+  }
+  
   @Override
   public boolean canCollideWith(Entity other) {
+    if (other == shooter) {
+      // Do not damage the shoter
+      return false;
+    }
+    
     return !(other instanceof Arrow);
   }
 

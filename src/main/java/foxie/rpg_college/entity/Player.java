@@ -60,7 +60,7 @@ public class Player extends LivingEntity {
     
     if (keyboard.getState(Button.Q) == Keyboard.State.Clicked) {
       // Spawn arrow
-      Arrow arrow = new Arrow();
+      Arrow arrow = new Arrow(this);
       this.getWorld().addEntity(arrow);
       arrow.setPos(this.getPos());
     }
