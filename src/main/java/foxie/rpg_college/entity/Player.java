@@ -23,7 +23,7 @@ public class Player extends LivingEntity {
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), Player.SIZE);
 
   public Player(World world, Vec2 viewSize) {
-    this.camera = new Camera(world.getWorldBound(), viewSize);
+    this.camera = new Camera(world.getRenderBound(), viewSize);
     this.setHealth(this.getMaxHealth());
   }
 
@@ -153,7 +153,7 @@ public class Player extends LivingEntity {
   @Override
   public void setWorld(World world) {
     super.setWorld(world);
-    this.camera.setBound(world.getWorldBound());
+    this.camera.setBound(world.getRenderBound());
   }
 
   @Override

@@ -18,7 +18,8 @@ import foxie.rpg_college.tile.Tile;
 
 public abstract class World {
   private final Game game;
-  private final FloatRectangle bound;
+  private final FloatRectangle renderBound;
+  private final FloatRectangle validBound;
   private final LinkedHashMap<Long, Entity> entities = new LinkedHashMap<>();
   private final LinkedHashMap<IVec2, Tile> tiles = new LinkedHashMap<>();
 
@@ -28,15 +29,23 @@ public abstract class World {
 
   public World(Game game, FloatRectangle bound) {
     this.game = game;
-    this.bound = bound;
+    this.renderBound = bound;
+    this.validBound = new FloatRectangle(
+      this.renderBound.getTopLeftCorner().add(new Vec2(World.BORDER_INNER_DEPTH, World.BORDER_INNER_DEPTH)),
+      this.renderBound.getBottomRightCorner().add(new Vec2(World.BORDER_INNER_DEPTH, World.BORDER_INNER_DEPTH))
+    );
 
-    float left = this.bound.getTopLeftCorner().x();
-    float right = this.bound.getBottomRightCorner().x();
-    float top = this.bound.getTopLeftCorner().y();
-    float bottom = this.bound.getBottomRightCorner().y();
+    float left = this.renderBound.getTopLeftCorner().x();
+    float right = this.renderBound.getBottomRightCorner().x();
+    float top = this.renderBound.getTopLeftCorner().y();
+    float bottom = this.renderBound.getBottomRightCorner().y();
 
-    float width = this.bound.getSize().x();
-    float height = this.bound.getSize().y();
+    float width = this.renderBound.getSize().x();
+    float height = this.renderBound.getSize().y();
+    
+    if (width < World.BORDER_INNER_DEPTH || height < World.BORDER_INNER_DEPTH) {
+      throw new IllegalArgumentException("World bound is too small");
+    }
 
     Vec2 center = new Vec2(
       (left + right) * 0.5f,
@@ -61,7 +70,11 @@ public abstract class World {
   }
   
   public final FloatRectangle getWorldBound() {
-    return this.bound;
+    return this.validBound;
+  }
+  
+  public final FloatRectangle getRenderBound() {
+    return this.renderBound;
   }
 
   public void addTile(IVec2 coord, Tile tile) {
