@@ -11,18 +11,6 @@ import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Player;
 
 public class InGame extends Screen {
-  private float healthFlashDuration = 0.0f;
-
-  // Essentially a state between two flash colors
-  // red and really bright red
-  private boolean healthFlashState = false;
-  private float healthFlashPeriodTimer = 0.0f;
-  
-  private static final float FLASH_PERIOD = 0.1f;
-  private static final float FLASH_DURATION = 1.2f;
-
-  private float prevPlayerHealth = 0.0f;
-
   public InGame(Game game) {
     super(game);
   }
@@ -45,26 +33,8 @@ public class InGame extends Screen {
     Player player = this.getGame().getPlayer();
     float healthPercent = player.getHealth() / player.getMaxHealth();
 
-    // Check if player dropped their health
-    if (player.getHealth() < this.prevPlayerHealth) {
-      this.healthFlashState = true;
-      this.healthFlashPeriodTimer = InGame.FLASH_PERIOD;
-      this.healthFlashDuration = InGame.FLASH_DURATION;
-    }
-    this.prevPlayerHealth = player.getHealth();
-
-    if (this.healthFlashDuration > 0.0f) {
-      this.healthFlashPeriodTimer -= deltaTime;
-      if (this.healthFlashPeriodTimer < 0.0f) {
-        this.healthFlashPeriodTimer = InGame.FLASH_PERIOD;
-        this.healthFlashState = !this.healthFlashState;
-      }
-
-      this.healthFlashDuration -= deltaTime;
-    }
-
     Color healthBarColor = new Color(0.9f, 0.0f, 0.0f, 1.0f);
-    if (this.healthFlashState) {
+    if (player.getFlashState()) {
       healthBarColor = new Color(0.9f, 0.8f, 0.8f, 1.0f);
     }
 
