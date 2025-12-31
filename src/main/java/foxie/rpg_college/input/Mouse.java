@@ -56,6 +56,7 @@ public class Mouse implements AutoCloseable {
     this.watchedArea = watchedArea;
     this.mapWatchedArea = mapToArea;
     window.addMouseListener(this.listener);
+    window.addMouseMotionListener(this.listener);
   }
   
   public void setWatchedArea(FloatRectangle watchedArea) {
@@ -97,6 +98,7 @@ public class Mouse implements AutoCloseable {
 
   @Override
   public void close() throws Exception {
+    this.window.removeMouseMotionListener(this.listener);
     this.window.removeMouseListener(this.listener);
   }
 
@@ -173,6 +175,16 @@ public class Mouse implements AutoCloseable {
         }
         
         this.updateButton(e, false);
+        this.updatePosition(e);
+      }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+      synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
         this.updatePosition(e);
       }
     }
