@@ -81,6 +81,11 @@ public abstract class World {
     if (this.tiles.containsKey(coord)) {
       throw new IllegalStateException("Attempting to add more than one tile to same coord");
     }
+    
+    Vec2 coordInWorld = Tile.fromTileCoordToWorldCoord(coord);
+    if (!this.isValidPos(coordInWorld)) {
+      throw new IllegalArgumentException("Attempting to add tile to outside of world");
+    }
 
     this.tiles.put(coord, tile);
   }
@@ -95,6 +100,11 @@ public abstract class World {
       entity.getWorld().removeEntity(entity);
     }
     entity.setWorld(this);
+    
+    // Clamp the pos to the valid position
+    if (!this.isValidPos(entity.getPos())) {
+      entity.setPos(this.validatePos(entity.getPos()));
+    }
   }
 
   public void removeEntity(Entity entity) {
