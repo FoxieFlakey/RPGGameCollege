@@ -4,9 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
@@ -20,8 +20,8 @@ public abstract class World {
   private final Game game;
   private final FloatRectangle renderBound;
   private final FloatRectangle validBound;
-  private final LinkedHashMap<Long, Entity> entities = new LinkedHashMap<>();
-  private final LinkedHashMap<IVec2, Tile> tiles = new LinkedHashMap<>();
+  private final ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<IVec2, Tile> tiles = new ConcurrentHashMap<>();
 
   private final CollisionBox[] worldBorder;
   private final static float BORDER_DEPTH = 200000000.0f;

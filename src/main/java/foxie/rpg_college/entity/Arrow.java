@@ -17,6 +17,8 @@ public class Arrow extends Entity {
   private float damage = 5.0f;
   
   private final Entity shooter;
+  private float velocity = 400.0f;
+  private float timeToLive = 1.0f;
   
   public Arrow(Entity shooter) {
     this.shooter = shooter;
@@ -62,6 +64,14 @@ public class Arrow extends Entity {
 
   @Override
   public void tick(float deltaTime) {
+    this.timeToLive -= deltaTime;
+    
+    Vec2 velocity = Vec2.unitVectorOfAngle(this.getRotation()).mul(this.velocity * deltaTime);
+    this.setPos(this.getPos().add(velocity));
+    
+    if (this.timeToLive < 0.0f) {
+      this.getWorld().removeEntity(this);
+    }
   }
 
   @Override
