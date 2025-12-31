@@ -120,6 +120,14 @@ public abstract class LivingEntity extends Entity {
     return this.getLegBox().getCenter();
   }
   
+  @Override
+  public void onEntityCollision(Entity other) {
+  }
+  
+  @Override
+  public void onTileCollision(IVec2 coord, Tile other) {
+  }
+  
   public abstract FloatRectangle getLegBox();
   public abstract float getMaxHealth();
 }

@@ -132,6 +132,9 @@ public abstract class World {
     if (thisBox.checkCollisionAndFix(otherBox)) {
       e.onCollision();
       other.onCollision();
+      
+      e.onEntityCollision(other);
+      other.onEntityCollision(e);
     }
   }
 
@@ -145,6 +148,7 @@ public abstract class World {
       tempBox.setPos(Tile.fromTileCoordToWorldCoord(coordAndTile.getKey()));
       if (thisBox.checkCollisionAndFix(tempBox)) {
         e.onCollision();
+        e.onTileCollision(coordAndTile.getKey(), coordAndTile.getValue());
       }
     }
   }

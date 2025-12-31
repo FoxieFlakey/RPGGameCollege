@@ -14,6 +14,7 @@ public class Arrow extends Entity {
   private static final Vec2 SIZE = new Vec2(32.0f, 32.0f);
   
   private Optional<CollisionBox> collisionBox = Optional.of(new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), Arrow.SIZE));
+  private float damage = 5.0f;
   
   @Override
   public boolean canCollideWith(Entity other) {
@@ -67,5 +68,17 @@ public class Arrow extends Entity {
     
     // Arrow collided a target
     this.collisionBox = Optional.empty();
+  }
+  
+  @Override
+  public void onEntityCollision(Entity other) {
+    if (other instanceof LivingEntity) {
+      LivingEntity living = (LivingEntity) other;
+      living.doDamage(this.damage);
+    }
+  }
+  
+  @Override
+  public void onTileCollision(IVec2 coord, Tile other) {
   }
 }

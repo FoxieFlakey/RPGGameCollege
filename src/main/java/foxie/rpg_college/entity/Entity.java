@@ -80,7 +80,8 @@ public abstract class Entity {
   // one say true other say false, the result is false
   // which mean no collision happens
   public abstract boolean canCollideWith(Entity other);
-
+  public abstract void onTileCollision(IVec2 coord, Tile other);
+  public abstract void onEntityCollision(Entity other);
   public abstract Optional<CollisionBox> getCollisionBox();
   public abstract boolean isVisible(Camera cam);
   public abstract void render(Graphics2D g, float deltaTime);
