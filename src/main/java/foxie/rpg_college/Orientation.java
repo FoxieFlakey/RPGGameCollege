@@ -6,6 +6,21 @@ public enum Orientation {
   Left,
   Right;
 
+  public float toDegrees() {
+    switch (this) {
+      case Up:
+        return 0.0f;
+      case Down:
+        return 180.0f;
+      case Left:
+        return 270.0f;
+      case Right:
+        return 90.0f;
+    }
+    
+    throw new RuntimeException("unreachable");
+  }
+
   // 315..45 is up
   // 45..135 is right
   // 135..225 is down

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
@@ -76,6 +77,18 @@ public class Player extends LivingEntity {
     }
 
     this.setPos(this.getPos().add(translation));
+    
+    if (translation.x() > 0.0f) {
+      this.setRotation(Orientation.Right.toDegrees());
+    } else if (translation.x() < 0.0f) {
+      this.setRotation(Orientation.Left.toDegrees());
+    }
+    
+    if (translation.y() < 0.0f) {
+      this.setRotation(Orientation.Up.toDegrees());
+    } else if (translation.y() > 0.0f) {
+      this.setRotation(Orientation.Down.toDegrees());
+    }
 
     if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
       Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(this.getPos());
