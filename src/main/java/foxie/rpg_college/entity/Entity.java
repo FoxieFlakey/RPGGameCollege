@@ -86,5 +86,5 @@ public abstract class Entity {
   public abstract void render(Graphics2D g, float deltaTime);
   public abstract void tick(float deltaTime);
   public abstract void onTileStep(Tile tile, IVec2 tileCoord);
-  public abstract FloatRectangle getBoxToBeCheckedForTileStep();
+  public abstract Optional<FloatRectangle> getBoxToBeCheckedForTileStep();
 }

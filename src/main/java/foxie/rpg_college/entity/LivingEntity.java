@@ -94,8 +94,8 @@ public abstract class LivingEntity extends Entity {
   }
   
   @Override
-  public final FloatRectangle getBoxToBeCheckedForTileStep() {
-    return this.getLegBox();
+  public final Optional<FloatRectangle> getBoxToBeCheckedForTileStep() {
+    return Optional.of(this.getLegBox());
   }
 
   @Override

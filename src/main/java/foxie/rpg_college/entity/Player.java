@@ -58,6 +58,13 @@ public class Player extends LivingEntity {
       return;
     }
     
+    if (keyboard.getState(Button.Q) == Keyboard.State.Clicked) {
+      // Spawn arrow
+      Arrow arrow = new Arrow();
+      this.getWorld().addEntity(arrow);
+      arrow.setPos(this.getPos());
+    }
+    
     Vec2 translation = new Vec2(0.0f, 0.0f);
     float moveSpeed = 100.0f; // 20 pixels per second
     if (keyboard.getState(Button.Control).isNowPressed()) {

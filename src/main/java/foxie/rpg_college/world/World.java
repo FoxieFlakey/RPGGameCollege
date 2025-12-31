@@ -180,7 +180,12 @@ public abstract class World {
     }
     
     for (Entity e : this.entities.values()) {
-      FloatRectangle checkBounds = e.getBoxToBeCheckedForTileStep();
+      Optional<FloatRectangle> maybeCheckBounds = e.getBoxToBeCheckedForTileStep();
+      if (maybeCheckBounds.isEmpty()) {
+        continue;
+      }
+      
+      FloatRectangle checkBounds = maybeCheckBounds.get();
       Vec2 topLeft = checkBounds.getTopLeftCorner().div(Tile.SIZE.x());
       Vec2 bottomRight = checkBounds.getBottomRightCorner().div(Tile.SIZE.x());
       
