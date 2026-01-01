@@ -79,14 +79,15 @@ public class Arrow extends Entity {
   @Override
   public void render(Graphics2D g, float deltaTime) {
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Arrow.SIZE);
-    
+    Vec2 center = renderBox.getCenter();
     AffineTransform transform = new AffineTransform();
-    transform.translate(renderBox.getTopLeftCorner().x(), renderBox.getTopLeftCorner().y());
+    transform.translate(center.x(), center.y());
     transform.rotate(Math.toRadians(this.getRotation()));
     transform.scale(
       renderBox.getSize().x() / (float) Arrow.ARROW_TEXTURE.getWidth(null),
       renderBox.getSize().y() / (float) Arrow.ARROW_TEXTURE.getHeight(null)
     );
+    transform.translate(-Arrow.SIZE.x() * 0.25f, -Arrow.SIZE.y() * 0.5f);
     
     g.drawImage(Arrow.ARROW_TEXTURE, transform, null);
   }
