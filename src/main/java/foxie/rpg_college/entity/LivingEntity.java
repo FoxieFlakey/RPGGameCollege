@@ -144,5 +144,6 @@ public abstract class LivingEntity extends Entity {
   
   public abstract FloatRectangle getLegBox();
   public abstract float getMaxHealth();
+  public abstract float getMovementSpeed();
 }
 

@@ -75,4 +75,9 @@ public class CatEntity extends LivingEntity {
       this.getPos().y() - CatEntity.SIZE.y() * 0.5f
     );
   }
+  
+  @Override
+  public float getMovementSpeed() {
+    return 200.0f;
+  }
 }

@@ -19,7 +19,6 @@ public class PlayerEntity extends LivingEntity implements Controllable {
     50.0f,
     100.0f
   );
-  private static final float MOVEMENT_SPEED = 100.0f;
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   
@@ -122,11 +121,16 @@ public class PlayerEntity extends LivingEntity implements Controllable {
     return this.controller;
   }
   
+  @Override
+  public float getMovementSpeed() {
+    return 100.0f;
+  }
+  
   private static class ControllerImpl implements Controller, ControlEventListener {
-    private final PlayerEntity owner;
+    private final LivingEntity owner;
     private final HashSet<ControlEventListener> listeners = new HashSet<>();
     
-    public ControllerImpl(PlayerEntity owner) {
+    public ControllerImpl(LivingEntity owner) {
       this.owner = owner;
     }
     
@@ -147,7 +151,7 @@ public class PlayerEntity extends LivingEntity implements Controllable {
 
 		@Override
 		public void applyMovement(Vec2 multiplier) {
-      this.owner.setPos(this.owner.getPos().add(multiplier.mul(PlayerEntity.MOVEMENT_SPEED)));
+      this.owner.setPos(this.owner.getPos().add(multiplier.mul(this.owner.getMovementSpeed())));
 		}
 
 		@Override
