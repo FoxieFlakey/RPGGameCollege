@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.PlayerEntity;
-import foxie.rpg_college.entity.controller.EntityController;
+import foxie.rpg_college.entity.controller.InputToControllerBridge;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.tile.TileList;
@@ -31,7 +31,7 @@ public class Game implements AutoCloseable {
 
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
   private final Overworld overworld;
-  private final EntityController player;
+  private final InputToControllerBridge player;
   private final Screen currentScreen;
   
   private float lastRenderTime = Util.getTime();
@@ -85,7 +85,7 @@ public class Game implements AutoCloseable {
     playerEntity.setPos(new Vec2(-100.0f, 300.0f));
     
     this.currentScreen = new InGame(this);
-    this.player = new EntityController(playerEntity, new Vec2(1280.0f, 720.0f));
+    this.player = new InputToControllerBridge(playerEntity, new Vec2(1280.0f, 720.0f));
   }
 
   @Override

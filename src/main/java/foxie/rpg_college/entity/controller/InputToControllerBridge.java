@@ -13,7 +13,7 @@ import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.input.Mouse;
 
-public class EntityController implements AutoCloseable {
+public class InputToControllerBridge implements AutoCloseable {
   private Optional<Controller> controller;
   private final Camera camera;
   private final ControlEventListener listener;
@@ -21,13 +21,13 @@ public class EntityController implements AutoCloseable {
   private float fireArrowCooldown = -1.0f;
   private float spawnCatCooldown = -1.0f;
   
-  public EntityController(Controllable entity, Vec2 viewSize) {
+  public InputToControllerBridge(Controllable entity, Vec2 viewSize) {
     Controller controller = entity.getController();
     this.controller = Optional.of(controller);
     this.camera = new Camera(controller.getEntity().getWorld().getRenderBound(), viewSize);
     
     @SuppressWarnings("resource")
-    EntityController self = this;
+    InputToControllerBridge self = this;
     this.listener = new ControlEventListener() {
       @Override
       public void onPositionUpdated() {
