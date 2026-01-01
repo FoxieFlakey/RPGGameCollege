@@ -2,16 +2,15 @@ package foxie.rpg_college.entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Optional;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.controller.ControlEventListener;
 import foxie.rpg_college.entity.controller.Controllable;
 import foxie.rpg_college.entity.controller.Controller;
+import foxie.rpg_college.entity.controller.SimpleEntityController;
+import foxie.rpg_college.entity.controller.LivingEntityController;
 import foxie.rpg_college.world.World;
 
 public class PlayerEntity extends LivingEntity implements Controllable {
@@ -22,7 +21,7 @@ public class PlayerEntity extends LivingEntity implements Controllable {
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   
-  private PlayerEntity.ControllerImpl controller = null;
+  private SimpleEntityController controller = null;
 
   public PlayerEntity() {
     this.setHealth(this.getMaxHealth());
@@ -115,8 +114,9 @@ public class PlayerEntity extends LivingEntity implements Controllable {
   
   @Override
   public Controller getController() {
+    PlayerEntity player = this;
     if (this.controller == null) {
-      this.controller = new PlayerEntity.ControllerImpl(this);
+      this.controller = new LivingEntityController(player);
     }
     return this.controller;
   }
@@ -124,75 +124,5 @@ public class PlayerEntity extends LivingEntity implements Controllable {
   @Override
   public float getMovementSpeed() {
     return 100.0f;
-  }
-  
-  private static class ControllerImpl implements Controller, ControlEventListener {
-    private final LivingEntity owner;
-    private final HashSet<ControlEventListener> listeners = new HashSet<>();
-    
-    public ControllerImpl(LivingEntity owner) {
-      this.owner = owner;
-    }
-    
-		@Override
-		public Entity getEntity() {
-      return owner;
-		}
-
-		@Override
-		public void addListener(ControlEventListener listener) {
-      this.listeners.add(listener);
-		}
-
-		@Override
-		public void removeListener(ControlEventListener listener) {
-      this.listeners.remove(listener);
-		}
-
-		@Override
-		public void applyMovement(Vec2 multiplier) {
-      this.owner.setPos(this.owner.getPos().add(multiplier.mul(this.owner.getMovementSpeed())));
-		}
-
-		@Override
-		public void setRotation(float rotation) {
-      this.owner.setRotation(rotation);
-		}
-
-		@Override
-		public void setPos(Vec2 position) {
-      this.owner.setPos(position);
-		}
-    
-    @Override
-		public boolean shouldControlDisabled() {
-			return this.owner.isDead();
-		}
-
-    // Forwarding to listeners
-		@Override
-		public void onPositionUpdated() {
-			for (ControlEventListener listener : this.listeners) {
-        listener.onPositionUpdated();
-      }
-		}
-    
-    @Override
-    public void onWorldChange() {
-      for (ControlEventListener listener : this.listeners) {
-        listener.onWorldChange();
-      }
-    }
-
-    // Forwarding to listeners
-		@Override
-		public void onEntityNoLongerControllable() {
-      Iterator<ControlEventListener> iter = this.listeners.iterator();
-			while (iter.hasNext()) {
-        ControlEventListener listener = iter.next();
-        iter.remove();
-        listener.onEntityNoLongerControllable();
-      }
-		}
   }
 }
