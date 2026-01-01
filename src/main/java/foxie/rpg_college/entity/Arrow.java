@@ -1,12 +1,18 @@
 package foxie.rpg_college.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
+import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Tile;
 
@@ -19,6 +25,17 @@ public class Arrow extends Entity {
   private final Entity shooter;
   private float velocity = 400.0f;
   private float timeToLive = 1.0f;
+  
+  private static final URL ARROW_URL = Util.getResource("/arrow.png");
+  private static Image ARROW_TEXTURE;
+  
+  static {
+    try {
+      ARROW_TEXTURE = ImageIO.read(Arrow.ARROW_URL.openStream());
+    } catch (IOException e) {
+      throw new RuntimeException("Error loading arrow texture", e);
+    }
+  }
   
   public Arrow(Entity shooter) {
     this.shooter = shooter;
@@ -63,18 +80,15 @@ public class Arrow extends Entity {
   public void render(Graphics2D g, float deltaTime) {
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Arrow.SIZE);
     
-    int x = (int) renderBox.getTopLeftCorner().x();
-    int y = (int) renderBox.getTopLeftCorner().y();
-    int width = (int) renderBox.getSize().x();
-    int height = (int) renderBox.getSize().y();
-    
-    g.setColor(Color.MAGENTA);
-    g.fillRect(
-      x,
-      y,
-      width,
-      height
+    AffineTransform transform = new AffineTransform();
+    transform.translate(renderBox.getTopLeftCorner().x(), renderBox.getTopLeftCorner().y());
+    transform.rotate(Math.toRadians(this.getRotation()));
+    transform.scale(
+      renderBox.getSize().x() / (float) Arrow.ARROW_TEXTURE.getWidth(null),
+      renderBox.getSize().y() / (float) Arrow.ARROW_TEXTURE.getHeight(null)
     );
+    
+    g.drawImage(Arrow.ARROW_TEXTURE, transform, null);
   }
 
   @Override
