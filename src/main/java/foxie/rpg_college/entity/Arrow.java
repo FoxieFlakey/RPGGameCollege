@@ -19,7 +19,8 @@ import foxie.rpg_college.tile.Tile;
 public class Arrow extends Entity {
   private static final Vec2 SIZE = new Vec2(32.0f, 32.0f);
   
-  private Optional<CollisionBox> collisionBox = Optional.of(new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), Arrow.SIZE));
+  private boolean hasArrowHitSomething = false;
+  private CollisionBox collisionBox = new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), Arrow.SIZE);
   private float damage = 5.0f;
   
   private final Entity shooter;
@@ -68,7 +69,10 @@ public class Arrow extends Entity {
 
   @Override
   public Optional<CollisionBox> getCollisionBox() {
-    return this.collisionBox;
+    if (this.hasArrowHitSomething) {
+      return Optional.empty();
+    }
+    return Optional.of(this.collisionBox);
   }
 
   @Override
@@ -119,7 +123,7 @@ public class Arrow extends Entity {
     super.onCollision();
     
     // Arrow collided a target
-    this.collisionBox = Optional.empty();
+    this.hasArrowHitSomething = true;
     this.velocity = 0.0f;
   }
   
