@@ -83,7 +83,7 @@ public class Game implements AutoCloseable {
     
     PlayerEntity playerEntity = new PlayerEntity();
     this.overworld.addEntity(playerEntity);
-    playerEntity.setPos(new Vec2(-100.0f, 300.0f));
+    playerEntity.setPos(new Vec2(-500.0f, 300.0f));
     
     CatEntity catEntity = new CatEntity();
     this.overworld.addEntity(catEntity);
@@ -108,7 +108,7 @@ public class Game implements AutoCloseable {
     this.overworld.addEntity(entity);
     this.player.setNewEntityToControl(entity);
     
-    entity.setPos(new Vec2(-100.0f, 300.0f));
+    entity.setPos(new Vec2(-500.0f, 300.0f));
   }
 
   @Override
@@ -176,7 +176,7 @@ public class Game implements AutoCloseable {
     if (this.getPlayer().isEmpty()) {
       if (this.keyboardState.getState(Keyboard.Button.R) == Keyboard.State.Clicked) {
         this.handleRespawnCat();
-      } else if (this.keyboardState.getState(Keyboard.Button.P) == Keyboard.State.Clicked) {
+      } else if (this.keyboardState.getState(Keyboard.Button.T) == Keyboard.State.Clicked) {
         this.handleRespawnPlayer();
       }
     }
