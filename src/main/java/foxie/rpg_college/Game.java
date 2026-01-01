@@ -11,7 +11,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.PlayerEntity;
+import foxie.rpg_college.entity.controller.EntityController;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.tile.TileList;
@@ -29,7 +31,7 @@ public class Game implements AutoCloseable {
 
   private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
   private final Overworld overworld;
-  private final PlayerEntity player;
+  private final EntityController player;
   private final Screen currentScreen;
   
   private float lastRenderTime = Util.getTime();
@@ -77,11 +79,13 @@ public class Game implements AutoCloseable {
     
     this.TILES = new TileList(this);
     this.overworld = new Overworld(this);
-    this.player = new PlayerEntity(this.overworld, new Vec2(1280.0f, 720.0f));
+    
+    PlayerEntity playerEntity = new PlayerEntity();
+    this.overworld.addEntity(playerEntity);
+    playerEntity.setPos(new Vec2(-100.0f, 300.0f));
+    
     this.currentScreen = new InGame(this);
-
-    this.overworld.addEntity(this.player);
-    this.player.setPos(new Vec2(-100.0f, 300.0f));
+    this.player = new EntityController(playerEntity, new Vec2(1280.0f, 720.0f));
   }
 
   @Override
@@ -95,11 +99,11 @@ public class Game implements AutoCloseable {
   }
 
   public World getCurrentWorld() {
-    return this.player.getWorld();
+    return this.getPlayer().getWorld();
   }
 
-  public PlayerEntity getPlayer() {
-    return this.player;
+  public Entity getPlayer() {
+    return this.player.getEntity();
   }
 
   public Screen getScreen() {
@@ -107,7 +111,7 @@ public class Game implements AutoCloseable {
   }
 
   public Camera getCamera() {
-    return this.player.camera;
+    return this.player.getCamera();
   }
 
   public int getOutputHeight() {
@@ -178,7 +182,7 @@ public class Game implements AutoCloseable {
   void render(float deltaTime) {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
-      this.player.getWorld().render(g, deltaTime);
+      this.getPlayer().getWorld().render(g, deltaTime);
       this.currentScreen.render(g, deltaTime);
     } finally {
       g.dispose();
@@ -204,6 +208,6 @@ public class Game implements AutoCloseable {
 
   void tick(float deltaTime) {
     // Tick the world and stuffs :3
-    this.player.getWorld().tick(deltaTime);
+    this.getPlayer().getWorld().tick(deltaTime);
   }
 }

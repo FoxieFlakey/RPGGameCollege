@@ -30,7 +30,7 @@ public class InGame extends Screen {
 
     Vec2 healthTextStart = new Vec2(hudStart.x() + 10.0f, healthBar.y() + healthBarSize.y() * 0.5f);
 
-    PlayerEntity player = this.getGame().getPlayer();
+    PlayerEntity player = (PlayerEntity) this.getGame().getPlayer();
     float healthPercent = player.getHealth() / player.getMaxHealth();
 
     Color healthBarColor = new Color(0.9f, 0.0f, 0.0f, 1.0f);
