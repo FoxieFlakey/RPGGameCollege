@@ -10,7 +10,6 @@ import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
-import foxie.rpg_college.entity.PlayerEntity;
 
 public class InGame extends Screen {
   public InGame(Game game) {
