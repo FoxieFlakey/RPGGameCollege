@@ -92,6 +92,15 @@ public class Game implements AutoCloseable {
     this.currentScreen = new InGame(this);
     this.player = new InputToControllerBridge(catEntity, new Vec2(1280.0f, 720.0f));
   }
+  
+  void handleRespawn() {
+    // Player request respawn
+    CatEntity entity = new CatEntity();
+    this.overworld.addEntity(entity);
+    this.player.setNewEntityToControl(entity);
+    
+    entity.setPos(new Vec2(-300.0f, 300.0f));
+  }
 
   @Override
   public void close() throws Exception {
@@ -154,6 +163,12 @@ public class Game implements AutoCloseable {
 
   void handleInput(float deltaTime) {
     this.player.handleInput(deltaTime);
+    
+    if (this.getPlayer().isEmpty()) {
+      if (this.keyboardState.getState(Keyboard.Button.R) == Keyboard.State.Clicked) {
+        this.handleRespawn();
+      }
+    }
   }
   
   FloatRectangle calcOutputArea() {

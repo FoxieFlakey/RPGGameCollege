@@ -25,16 +25,16 @@ public class InputToControllerBridge implements AutoCloseable {
   private float spawnCatCooldown = -1.0f;
   
   public InputToControllerBridge(Controllable entity, Vec2 viewSize) {
-    Controller controller = entity.getController();
-    this.controller = Optional.of(controller);
+    this.controller = Optional.of(entity.getController());
     this.currentWorld = entity.getController().getEntity().getWorld();
-    this.camera = new Camera(controller.getEntity().getWorld().getRenderBound(), viewSize);
+    this.camera = new Camera(entity.getController().getEntity().getWorld().getRenderBound(), viewSize);
     
     @SuppressWarnings("resource")
     InputToControllerBridge self = this;
     this.listener = new ControlEventListener() {
       @Override
       public void onPositionUpdated() {
+        Controller controller = self.controller.get();
         self.camera.setPosition(controller.getEntity().getPos());
       }
       
@@ -45,14 +45,29 @@ public class InputToControllerBridge implements AutoCloseable {
       
       @Override
       public void onWorldChange() {
+        Controller controller = self.controller.get();
         if (controller.getEntity().getWorld() != null) {
           self.camera.setBound(controller.getEntity().getWorld().getRenderBound());
+          self.camera.setPosition(controller.getEntity().getPos());
           self.currentWorld = controller.getEntity().getWorld();
         }
       }
     };
     
-    controller.addListener(this.listener);
+    entity.getController().addListener(this.listener);
+  }
+  
+  public void setNewEntityToControl(Controllable entity) {
+    if (this.controller.isPresent()) {
+      this.controller.get().removeListener(this.listener);
+    }
+    
+    Controller newController = entity.getController();
+    newController.addListener(this.listener);
+    this.controller = Optional.of(newController);
+    
+    this.listener.onWorldChange();
+    this.listener.onPositionUpdated();
   }
   
   public World getWorld() {
@@ -105,18 +120,6 @@ public class InputToControllerBridge implements AutoCloseable {
     this.spawnCatCooldown -= deltaTime;
     if (this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = -1.0f;
-    }
-
-    if (keyboard.getState(Button.R) == Keyboard.State.Clicked) {
-      // Respawn player
-      controller.setPos(new Vec2(0.0f, 0.0f));
-      
-      if (maybeLiving.isPresent()) {
-        LivingEntity living = maybeLiving.get();
-        living.setHealth(living.getMaxHealth());
-        living.resetFlash();
-      }
-      return;
     }
 
     if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
