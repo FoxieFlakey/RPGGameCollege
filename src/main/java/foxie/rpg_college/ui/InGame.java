@@ -8,6 +8,8 @@ import java.awt.Stroke;
 
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.Entity;
+import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.entity.PlayerEntity;
 
 public class InGame extends Screen {
@@ -22,20 +24,21 @@ public class InGame extends Screen {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    Vec2 hudStart = new Vec2(10.0f, this.getGame().getOutputHeight() - 60.0f);
-    Vec2 hudSize = new Vec2(600.0f, 50.0f);
+    Vec2 hudStart = new Vec2(10.0f, this.getGame().getOutputHeight() - 20.0f);
+    Vec2 hudSize = new Vec2(620.0f, 10.0f);
 
-    Vec2 healthBar = new Vec2(hudStart.x() + 190.0f, hudStart.y() + 10.0f);
+    // Health bar sizing
     Vec2 healthBarSize = new Vec2(400.0f, 30.0f);
-
-    Vec2 healthTextStart = new Vec2(hudStart.x() + 10.0f, healthBar.y() + healthBarSize.y() * 0.5f);
-
-    PlayerEntity player = (PlayerEntity) this.getGame().getPlayer();
-    float healthPercent = player.getHealth() / player.getMaxHealth();
-
-    Color healthBarColor = new Color(0.9f, 0.0f, 0.0f, 1.0f);
-    if (player.getFlashState()) {
-      healthBarColor = new Color(0.9f, 0.8f, 0.8f, 1.0f);
+    boolean hasHealthBar = false;
+    float padding = 10.0f;
+    
+    Entity player = this.getGame().getPlayer();
+    
+    // Determining what HUD elements can be rendered
+    if (player instanceof LivingEntity) {
+      hudStart = hudStart.sub(new Vec2(0.0f, healthBarSize.y() + padding));
+      hudSize = hudSize.add(new Vec2(0.0f, healthBarSize.y() + padding));
+      hasHealthBar = true;
     }
 
     // Create the background
@@ -46,6 +49,25 @@ public class InGame extends Screen {
       (int) hudSize.x(),
       (int) hudSize.y()
     );
+    
+    Vec2 currentContentStart = hudStart.add(new Vec2(10.0f, 10.0f));
+    
+    // Now do the rendering
+    if (hasHealthBar) {
+      this.renderHealthBar(g, deltaTime, (LivingEntity) player, currentContentStart, healthBarSize);
+      currentContentStart = currentContentStart.add(new Vec2(0.0f, currentContentStart.y() + healthBarSize.y() + padding));
+    }
+  }
+  
+  void renderHealthBar(Graphics2D g, float deltaTime, LivingEntity player, Vec2 healthBarPos, Vec2 healthBarSize) {
+    float healthPercent = player.getHealth() / player.getMaxHealth();
+    Vec2 healthTextStart = new Vec2(healthBarPos.x(), healthBarPos.y() + healthBarSize.y() * 0.5f);
+    Vec2 bar = new Vec2(healthBarPos.x() + 200.0f, healthBarPos.y());
+
+    Color healthBarColor = new Color(0.9f, 0.0f, 0.0f, 1.0f);
+    if (player.getFlashState()) {
+      healthBarColor = new Color(0.9f, 0.8f, 0.8f, 1.0f);
+    }
 
     // Create the empty health bar
     g.setColor(new Color(0.7f, 0.4f, 0.4f, 1.0f));
@@ -54,8 +76,8 @@ public class InGame extends Screen {
     }
 
     g.fillRect(
-      (int) healthBar.x(),
-      (int) healthBar.y(),
+      (int) bar.x(),
+      (int) bar.y(),
       (int) healthBarSize.x(),
       (int) healthBarSize.y()
     );
@@ -63,8 +85,8 @@ public class InGame extends Screen {
     // Create the health bar filled with actual health
     g.setColor(healthBarColor);
     g.fillRect(
-      (int) healthBar.x(),
-      (int) healthBar.y(),
+      (int) bar.x(),
+      (int) bar.y(),
       (int) (healthBarSize.x() * healthPercent),
       (int) healthBarSize.y()
     );
@@ -75,8 +97,8 @@ public class InGame extends Screen {
 
     g.setColor(Color.BLACK);
     g.drawRect(
-      (int) healthBar.x(),
-      (int) healthBar.y(),
+      (int) bar.x(),
+      (int) bar.y(),
       (int) (healthBarSize.x() - healthPercent),
       (int) healthBarSize.y()
     );
