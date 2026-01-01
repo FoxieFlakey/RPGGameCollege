@@ -11,10 +11,13 @@ import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
+import foxie.rpg_college.world.World;
 import foxie.rpg_college.input.Mouse;
 
 public class InputToControllerBridge implements AutoCloseable {
   private Optional<Controller> controller;
+  private World currentWorld = null;
+  
   private final Camera camera;
   private final ControlEventListener listener;
   
@@ -24,6 +27,7 @@ public class InputToControllerBridge implements AutoCloseable {
   public InputToControllerBridge(Controllable entity, Vec2 viewSize) {
     Controller controller = entity.getController();
     this.controller = Optional.of(controller);
+    this.currentWorld = entity.getController().getEntity().getWorld();
     this.camera = new Camera(controller.getEntity().getWorld().getRenderBound(), viewSize);
     
     @SuppressWarnings("resource")
@@ -41,15 +45,22 @@ public class InputToControllerBridge implements AutoCloseable {
       
       @Override
       public void onWorldChange() {
-        self.camera.setBound(controller.getEntity().getWorld().getRenderBound());
+        if (controller.getEntity().getWorld() != null) {
+          self.camera.setBound(controller.getEntity().getWorld().getRenderBound());
+          self.currentWorld = controller.getEntity().getWorld();
+        }
       }
     };
     
     controller.addListener(this.listener);
   }
   
-  public Entity getEntity() {
-    return this.controller.get().getEntity();
+  public World getWorld() {
+    return this.currentWorld;
+  }
+  
+  public Optional<Entity> getEntity() {
+    return this.controller.map(Controller::getEntity);
   }
   
   @Override
@@ -60,8 +71,12 @@ public class InputToControllerBridge implements AutoCloseable {
   }
   
   public Optional<LivingEntity> getLivingEntity() {
-    if (this.getEntity() instanceof LivingEntity) {
-      return Optional.of((LivingEntity) this.getEntity());
+    Optional<Entity> maybeEntity = this.getEntity();
+    if (maybeEntity.isPresent()) {
+      Entity entity = maybeEntity.get();
+      if (entity instanceof LivingEntity) {
+        return Optional.of((LivingEntity) entity);
+      }
     }
     
     return Optional.empty();
@@ -78,8 +93,8 @@ public class InputToControllerBridge implements AutoCloseable {
     
     Controller controller = this.controller.get();
     
-    Keyboard keyboard = this.getEntity().getWorld().getGame().keyboardState;
-    Mouse mouse = this.getEntity().getWorld().getGame().mouseState;
+    Keyboard keyboard = this.getWorld().getGame().keyboardState;
+    Mouse mouse = this.getWorld().getGame().mouseState;
     Optional<LivingEntity> maybeLiving = this.getLivingEntity();
     
     this.fireArrowCooldown -= deltaTime;
@@ -109,7 +124,7 @@ public class InputToControllerBridge implements AutoCloseable {
       
       // Spawn cat
       CatEntity cat = new CatEntity();
-      this.getEntity().getWorld().addEntity(cat);
+      this.getWorld().addEntity(cat);
       
       Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
       cat.setPos(pos);
@@ -120,7 +135,7 @@ public class InputToControllerBridge implements AutoCloseable {
       
       // Spawn cat
       CatEntity cat = new CatEntity();
-      this.getEntity().getWorld().addEntity(cat);
+      this.getWorld().addEntity(cat);
       cat.setPos(this.camera.translateAWTGraphicsToWorldCoord(mouse.getButtonPosition()));
     }
 
@@ -129,21 +144,25 @@ public class InputToControllerBridge implements AutoCloseable {
       return;
     }
     
-    if (keyboard.getState(Button.Q).isNowPressed() && this.fireArrowCooldown < 0.0f) {
-      this.fireArrowCooldown = 0.1f;
+    if (this.getEntity().isPresent()) {
+      Entity entity = this.getEntity().get();
       
-      // Spawn arrow
-      ArrowEntity arrow = new ArrowEntity(this.getEntity());
-      this.getEntity().getWorld().addEntity(arrow);
-      arrow.setPos(this.getEntity().getPos());
-      arrow.setRotation(this.getEntity().getRotation());
-    }
-    
-    Vec2 moveMultiplier = new Vec2(0.0f, 0.0f);
-    if (keyboard.getState(Button.P) == Keyboard.State.Clicked) {
-      System.out.println("Coord: " + this.getEntity().getPos().x() + ", " + this.getEntity().getPos().y());
+      if (keyboard.getState(Button.Q).isNowPressed() && this.fireArrowCooldown < 0.0f) {
+        this.fireArrowCooldown = 0.1f;
+        
+        // Spawn arrow
+        ArrowEntity arrow = new ArrowEntity(entity);
+        this.getWorld().addEntity(arrow);
+        arrow.setPos(entity.getPos());
+        arrow.setRotation(entity.getRotation());
+      }
+      
+      if (keyboard.getState(Button.P) == Keyboard.State.Clicked) {
+        System.out.println("Coord: " + entity.getPos().x() + ", " + entity.getPos().y());
+      }
     }
 
+    Vec2 moveMultiplier = new Vec2(0.0f, 0.0f);
     if (keyboard.getState(Button.W).isNowPressed()) {
       moveMultiplier = moveMultiplier.add(new Vec2(0.0f, -deltaTime));
     }
@@ -177,12 +196,15 @@ public class InputToControllerBridge implements AutoCloseable {
     } else if (moveMultiplier.y() > 0.0f) {
       controller.setRotation(Orientation.Down.toDegrees());
     }
+    
+    if (this.getEntity().isPresent()) {
+      Entity entity = this.getEntity().get();
+      if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
+        Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(entity.getPos());
+        Vec2 lookToScreenCoord = mouse.getButtonPosition().sub(playerScreenCoord);
 
-    if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
-      Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(this.getEntity().getPos());
-      Vec2 lookToScreenCoord = mouse.getButtonPosition().sub(playerScreenCoord);
-
-      controller.setRotation(lookToScreenCoord.calculateAngle());
+        controller.setRotation(lookToScreenCoord.calculateAngle());
+      }
     }
   }
 }

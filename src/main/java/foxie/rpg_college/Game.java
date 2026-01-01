@@ -104,10 +104,10 @@ public class Game implements AutoCloseable {
   }
 
   public World getCurrentWorld() {
-    return this.getPlayer().getWorld();
+    return this.player.getWorld();
   }
 
-  public Entity getPlayer() {
+  public Optional<Entity> getPlayer() {
     return this.player.getEntity();
   }
 
@@ -187,7 +187,7 @@ public class Game implements AutoCloseable {
   void render(float deltaTime) {
     Graphics2D g = this.gameBuffer.createGraphics();
     try {
-      this.getPlayer().getWorld().render(g, deltaTime);
+      this.getCurrentWorld().render(g, deltaTime);
       this.currentScreen.render(g, deltaTime);
     } finally {
       g.dispose();
@@ -213,6 +213,6 @@ public class Game implements AutoCloseable {
 
   void tick(float deltaTime) {
     // Tick the world and stuffs :3
-    this.getPlayer().getWorld().tick(deltaTime);
+    this.getCurrentWorld().tick(deltaTime);
   }
 }

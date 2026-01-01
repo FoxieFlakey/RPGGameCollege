@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.util.Optional;
 
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
@@ -31,10 +32,10 @@ public class InGame extends Screen {
     boolean hasHealthBar = false;
     float padding = 10.0f;
     
-    Entity player = this.getGame().getPlayer();
+    Optional<Entity> maybePlayer = this.getGame().getPlayer();
     
     // Determining what HUD elements can be rendered
-    if (player instanceof LivingEntity) {
+    if (maybePlayer.isPresent() && maybePlayer.get() instanceof LivingEntity) {
       hudStart = hudStart.sub(new Vec2(0.0f, healthBarSize.y() + padding));
       hudSize = hudSize.add(new Vec2(0.0f, healthBarSize.y() + padding));
       hasHealthBar = true;
@@ -53,7 +54,7 @@ public class InGame extends Screen {
     
     // Now do the rendering
     if (hasHealthBar) {
-      this.renderHealthBar(g, deltaTime, (LivingEntity) player, currentContentStart, healthBarSize);
+      this.renderHealthBar(g, deltaTime, (LivingEntity) maybePlayer.get(), currentContentStart, healthBarSize);
       currentContentStart = currentContentStart.add(new Vec2(0.0f, currentContentStart.y() + healthBarSize.y() + padding));
     }
   }
