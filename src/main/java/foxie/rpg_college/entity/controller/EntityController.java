@@ -6,11 +6,11 @@ import java.util.Iterator;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Entity;
 
-public abstract class SimpleEntityController implements Controller, ControlEventListener {
+public abstract class EntityController implements Controller, ControlEventListener {
   private final Entity owner;
   private final HashSet<ControlEventListener> listeners = new HashSet<>();
   
-  public SimpleEntityController(Entity owner) {
+  public EntityController(Entity owner) {
     this.owner = owner;
   }
   

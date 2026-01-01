@@ -2,7 +2,7 @@ package foxie.rpg_college.entity.controller;
 
 import foxie.rpg_college.entity.LivingEntity;
 
-public class LivingEntityController extends SimpleEntityController {
+public class LivingEntityController extends EntityController {
   public LivingEntityController(LivingEntity owner) {
 		super(owner);
 	}

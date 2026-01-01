@@ -9,7 +9,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controllable;
 import foxie.rpg_college.entity.controller.Controller;
-import foxie.rpg_college.entity.controller.SimpleEntityController;
+import foxie.rpg_college.entity.controller.EntityController;
 import foxie.rpg_college.entity.controller.LivingEntityController;
 import foxie.rpg_college.world.World;
 
@@ -21,7 +21,7 @@ public class PlayerEntity extends LivingEntity implements Controllable {
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   
-  private SimpleEntityController controller = null;
+  private EntityController controller = null;
 
   public PlayerEntity() {
     this.setHealth(this.getMaxHealth());
