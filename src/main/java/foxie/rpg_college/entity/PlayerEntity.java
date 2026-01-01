@@ -109,7 +109,10 @@ public class PlayerEntity extends LivingEntity implements Controllable {
   
   @Override
   public void die() {
-    // Player cannot die
+    super.die();
+    if (this.controller != null) {
+      this.controller.onEntityNoLongerControllable();
+    }
   }
   
   @Override

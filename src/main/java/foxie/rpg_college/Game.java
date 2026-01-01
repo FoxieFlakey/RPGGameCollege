@@ -11,6 +11,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
+import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.PlayerEntity;
 import foxie.rpg_college.entity.controller.InputToControllerBridge;
@@ -84,8 +85,12 @@ public class Game implements AutoCloseable {
     this.overworld.addEntity(playerEntity);
     playerEntity.setPos(new Vec2(-100.0f, 300.0f));
     
+    CatEntity catEntity = new CatEntity();
+    this.overworld.addEntity(catEntity);
+    catEntity.setPos(new Vec2(-300.0f, 300.0f));
+    
     this.currentScreen = new InGame(this);
-    this.player = new InputToControllerBridge(playerEntity, new Vec2(1280.0f, 720.0f));
+    this.player = new InputToControllerBridge(catEntity, new Vec2(1280.0f, 720.0f));
   }
 
   @Override
