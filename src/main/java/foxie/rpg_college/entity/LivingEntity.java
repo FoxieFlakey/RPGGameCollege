@@ -5,7 +5,7 @@ import java.util.Optional;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.tile.Lava;
+import foxie.rpg_college.tile.LavaTile;
 import foxie.rpg_college.tile.Tile;
 
 public abstract class LivingEntity extends Entity {
@@ -89,8 +89,8 @@ public abstract class LivingEntity extends Entity {
     // Harm the living entity when stepped on lava
     if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
       if (this.canBurn()) {
-        this.burnTimer = Lava.BURN_PERIOD;
-        this.doDamage(Lava.DAMAGE);
+        this.burnTimer = LavaTile.BURN_PERIOD;
+        this.doDamage(LavaTile.DAMAGE);
       }
     }
   }

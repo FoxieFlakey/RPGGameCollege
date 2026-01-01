@@ -13,19 +13,19 @@ import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
 
-public class Player extends LivingEntity {
+public class PlayerEntity extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
     50.0f,
     100.0f
   );
 
   public final Camera camera;
-  private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), Player.SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   
   private float fireArrowCooldown = -1.0f;
   private float spawnCatCooldown = -1.0f;
 
-  public Player(World world, Vec2 viewSize) {
+  public PlayerEntity(World world, Vec2 viewSize) {
     this.camera = new Camera(world.getRenderBound(), viewSize);
     this.setHealth(this.getMaxHealth());
   }
@@ -56,7 +56,7 @@ public class Player extends LivingEntity {
       this.spawnCatCooldown = 0.1f;
       
       // Spawn cat
-      Cat cat = new Cat();
+      CatEntity cat = new CatEntity();
       this.getWorld().addEntity(cat);
       cat.setPos(this.getLegPos());
     }
@@ -65,7 +65,7 @@ public class Player extends LivingEntity {
       this.spawnCatCooldown = 0.1f;
       
       // Spawn cat
-      Cat cat = new Cat();
+      CatEntity cat = new CatEntity();
       this.getWorld().addEntity(cat);
       cat.setPos(this.camera.translateAWTGraphicsToWorldCoord(mouse.getButtonPosition()));
     }
@@ -79,7 +79,7 @@ public class Player extends LivingEntity {
       this.fireArrowCooldown = 0.1f;
       
       // Spawn arrow
-      Arrow arrow = new Arrow(this);
+      ArrowEntity arrow = new ArrowEntity(this);
       this.getWorld().addEntity(arrow);
       arrow.setPos(this.getPos());
       arrow.setRotation(this.getRotation());
@@ -146,7 +146,7 @@ public class Player extends LivingEntity {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Player.SIZE);
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, PlayerEntity.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
     int y = (int) renderBox.getTopLeftCorner().y();
@@ -202,7 +202,7 @@ public class Player extends LivingEntity {
     return new FloatRectangle(
       new Vec2(
         topLeftCollision.x(),
-        bottomRightCollision.y() - Player.SIZE.y() * 0.5f
+        bottomRightCollision.y() - PlayerEntity.SIZE.y() * 0.5f
       ),
       bottomRightCollision
     );

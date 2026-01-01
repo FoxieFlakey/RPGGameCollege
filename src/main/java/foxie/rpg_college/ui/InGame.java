@@ -8,7 +8,7 @@ import java.awt.Stroke;
 
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.Player;
+import foxie.rpg_college.entity.PlayerEntity;
 
 public class InGame extends Screen {
   public InGame(Game game) {
@@ -30,7 +30,7 @@ public class InGame extends Screen {
 
     Vec2 healthTextStart = new Vec2(hudStart.x() + 10.0f, healthBar.y() + healthBarSize.y() * 0.5f);
 
-    Player player = this.getGame().getPlayer();
+    PlayerEntity player = this.getGame().getPlayer();
     float healthPercent = player.getHealth() / player.getMaxHealth();
 
     Color healthBarColor = new Color(0.9f, 0.0f, 0.0f, 1.0f);

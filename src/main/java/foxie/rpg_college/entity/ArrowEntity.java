@@ -14,11 +14,11 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 
-public class Arrow extends Projectile {
+public class ArrowEntity extends ProjectileEntity {
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
   private static final Vec2 COLLISION_SIZE = new Vec2(5.0f, 5.0f);
   
-  private CollisionBox collisionBox = new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), Arrow.COLLISION_SIZE);
+  private CollisionBox collisionBox = new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), ArrowEntity.COLLISION_SIZE);
   
   private float damage = 5.0f;
   
@@ -27,13 +27,13 @@ public class Arrow extends Projectile {
   
   static {
     try {
-      ARROW_TEXTURE = ImageIO.read(Arrow.ARROW_URL.openStream());
+      ARROW_TEXTURE = ImageIO.read(ArrowEntity.ARROW_URL.openStream());
     } catch (IOException e) {
       throw new RuntimeException("Error loading arrow texture", e);
     }
   }
   
-  public Arrow(Entity shooter) {
+  public ArrowEntity(Entity shooter) {
     super(shooter, 1.0f, 400.0f);
   }
   
@@ -66,15 +66,15 @@ public class Arrow extends Projectile {
   
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Arrow.RENDER_SIZE);
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArrowEntity.RENDER_SIZE);
     AffineTransform transform = EntityHelper.calculateCameraTransform(this);
-    transform.translate(-Arrow.RENDER_SIZE.x() * 0.5f, -Arrow.RENDER_SIZE.x() * 0.5f);
+    transform.translate(-ArrowEntity.RENDER_SIZE.x() * 0.5f, -ArrowEntity.RENDER_SIZE.x() * 0.5f);
     transform.scale(
-      renderBox.getSize().x() / (float) Arrow.ARROW_TEXTURE.getWidth(null),
-      renderBox.getSize().y() / (float) Arrow.ARROW_TEXTURE.getHeight(null)
+      renderBox.getSize().x() / (float) ArrowEntity.ARROW_TEXTURE.getWidth(null),
+      renderBox.getSize().y() / (float) ArrowEntity.ARROW_TEXTURE.getHeight(null)
     );
     
-    g.drawImage(Arrow.ARROW_TEXTURE, transform, null);
+    g.drawImage(ArrowEntity.ARROW_TEXTURE, transform, null);
   }
 
   @Override

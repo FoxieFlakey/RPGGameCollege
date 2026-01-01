@@ -9,11 +9,11 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Tile;
 
-public class Cat extends LivingEntity {
+public class CatEntity extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
-  private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), Cat.SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), CatEntity.SIZE);
 
-  public Cat() {
+  public CatEntity() {
     this.setHealth(this.getMaxHealth());
   }
 
@@ -39,7 +39,7 @@ public class Cat extends LivingEntity {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, Cat.SIZE);
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, CatEntity.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
     int y = (int) renderBox.getTopLeftCorner().y();
@@ -72,7 +72,7 @@ public class Cat extends LivingEntity {
   public Vec2 getLegPos() {
     return new Vec2(
       this.getPos().x(),
-      this.getPos().y() - Cat.SIZE.y() * 0.5f
+      this.getPos().y() - CatEntity.SIZE.y() * 0.5f
     );
   }
 }

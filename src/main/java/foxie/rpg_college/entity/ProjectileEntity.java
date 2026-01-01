@@ -7,14 +7,14 @@ import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Tile;
 
-public abstract class Projectile extends Entity {
+public abstract class ProjectileEntity extends Entity {
   private boolean hasProjectileHitSomething = false;
   
   private final Entity shooter;
   private float velocity;
   private float timeToLive;
   
-  public Projectile(Entity shooter, float timeToLiveWhenHit, float velocity) {
+  public ProjectileEntity(Entity shooter, float timeToLiveWhenHit, float velocity) {
     this.shooter = shooter;
     this.timeToLive = timeToLiveWhenHit;
     this.velocity = velocity;
@@ -22,7 +22,7 @@ public abstract class Projectile extends Entity {
   
   @Override
   public boolean canCollideWith(Entity other) {
-    if (other instanceof Projectile) {
+    if (other instanceof ProjectileEntity) {
       // Arrow dont collide with arrow
       return false;
     }
