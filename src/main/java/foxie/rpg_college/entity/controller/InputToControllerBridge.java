@@ -5,7 +5,7 @@ import java.util.Optional;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.ArrowEntity;
+import foxie.rpg_college.entity.Attackable;
 import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
@@ -21,7 +21,6 @@ public class InputToControllerBridge implements AutoCloseable {
   private final Camera camera;
   private final ControlEventListener listener;
   
-  private float fireArrowCooldown = -1.0f;
   private float spawnCatCooldown = -1.0f;
   
   public InputToControllerBridge(Entity entity, Vec2 viewSize) {
@@ -120,11 +119,6 @@ public class InputToControllerBridge implements AutoCloseable {
     Mouse mouse = this.getWorld().getGame().mouseState;
     Optional<LivingEntity> maybeLiving = this.getLivingEntity();
     
-    this.fireArrowCooldown -= deltaTime;
-    if (this.fireArrowCooldown < 0.0f) {
-      this.fireArrowCooldown = -1.0f;
-    }
-    
     this.spawnCatCooldown -= deltaTime;
     if (this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = -1.0f;
@@ -158,14 +152,13 @@ public class InputToControllerBridge implements AutoCloseable {
     if (this.getEntity().isPresent()) {
       Entity entity = this.getEntity().get();
       
-      if (keyboard.getState(Button.Q).isNowPressed() && this.fireArrowCooldown < 0.0f) {
-        this.fireArrowCooldown = 0.1f;
-        
-        // Spawn arrow
-        ArrowEntity arrow = new ArrowEntity(entity);
-        this.getWorld().addEntity(arrow);
-        arrow.setPos(entity.getPos());
-        arrow.setRotation(entity.getRotation());
+      if (keyboard.getState(Button.Q).isNowPressed()) {
+        if (entity instanceof Attackable) {
+          Attackable attacker = (Attackable) entity;
+          if (attacker.canAttack()) {
+            attacker.attack();
+          }
+        }
       }
       
       if (keyboard.getState(Button.P) == Keyboard.State.Clicked) {

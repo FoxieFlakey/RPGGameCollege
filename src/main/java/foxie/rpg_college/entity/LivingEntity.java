@@ -142,6 +142,13 @@ public abstract class LivingEntity extends Entity {
     }
   }
   
+  // All living entities can be attacked
+  // override this if some living entities
+  // have state where they can't attack
+  public boolean canBeAttacked() {
+    return true;
+  }
+  
   @Override
   public void onEntityCollision(Entity other) {
   }

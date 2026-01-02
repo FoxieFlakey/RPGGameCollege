@@ -67,18 +67,21 @@ public abstract class ProjectileEntity extends Entity {
     super.onCollision();
     
     // Arrow collided a target
-    this.hasProjectileHitSomething = true;
     this.velocity = 0.0f;
   }
   
   @Override
   public void onEntityCollision(Entity other) {
-    this.onHit(other);
+    if (!this.hasProjectileHitSomething) {
+      this.onHit(other);
+      this.hasProjectileHitSomething = true;
+    }
     this.die();
   }
   
   @Override
   public void onTileCollision(IVec2 coord, Tile other) {
+    this.hasProjectileHitSomething = true;
   }
   
   @Override

@@ -8,13 +8,14 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 
-public class PlayerEntity extends LivingEntity {
+public class PlayerEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
     50.0f,
     100.0f
   );
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
+  private float fireArrowCooldown = -1.0f;
   
   public PlayerEntity() {
     this.setHealth(this.getMaxHealth());
@@ -86,5 +87,36 @@ public class PlayerEntity extends LivingEntity {
   @Override
   public float getMovementSpeed() {
     return 100.0f;
+  }
+  
+  @Override
+  public void tick(float deltaTime) {
+    super.tick(deltaTime);
+    this.fireArrowCooldown -= deltaTime;
+    if (this.fireArrowCooldown < 0.0f) {
+      this.fireArrowCooldown = -1.0f;
+    }
+  }
+  
+  @Override
+  public boolean attack() {
+    if (!this.canAttack()) {
+      return false;
+    }
+    
+    this.fireArrowCooldown = 0.1f;
+    
+    // Spawn arrow
+    ArrowEntity arrow = new ArrowEntity(this);
+    this.getWorld().addEntity(arrow);
+    arrow.setPos(this.getPos());
+    arrow.setRotation(this.getRotation());
+    
+    return true;
+  }
+
+  @Override
+  public boolean canAttack() {
+    return this.fireArrowCooldown < 0.0f;
   }
 }
