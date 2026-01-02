@@ -13,6 +13,7 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
     50.0f,
     100.0f
   );
+  private static final float ATTACK_MANA_POINT = 7.0f;
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   private float fireArrowCooldown = -1.0f;
@@ -25,6 +26,16 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
   @Override
   public float getMaxManaPoint() {
     return 100.0f;
+  }
+  
+  @Override
+  public float getManaRefillRate() {
+    return 40.0f;
+  }
+  
+  @Override
+  public float getManaRefillPeriod() {
+    return 2.0f;
   }
 
   @Override
@@ -105,6 +116,10 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
       return false;
     }
     
+    if (!this.consumeManaPoint(PlayerEntity.ATTACK_MANA_POINT)) {
+      return false;
+    }
+    
     this.fireArrowCooldown = 0.1f;
     
     // Spawn arrow
@@ -118,6 +133,6 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
 
   @Override
   public boolean canAttack() {
-    return this.fireArrowCooldown < 0.0f;
+    return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= PlayerEntity.ATTACK_MANA_POINT;
   }
 }
