@@ -54,35 +54,6 @@ public class Keyboard implements AutoCloseable {
     this.window.removeKeyListener(this.listener);
   }
 
-  public enum State {
-    Clicked,
-    Unclicked,
-    Hold,
-    Unhold;
-
-    public boolean isNowPressed() {
-      switch (this) {
-        case Keyboard.State.Clicked:
-          return true;
-        case Keyboard.State.Hold:
-          return true;
-        default:
-          return false;
-      }
-    }
-
-    public boolean isNowReleased() {
-      switch (this) {
-        case Keyboard.State.Unclicked:
-          return true;
-        case Keyboard.State.Unhold:
-          return true;
-        default:
-          return false;
-      }
-    }
-  }
-
   private class Listener extends KeyAdapter {
     private final Keyboard owner;
 

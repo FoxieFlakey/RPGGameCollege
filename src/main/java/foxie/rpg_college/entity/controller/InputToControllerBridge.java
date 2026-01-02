@@ -13,6 +13,7 @@ import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.input.State;
 
 public class InputToControllerBridge implements AutoCloseable {
   private Optional<Controller> controller;
@@ -161,7 +162,7 @@ public class InputToControllerBridge implements AutoCloseable {
         }
       }
       
-      if (keyboard.getState(Button.P) == Keyboard.State.Clicked) {
+      if (keyboard.getState(Button.P) == State.Clicked) {
         System.out.println("Coord: " + entity.getPos().x() + ", " + entity.getPos().y());
       }
     }

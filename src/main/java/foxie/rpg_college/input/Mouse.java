@@ -14,28 +14,6 @@ public class Mouse implements AutoCloseable {
     Right
   }
 
-  public enum State {
-    Clicked,
-    Unclicked,
-    Hold,
-    Unhold;
-
-    public boolean isNowPressed() {
-      switch (this) {
-        case Clicked:
-          return true;
-        case Hold:
-          return true;
-        case Unclicked:
-          return false;
-        case Unhold:
-          return false;
-      }
-
-      throw new RuntimeException("unreachable");
-    }
-  }
-
   // Shared with listener
   private final Object lock = new Object();
   private boolean buttonStateNow[] = {false, false, false};

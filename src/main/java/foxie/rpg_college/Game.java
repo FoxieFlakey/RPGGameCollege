@@ -18,6 +18,7 @@ import foxie.rpg_college.entity.PlayerEntity;
 import foxie.rpg_college.entity.controller.InputToControllerBridge;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
+import foxie.rpg_college.input.State;
 import foxie.rpg_college.tile.TileList;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
@@ -175,14 +176,14 @@ public class Game implements AutoCloseable {
     this.player.handleInput(deltaTime);
     
     if (this.getPlayer().isEmpty()) {
-      if (this.keyboardState.getState(Keyboard.Button.R) == Keyboard.State.Clicked) {
+      if (this.keyboardState.getState(Keyboard.Button.R) == State.Clicked) {
         this.handleRespawnCat();
-      } else if (this.keyboardState.getState(Keyboard.Button.T) == Keyboard.State.Clicked) {
+      } else if (this.keyboardState.getState(Keyboard.Button.T) == State.Clicked) {
         this.handleRespawnPlayer();
       }
     }
     
-    if (this.mouseState.getButtonState(Mouse.Button.Middle) == Mouse.State.Clicked) {
+    if (this.mouseState.getButtonState(Mouse.Button.Middle) == State.Clicked) {
       Vec2 selectedPoint = this.getCamera().translateAWTGraphicsToWorldCoord(this.mouseState.getButtonPosition());
       
       // Control other entity lol
