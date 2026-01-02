@@ -22,6 +22,7 @@ public abstract class Entity {
   private World currentWorld = null;
   private float rotation = 90.0f;
   private Optional<Controller> controller = Optional.empty();
+  private String name;
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
@@ -38,6 +39,8 @@ public abstract class Entity {
     if (this.id == Long.MAX_VALUE) {
       throw new RuntimeException("Counter for entity ID overflowed!");
     }
+    
+    name = this.getClass().getName() + " #" + this.id;
   }
 
   public final Vec2 getPos() {
@@ -99,6 +102,10 @@ public abstract class Entity {
   
   public final boolean canDispatchControllerEvents() {
     return this.canBeControlled() && this.controller.isPresent();
+  }
+  
+  public String getName() {
+    return this.name;
   }
 
   // This prefer 'false', so if there two entities

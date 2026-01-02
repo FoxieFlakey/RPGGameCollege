@@ -13,6 +13,7 @@ public abstract class Tile {
   public static final Vec2 SIZE = new Vec2(64.0f, 64.0f);
 
   protected final Game game;
+  private String name = this.getClass().getName();
 
   public Tile(Game game) {
     this.game = game;
@@ -20,6 +21,10 @@ public abstract class Tile {
   
   public final Game getGame() {
     return this.game;
+  }
+  
+  public String getName(IVec2 coord) {
+    return this.name;
   }
 
   public static Vec2 fromTileCoordToWorldCoord(IVec2 coord) {

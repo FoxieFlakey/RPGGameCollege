@@ -13,6 +13,7 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.damage.EntityDamageSource;
 
 public class ArrowEntity extends ProjectileEntity {
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
@@ -61,7 +62,7 @@ public class ArrowEntity extends ProjectileEntity {
   @Override
   public void onHit(Entity other) {
     LivingEntity living = (LivingEntity) other;
-    living.doDamage(this.damage);
+    living.doDamage(new EntityDamageSource(this, this.damage));
   }
   
   @Override

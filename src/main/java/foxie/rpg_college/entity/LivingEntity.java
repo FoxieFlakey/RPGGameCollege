@@ -7,6 +7,8 @@ import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
 import foxie.rpg_college.entity.controller.LivingEntityController;
+import foxie.rpg_college.entity.damage.DamageSource;
+import foxie.rpg_college.entity.damage.TileDamageSource;
 import foxie.rpg_college.tile.LavaTile;
 import foxie.rpg_college.tile.Tile;
 
@@ -50,7 +52,8 @@ public abstract class LivingEntity extends Entity {
     }
   }
 
-  public void doDamage(float damage) {
+  public void doDamage(DamageSource damageSource) {
+    float damage = damageSource.getDamagePoint();
     if (damage < 0.0f) {
       damage = 0.0f;
     }
@@ -92,7 +95,7 @@ public abstract class LivingEntity extends Entity {
     if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
       if (this.canBurn()) {
         this.burnTimer = LavaTile.BURN_PERIOD;
-        this.doDamage(LavaTile.DAMAGE);
+        this.doDamage(new TileDamageSource(tile, tileCoord, LavaTile.DAMAGE));
       }
     }
   }
