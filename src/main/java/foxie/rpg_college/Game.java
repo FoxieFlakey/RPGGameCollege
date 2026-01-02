@@ -184,7 +184,7 @@ public class Game implements AutoCloseable {
     }
     
     if (this.mouseState.getButtonState(Mouse.Button.Middle) == State.Clicked) {
-      Vec2 selectedPoint = this.getCamera().translateAWTGraphicsToWorldCoord(this.mouseState.getButtonPosition());
+      Vec2 selectedPoint = this.getCamera().translateAWTGraphicsToWorldCoord(this.mouseState.getMousePosition());
       
       // Control other entity lol
       Iterator<Entity> eligibleEntities = this.getCurrentWorld()

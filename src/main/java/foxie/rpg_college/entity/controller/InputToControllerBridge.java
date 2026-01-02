@@ -142,7 +142,7 @@ public class InputToControllerBridge implements AutoCloseable {
       // Spawn cat
       CatEntity cat = new CatEntity();
       this.getWorld().addEntity(cat);
-      cat.setPos(this.camera.translateAWTGraphicsToWorldCoord(mouse.getButtonPosition()));
+      cat.setPos(this.camera.translateAWTGraphicsToWorldCoord(mouse.getMousePosition()));
     }
 
     if (controller.shouldControlDisabled()) {
@@ -206,7 +206,7 @@ public class InputToControllerBridge implements AutoCloseable {
       Entity entity = this.getEntity().get();
       if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
         Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(entity.getPos());
-        Vec2 lookToScreenCoord = mouse.getButtonPosition().sub(playerScreenCoord);
+        Vec2 lookToScreenCoord = mouse.getMousePosition().sub(playerScreenCoord);
 
         controller.setRotation(lookToScreenCoord.calculateAngle());
       }

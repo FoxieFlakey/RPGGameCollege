@@ -70,7 +70,7 @@ public class Mouse implements AutoCloseable {
     return this.buttonState[button.ordinal()];
   }
 
-  public Vec2 getButtonPosition() {
+  public Vec2 getMousePosition() {
     return this.positionSaved;
   }
 
