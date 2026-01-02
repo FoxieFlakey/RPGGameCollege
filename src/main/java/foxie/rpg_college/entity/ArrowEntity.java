@@ -19,7 +19,7 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
   private static final Vec2 COLLISION_SIZE = new Vec2(5.0f, 5.0f);
   
-  private CollisionBox collisionBox = new CollisionBox(0.1f, new Vec2(0.0f, 0.0f), ArrowEntity.COLLISION_SIZE);
+  private CollisionBox collisionBox = new CollisionBox(0.0001f, new Vec2(0.0f, 0.0f), ArrowEntity.COLLISION_SIZE);
   
   private float damage = 5.0f;
   
