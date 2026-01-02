@@ -17,10 +17,6 @@ public class PlayerEntity extends LivingEntity implements Attackable {
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   private float fireArrowCooldown = -1.0f;
   
-  public PlayerEntity() {
-    this.setHealth(this.getMaxHealth());
-  }
-  
   @Override
   public float getMaxHealth() {
     return 100.0f;

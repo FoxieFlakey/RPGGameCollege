@@ -13,7 +13,7 @@ import foxie.rpg_college.tile.LavaTile;
 import foxie.rpg_college.tile.Tile;
 
 public abstract class LivingEntity extends Entity {
-  private float healthPoint = 0.0f;
+  private float healthPoint;
 
   // When timer hits 0, a burn happens
   // from fire source like lava or fire
@@ -27,6 +27,10 @@ public abstract class LivingEntity extends Entity {
 
   public static final float FLASH_DURATION = 1.2f;
   public static final float FLASH_PERIOD = 0.1f;
+  
+  public LivingEntity() {
+    this.healthPoint = this.getMaxHealth();
+  }
 
   public boolean canBurn() {
     return burnTimer <= 0.0f;

@@ -13,10 +13,6 @@ public class CatEntity extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
   private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), CatEntity.SIZE);
   
-  public CatEntity() {
-    this.setHealth(this.getMaxHealth());
-  }
-
   @Override
   public float getMaxHealth() {
     return 20.0f;
