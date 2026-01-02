@@ -25,5 +25,10 @@ public interface Controller {
   void applyMovement(Vec2 multiplier);
   void setRotation(float rotation);
   void setPos(Vec2 position);
+  
+  // Events to be dispatched
+  void dispatchOnPositionUpdated();
+  void dispatchOnWorldChange();
+  void dispatchOnEntityNoLongerControllable();
 }
 

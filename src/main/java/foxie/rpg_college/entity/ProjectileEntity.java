@@ -5,6 +5,7 @@ import java.util.Optional;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.controller.Controller;
 import foxie.rpg_college.tile.Tile;
 
 public abstract class ProjectileEntity extends Entity {
@@ -82,6 +83,16 @@ public abstract class ProjectileEntity extends Entity {
   
   @Override
   public void onTileStep(Tile tile, IVec2 tileCoord) {
+  }
+  
+  @Override
+  public boolean canBeControlled() {
+    return false;
+  }
+  
+  @Override
+  protected Controller createController() {
+    return null;
   }
   
   public abstract boolean canBeHit(Entity other);

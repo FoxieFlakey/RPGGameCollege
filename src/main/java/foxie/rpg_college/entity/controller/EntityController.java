@@ -6,7 +6,7 @@ import java.util.Iterator;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.Entity;
 
-public abstract class EntityController implements Controller, ControlEventListener {
+public abstract class EntityController implements Controller {
   private final Entity owner;
   private final HashSet<ControlEventListener> listeners = new HashSet<>();
   
@@ -46,14 +46,14 @@ public abstract class EntityController implements Controller, ControlEventListen
 
   // Forwarding to listeners
   @Override
-  public void onPositionUpdated() {
+  public void dispatchOnPositionUpdated() {
     for (ControlEventListener listener : this.listeners) {
       listener.onPositionUpdated();
     }
   }
   
   @Override
-  public void onWorldChange() {
+  public void dispatchOnWorldChange() {
     for (ControlEventListener listener : this.listeners) {
       listener.onWorldChange();
     }
@@ -61,7 +61,7 @@ public abstract class EntityController implements Controller, ControlEventListen
 
   // Forwarding to listeners
   @Override
-  public void onEntityNoLongerControllable() {
+  public void dispatchOnEntityNoLongerControllable() {
     Iterator<ControlEventListener> iter = this.listeners.iterator();
     while (iter.hasNext()) {
       ControlEventListener listener = iter.next();

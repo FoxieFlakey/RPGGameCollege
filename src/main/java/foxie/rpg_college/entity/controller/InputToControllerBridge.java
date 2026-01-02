@@ -24,10 +24,14 @@ public class InputToControllerBridge implements AutoCloseable {
   private float fireArrowCooldown = -1.0f;
   private float spawnCatCooldown = -1.0f;
   
-  public InputToControllerBridge(Controllable entity, Vec2 viewSize) {
-    this.controller = Optional.of(entity.getController());
-    this.currentWorld = entity.getController().getEntity().getWorld();
-    this.camera = new Camera(entity.getController().getEntity().getWorld().getRenderBound(), viewSize);
+  public InputToControllerBridge(Entity entity, Vec2 viewSize) {
+    if (!entity.canBeControlled()) {
+      throw new IllegalArgumentException("Attempt to create InputToControllerBridge with non controllable entity");
+    }
+    
+    this.controller = Optional.of(entity.getController().get());
+    this.currentWorld = entity.getWorld();
+    this.camera = new Camera(entity.getWorld().getRenderBound(), viewSize);
     
     @SuppressWarnings("resource")
     InputToControllerBridge self = this;
@@ -54,15 +58,19 @@ public class InputToControllerBridge implements AutoCloseable {
       }
     };
     
-    entity.getController().addListener(this.listener);
+    entity.getController().get().addListener(this.listener);
   }
   
-  public void setNewEntityToControl(Controllable entity) {
+  public void setNewEntityToControl(Entity entity) {
+    if (!entity.canBeControlled()) {
+      throw new IllegalArgumentException("Attempt to controll non-controllable entity");
+    }
+    
     if (this.controller.isPresent()) {
       this.controller.get().removeListener(this.listener);
     }
     
-    Controller newController = entity.getController();
+    Controller newController = entity.getController().get();
     newController.addListener(this.listener);
     this.controller = Optional.of(newController);
     

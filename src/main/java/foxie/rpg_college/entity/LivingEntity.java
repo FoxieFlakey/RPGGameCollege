@@ -5,6 +5,8 @@ import java.util.Optional;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.controller.Controller;
+import foxie.rpg_college.entity.controller.LivingEntityController;
 import foxie.rpg_college.tile.LavaTile;
 import foxie.rpg_college.tile.Tile;
 
@@ -132,6 +134,9 @@ public abstract class LivingEntity extends Entity {
   
   public void die() {
     this.getWorld().removeEntity(this);
+    if (this.canDispatchControllerEvents()) {
+      this.getController().get().dispatchOnEntityNoLongerControllable();
+    }
   }
   
   @Override
@@ -140,6 +145,16 @@ public abstract class LivingEntity extends Entity {
   
   @Override
   public void onTileCollision(IVec2 coord, Tile other) {
+  }
+  
+  @Override
+  public boolean canBeControlled() {
+    return true;
+  }
+  
+  @Override
+  protected Controller createController() {
+    return new LivingEntityController(this);
   }
   
   public abstract FloatRectangle getLegBox();

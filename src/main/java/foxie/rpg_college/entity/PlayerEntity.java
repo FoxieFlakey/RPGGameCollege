@@ -7,13 +7,8 @@ import java.util.Optional;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.controller.Controllable;
-import foxie.rpg_college.entity.controller.Controller;
-import foxie.rpg_college.entity.controller.EntityController;
-import foxie.rpg_college.entity.controller.LivingEntityController;
-import foxie.rpg_college.world.World;
 
-public class PlayerEntity extends LivingEntity implements Controllable {
+public class PlayerEntity extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
     50.0f,
     100.0f
@@ -21,20 +16,10 @@ public class PlayerEntity extends LivingEntity implements Controllable {
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
   
-  private EntityController controller = null;
-
   public PlayerEntity() {
     this.setHealth(this.getMaxHealth());
   }
-
-  @Override
-  public void setPos(Vec2 pos) {
-    super.setPos(pos);
-    if (this.controller != null) {
-      this.controller.onPositionUpdated();
-    }
-  }
-
+  
   @Override
   public float getMaxHealth() {
     return 100.0f;
@@ -74,15 +59,6 @@ public class PlayerEntity extends LivingEntity implements Controllable {
   }
 
   @Override
-  public void setWorld(World world) {
-    super.setWorld(world);
-    
-    if (this.controller != null) {
-      this.controller.onWorldChange();
-    }
-  }
-
-  @Override
   public Optional<CollisionBox> getCollisionBox() {
     return Optional.of(this.collisionBox);
   }
@@ -105,23 +81,6 @@ public class PlayerEntity extends LivingEntity implements Controllable {
       ),
       bottomRightCollision
     );
-  }
-  
-  @Override
-  public void die() {
-    super.die();
-    if (this.controller != null) {
-      this.controller.onEntityNoLongerControllable();
-    }
-  }
-  
-  @Override
-  public Controller getController() {
-    PlayerEntity player = this;
-    if (this.controller == null) {
-      this.controller = new LivingEntityController(player);
-    }
-    return this.controller;
   }
   
   @Override

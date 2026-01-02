@@ -10,6 +10,7 @@ import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.controller.Controller;
 import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
@@ -20,6 +21,7 @@ public abstract class Entity {
   private Vec2 position = new Vec2(0.0f, 0.0f);
   private World currentWorld = null;
   private float rotation = 90.0f;
+  private Optional<Controller> controller = Optional.empty();
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
@@ -48,6 +50,10 @@ public abstract class Entity {
     if (this.getCollisionBox().isPresent()) {
       this.getCollisionBox().get().setPos(pos);
     }
+    
+    if (this.controller.isPresent()) {
+      this.controller.get().dispatchOnPositionUpdated();
+    }
   }
 
   public final World getWorld() {
@@ -58,6 +64,9 @@ public abstract class Entity {
   // itself from corresponding world
   public void setWorld(World world) {
     this.currentWorld = world;
+    if (this.controller.isPresent()) {
+      this.controller.get().dispatchOnWorldChange();
+    }
   }
   
   public void onCollision() {
@@ -75,6 +84,22 @@ public abstract class Entity {
   public final Orientation getOrientation() {
     return Orientation.fromDegrees(this.rotation);
   }
+  
+  public final Optional<Controller> getController() {
+    if (!this.canBeControlled()) {
+      return Optional.empty();
+    }
+    
+    if (this.controller.isEmpty()) {
+      this.controller = Optional.of(this.createController());
+    }
+    
+    return Optional.of(this.controller.get());
+  }
+  
+  public final boolean canDispatchControllerEvents() {
+    return this.canBeControlled() && this.controller.isPresent();
+  }
 
   // This prefer 'false', so if there two entities
   // one say true other say false, the result is false
@@ -88,4 +113,6 @@ public abstract class Entity {
   public abstract void tick(float deltaTime);
   public abstract void onTileStep(Tile tile, IVec2 tileCoord);
   public abstract Optional<FloatRectangle> getBoxToBeCheckedForTileStep();
+  public abstract boolean canBeControlled();
+  protected abstract Controller createController();
 }
