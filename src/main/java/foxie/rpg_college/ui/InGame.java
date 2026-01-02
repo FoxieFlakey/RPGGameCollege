@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.CharacterEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
 
@@ -30,6 +31,11 @@ public class InGame extends Screen {
     // Health bar sizing
     Vec2 healthBarSize = new Vec2(400.0f, 30.0f);
     boolean hasHealthBar = false;
+    
+    // Mana bar sizing
+    Vec2 manaBarSize = new Vec2(400.0f, 30.0f);
+    boolean hasManaBar = false;
+    
     float padding = 10.0f;
     
     Optional<Entity> maybePlayer = this.getGame().getPlayer();
@@ -39,6 +45,12 @@ public class InGame extends Screen {
       hudStart = hudStart.sub(new Vec2(0.0f, healthBarSize.y() + padding));
       hudSize = hudSize.add(new Vec2(0.0f, healthBarSize.y() + padding));
       hasHealthBar = true;
+    }
+    
+    if (maybePlayer.isPresent() && maybePlayer.get() instanceof CharacterEntity) {
+      hudStart = hudStart.sub(new Vec2(0.0f, manaBarSize.y() + padding));
+      hudSize = hudSize.add(new Vec2(0.0f, manaBarSize.y() + padding));
+      hasManaBar = true;
     }
 
     // Create the background
@@ -55,8 +67,66 @@ public class InGame extends Screen {
     // Now do the rendering
     if (hasHealthBar) {
       this.renderHealthBar(g, deltaTime, (LivingEntity) maybePlayer.get(), currentContentStart, healthBarSize);
-      currentContentStart = currentContentStart.add(new Vec2(0.0f, currentContentStart.y() + healthBarSize.y() + padding));
+      currentContentStart = currentContentStart.add(new Vec2(0.0f, healthBarSize.y() + padding));
     }
+    
+    if (hasManaBar) {
+      this.renderManaBar(g, deltaTime, (CharacterEntity) maybePlayer.get(), currentContentStart, manaBarSize);
+      currentContentStart = currentContentStart.add(new Vec2(0.0f, manaBarSize.y() + padding));
+    }
+  }
+  
+  void renderManaBar(Graphics2D g, float deltaTime, CharacterEntity player, Vec2 manaBarPos, Vec2 manaBarSize) {
+    float manaPercent = player.getManaPoint() / player.getMaxManaPoint();
+    Vec2 healthTextStart = new Vec2(manaBarPos.x(), manaBarPos.y() + manaBarSize.y() * 0.5f);
+    Vec2 bar = new Vec2(manaBarPos.x() + 200.0f, manaBarPos.y());
+
+    Color manaBarColor = new Color(0.0f, 0.0f, 0.9f, 1.0f);
+    if (player.getFlashState()) {
+      manaBarColor = new Color(0.8f, 0.8f, 1.0f, 1.0f);
+    }
+
+    // Create the mana bar
+    g.setColor(new Color(0.7f, 0.4f, 0.4f, 1.0f));
+    if (player.isDead()) {
+      g.setColor(new Color(0.0f, 0.0f, 0.3f, 1.0f));
+      manaPercent = 0.0f;
+    }
+
+    g.fillRect(
+      (int) bar.x(),
+      (int) bar.y(),
+      (int) manaBarSize.x(),
+      (int) manaBarSize.y()
+    );
+
+    // Create the health bar filled with actual health
+    g.setColor(manaBarColor);
+    g.fillRect(
+      (int) bar.x(),
+      (int) bar.y(),
+      (int) (manaBarSize.x() * manaPercent),
+      (int) manaBarSize.y()
+    );
+
+    // Now the border
+    Stroke oldStroke = g.getStroke();
+    g.setStroke(new BasicStroke(5.0f));
+
+    g.setColor(Color.BLACK);
+    g.drawRect(
+      (int) bar.x(),
+      (int) bar.y(),
+      (int) (manaBarSize.x() - manaPercent),
+      (int) manaBarSize.y()
+    );
+
+    g.setStroke(oldStroke);
+
+    // Draw text 'health'
+    g.setColor(Color.WHITE);
+    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30));
+    g.drawString("Mana: ", (int) healthTextStart.x(), (int) healthTextStart.y() + Fonts.calcYOffsetSoItsCenter(g));
   }
   
   void renderHealthBar(Graphics2D g, float deltaTime, LivingEntity player, Vec2 healthBarPos, Vec2 healthBarSize) {

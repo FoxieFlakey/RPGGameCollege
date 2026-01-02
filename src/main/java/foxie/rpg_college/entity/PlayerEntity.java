@@ -8,7 +8,7 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 
-public class PlayerEntity extends LivingEntity implements Attackable {
+public class PlayerEntity extends CharacterEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
     50.0f,
     100.0f
@@ -19,6 +19,11 @@ public class PlayerEntity extends LivingEntity implements Attackable {
   
   @Override
   public float getMaxHealth() {
+    return 100.0f;
+  }
+  
+  @Override
+  public float getMaxManaPoint() {
     return 100.0f;
   }
 
