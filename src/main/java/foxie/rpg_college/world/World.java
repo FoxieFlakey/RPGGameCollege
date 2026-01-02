@@ -7,6 +7,7 @@ import java.awt.Stroke;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
@@ -114,6 +115,20 @@ public abstract class World {
 
     this.entities.remove(entity.id);
     entity.setWorld(null);
+  }
+  
+  // The iterator must not be saved as new entitity may be added later
+  public Stream<Entity> findEntitiesOverlaps(Vec2 point) {
+    return this.entities.values()
+      .stream()
+      .filter(e -> {
+        Optional<CollisionBox> maybeBox = e.getCollisionBox();
+        if (maybeBox.isEmpty()) {
+          return false;
+        }
+        
+        return maybeBox.get().asRect().contains(point);
+      });
   }
 
   void checkCollisionInner(Entity e, Entity other, CollisionBox thisBox) {

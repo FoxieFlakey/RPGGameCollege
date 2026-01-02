@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 import java.util.Optional;
 
 import foxie.rpg_college.entity.CatEntity;
@@ -178,6 +179,21 @@ public class Game implements AutoCloseable {
         this.handleRespawnCat();
       } else if (this.keyboardState.getState(Keyboard.Button.T) == Keyboard.State.Clicked) {
         this.handleRespawnPlayer();
+      }
+    }
+    
+    if (this.mouseState.getButtonState(Mouse.Button.Middle) == Mouse.State.Clicked) {
+      Vec2 selectedPoint = this.getCamera().translateAWTGraphicsToWorldCoord(this.mouseState.getButtonPosition());
+      
+      // Control other entity lol
+      Iterator<Entity> eligibleEntities = this.getCurrentWorld()
+        .findEntitiesOverlaps(selectedPoint)
+        .filter(e -> e.canBeControlled())
+        .iterator();
+      
+      if (eligibleEntities.hasNext()) {
+        Entity entity = eligibleEntities.next();
+        this.player.setNewEntityToControl(entity);
       }
     }
   }
