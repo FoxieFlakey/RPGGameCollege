@@ -82,9 +82,6 @@ public class InGame extends Screen {
     Vec2 bar = new Vec2(manaBarPos.x() + 200.0f, manaBarPos.y());
 
     Color manaBarColor = new Color(0.0f, 0.0f, 0.9f, 1.0f);
-    if (player.getFlashState()) {
-      manaBarColor = new Color(0.8f, 0.8f, 1.0f, 1.0f);
-    }
 
     // Create the mana bar
     g.setColor(new Color(0.7f, 0.4f, 0.4f, 1.0f));
