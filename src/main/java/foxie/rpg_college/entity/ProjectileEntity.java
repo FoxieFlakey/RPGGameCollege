@@ -15,9 +15,9 @@ public abstract class ProjectileEntity extends Entity {
   private float velocity;
   private float timeToLive;
   
-  public ProjectileEntity(Entity shooter, float timeToLiveWhenHit, float velocity) {
+  public ProjectileEntity(Entity shooter, float timeToLive, float velocity) {
     this.shooter = shooter;
-    this.timeToLive = timeToLiveWhenHit;
+    this.timeToLive = timeToLive;
     this.velocity = velocity;
   }
   

@@ -35,7 +35,7 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   }
   
   public ArrowEntity(Entity shooter) {
-    super(shooter, 1.0f, 400.0f);
+    super(shooter, 5.0f, 400.0f);
   }
   
   @Override
