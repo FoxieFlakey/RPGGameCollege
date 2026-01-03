@@ -1,7 +1,10 @@
 package foxie.rpg_college;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -32,6 +35,7 @@ public class Game implements AutoCloseable {
   
   private boolean isRunning = false;
   private boolean isClosed = false;
+  private boolean isFullScreened = false;
   private int currentRenderWidth = INITIAL_RENDER_WIDTH;
   private int currentRenderHeight = INITIAL_RENDER_HEIGHT;
   private FloatRectangle outputAreaInWindow;
@@ -61,6 +65,7 @@ public class Game implements AutoCloseable {
   public Game() {
     this.window = new Frame();
     this.window.setSize(this.getOutputWidth(), this.getOutputHeight());
+    this.window.setMinimumSize(new Dimension(this.getOutputWidth(), this.getOutputHeight()));
     this.window.setFocusable(true);
     this.window.setUndecorated(false);
     this.window.setVisible(true);
@@ -203,6 +208,19 @@ public class Game implements AutoCloseable {
 
   void handleInput(float deltaTime) {
     this.player.handleInput(deltaTime);
+    
+    if (this.keyboardState.getState(Keyboard.Button.F11) == State.Clicked) {
+      GraphicsDevice dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+      if (dev.isFullScreenSupported()) {
+        this.isFullScreened = !this.isFullScreened;
+        
+        if (this.isFullScreened) {
+          dev.setFullScreenWindow(this.window);
+        } else {
+          dev.setFullScreenWindow(null);
+        }
+      }
+    }
     
     if (this.getPlayer().isEmpty()) {
       if (this.keyboardState.getState(Keyboard.Button.R) == State.Clicked) {
