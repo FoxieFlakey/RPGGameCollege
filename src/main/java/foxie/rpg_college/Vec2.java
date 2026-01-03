@@ -7,6 +7,10 @@ public record Vec2(
   public Vec2 add(Vec2 rhs) {
     return new Vec2(this.x + rhs.x, this.y + rhs.y);
   }
+  
+  public Vec2 mul(Vec2 rhs) {
+    return new Vec2(this.x * rhs.x, this.y * rhs.y);
+  }
 
   public Vec2 mul(float factor) {
     return new Vec2(
@@ -20,6 +24,10 @@ public record Vec2(
       this.x / factor,
       this.y / factor
     );
+  }
+  
+  public Vec2 div(Vec2 rhs) {
+    return new Vec2(this.x / rhs.x, this.y / rhs.y);
   }
 
   public Vec2 sub(Vec2 rhs) {

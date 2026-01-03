@@ -24,14 +24,14 @@ public class InputToControllerBridge implements AutoCloseable {
   
   private float spawnCatCooldown = -1.0f;
   
-  public InputToControllerBridge(Entity entity, Vec2 viewSize) {
+  public InputToControllerBridge(Entity entity, Vec2 viewSize, Vec2 outputSize) {
     if (!entity.canBeControlled()) {
       throw new IllegalArgumentException("Attempt to create InputToControllerBridge with non controllable entity");
     }
     
     this.controller = Optional.of(entity.getController().get());
     this.currentWorld = entity.getWorld();
-    this.camera = new Camera(entity.getWorld().getRenderBound(), viewSize);
+    this.camera = new Camera(entity.getWorld().getRenderBound(), viewSize, outputSize);
     
     @SuppressWarnings("resource")
     InputToControllerBridge self = this;
@@ -206,7 +206,7 @@ public class InputToControllerBridge implements AutoCloseable {
       Entity entity = this.getEntity().get();
       if (mouse.getButtonState(Mouse.Button.Right).isNowPressed()) {
         Vec2 playerScreenCoord = this.camera.translateWorldToAWTGraphicsCoord(entity.getPos());
-        Vec2 lookToScreenCoord = mouse.getMousePosition().sub(playerScreenCoord);
+        Vec2 lookToScreenCoord = this.camera.translateScreenToAWTGraphicsCoord(mouse.getMousePosition()).sub(playerScreenCoord);
 
         controller.setRotation(lookToScreenCoord.calculateAngle());
       }

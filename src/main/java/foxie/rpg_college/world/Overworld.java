@@ -85,16 +85,17 @@ public class Overworld extends World {
     FloatRectangle visible = this.getGame().getCamera().getVisibleWorld();
     Vec2 coord = visible.getTopLeftCorner().add(this.backgroundImageSize.mul(0.5f));
     Vec2 visibleSize = visible.getSize();
+    Vec2 visibleSizeOutput = visible.getSize().mul(this.getGame().getCamera().getScale());
 
     // Image might be not ready, but lets ignore
     g.drawImage(
       this.backgroundImage,
       // Dest coords
       0, 0,
-      (int) visibleSize.x(), (int) visibleSize.y(),
+      (int) visibleSizeOutput.x(), (int) visibleSizeOutput.y(),
       // Source coords
       (int) coord.x(), (int) coord.y(),
-      (int) visibleSize.x() + (int) coord.x(), (int) visibleSize.y() + (int) coord.y(),
+      (int) (visibleSize.x() + coord.x()), (int) (visibleSize.y() + coord.y()),
       null
     );
   }

@@ -32,10 +32,16 @@ public class Game implements AutoCloseable {
   private final Frame window;
   private final BufferStrategy windowBufferStrategy;
 
-  private final BufferedImage gameBuffer = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
+  private final BufferedImage gameBuffer = new BufferedImage((int) Game.RENDER_WIDTH, (int) Game.RENDER_HEIGHT, BufferedImage.TYPE_INT_RGB);
   private final Overworld overworld;
   private final InputToControllerBridge player;
   private final Screen currentScreen;
+  
+  private static final float VIEW_WIDTH = 1280.0f;
+  private static final float VIEW_HEIGHT = 720.0f;
+  
+  private static final float RENDER_WIDTH = 2160.0f;
+  private static final float RENDER_HEIGHT = 300.0f;
   
   private float lastRenderTime = Util.getTime();
   
@@ -74,7 +80,7 @@ public class Game implements AutoCloseable {
       }
     });
 
-    this.mouseState = new Mouse(this.window, this.outputAreaInWindow, new Vec2(this.getOutputWidth(), this.getOutputHeight()));
+    this.mouseState = new Mouse(this.window, this.outputAreaInWindow, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT));
     this.keyboardState = new Keyboard(this.window);
     
     this.window.createBufferStrategy(2);
@@ -92,7 +98,7 @@ public class Game implements AutoCloseable {
     catEntity.setPos(new Vec2(-300.0f, 300.0f));
     
     this.currentScreen = new InGame(this);
-    this.player = new InputToControllerBridge(catEntity, new Vec2(1280.0f, 720.0f));
+    this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(Game.RENDER_WIDTH, Game.RENDER_HEIGHT));
   }
   
   void handleRespawnCat() {

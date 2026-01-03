@@ -98,11 +98,9 @@ public class Mouse implements AutoCloseable {
       
       Vec2 raw = new Vec2((float) e.getX(), (float) e.getY());
       Vec2 offseted = raw.sub(this.owner.watchedArea.getTopLeftCorner());
+      Vec2 percentMoved = offseted.div(this.owner.watchedArea.getSize());
       
-      this.owner.positionNow = new Vec2(
-        (offseted.x() / this.owner.watchedArea.getSize().x()) * this.owner.mapWatchedArea.x(),
-        (offseted.y() / this.owner.watchedArea.getSize().y()) * this.owner.mapWatchedArea.y()
-      );
+      this.owner.positionNow = percentMoved.mul(this.owner.mapWatchedArea);
     }
 
     @Override

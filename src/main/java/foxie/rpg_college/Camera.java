@@ -12,16 +12,18 @@ package foxie.rpg_college;
 public class Camera {
   private FloatRectangle possiblePosition;
   private Vec2 viewSize;
+  private Vec2 outputSize;
   private Vec2 pos = new Vec2(0.0f, 0.0f);
 
-  public Camera(FloatRectangle worldBound, Vec2 viewSize) {
+  public Camera(FloatRectangle worldBound, Vec2 viewSize, Vec2 outputSize) {
     if (!worldBound.canFit(viewSize)) {
       // The world cannot fit the view. There would empty space
       // in final render which game don't know whta to do
       throw new IllegalArgumentException("Attempt to create camera with it viewing area larger than the world");
     }
-
+    
     this.viewSize = viewSize;
+    this.outputSize = outputSize;
     this.setBound(worldBound);
   }
 
@@ -36,11 +38,15 @@ public class Camera {
   // coordinate suitable for AWT graphics class
   // to use on game view canvas
   public Vec2 translateWorldToAWTGraphicsCoord(Vec2 coord) {
-    return coord.sub(this.getVisibleWorld().getTopLeftCorner());
+    return coord.sub(this.getVisibleWorld().getTopLeftCorner()).mul(this.getScale());
   }
   
   public Vec2 translateAWTGraphicsToWorldCoord(Vec2 coord) {
-    return coord.add(this.getVisibleWorld().getTopLeftCorner());
+    return coord.div(this.getScale()).add(this.getVisibleWorld().getTopLeftCorner());
+  }
+  
+  public Vec2 translateScreenToAWTGraphicsCoord(Vec2 coord) {
+    return coord.mul(this.getScale());
   }
 
   public void setPosition(Vec2 newPos) {
@@ -61,5 +67,9 @@ public class Camera {
 
     // Fix the position
     this.setPosition(this.pos);
+  }
+  
+  public Vec2 getScale() {
+    return this.outputSize.div(this.viewSize);
   }
 }
