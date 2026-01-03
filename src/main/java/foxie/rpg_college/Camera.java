@@ -76,4 +76,8 @@ public class Camera {
   public Vec2 getScale() {
     return this.outputSize.div(this.viewSize);
   }
+  
+  public void setOutputSize(Vec2 size) {
+    this.outputSize = size;
+  }
 }

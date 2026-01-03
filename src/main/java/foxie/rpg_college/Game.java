@@ -1,14 +1,12 @@
 package foxie.rpg_college;
 
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -28,11 +26,13 @@ import foxie.rpg_college.world.World;
 public class Game implements AutoCloseable {
   private boolean isRunning = false;
   private boolean isClosed = false;
+  private int currentRenderWidth = INITIAL_RENDER_WIDTH;
+  private int currentRenderHeight = INITIAL_RENDER_HEIGHT;
+  private FloatRectangle outputAreaInWindow;
 
   private final Frame window;
   private final BufferStrategy windowBufferStrategy;
 
-  private final BufferedImage gameBuffer = new BufferedImage((int) Game.RENDER_WIDTH, (int) Game.RENDER_HEIGHT, BufferedImage.TYPE_INT_RGB);
   private final Overworld overworld;
   private final InputToControllerBridge player;
   private final Screen currentScreen;
@@ -40,8 +40,8 @@ public class Game implements AutoCloseable {
   private static final float VIEW_WIDTH = 1280.0f;
   private static final float VIEW_HEIGHT = 720.0f;
   
-  private static final float RENDER_WIDTH = 900.0f;
-  private static final float RENDER_HEIGHT = 900.0f;
+  private static final int INITIAL_RENDER_WIDTH = 1280;
+  private static final int INITIAL_RENDER_HEIGHT = 200;
   
   private float lastRenderTime = Util.getTime();
   
@@ -49,8 +49,6 @@ public class Game implements AutoCloseable {
   public final Keyboard keyboardState;
   public final TileList TILES;
   
-  public FloatRectangle outputAreaInWindow;
-
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
 
@@ -61,24 +59,8 @@ public class Game implements AutoCloseable {
     this.window.setUndecorated(false);
     this.window.setVisible(true);
     this.outputAreaInWindow = this.calcOutputArea();
-
-    @SuppressWarnings("resource")
-    final Game game = this;
-
-    this.window.addWindowListener(new WindowAdapter() {
-      @Override
-      public void windowClosing(WindowEvent e) {
-        game.isClosed = true;
-      }
-    });
-    
-    this.window.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        game.outputAreaInWindow = game.calcOutputArea();
-        game.mouseState.setWatchedArea(game.outputAreaInWindow);
-      }
-    });
+    this.currentRenderWidth = (int) this.outputAreaInWindow.getSize().x();
+    this.currentRenderHeight = (int) this.outputAreaInWindow.getSize().y();
 
     this.mouseState = new Mouse(this.window, this.outputAreaInWindow, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT));
     this.keyboardState = new Keyboard(this.window);
@@ -98,7 +80,28 @@ public class Game implements AutoCloseable {
     catEntity.setPos(new Vec2(-300.0f, 300.0f));
     
     this.currentScreen = new InGame(this);
-    this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(Game.RENDER_WIDTH, Game.RENDER_HEIGHT));
+    this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.currentRenderWidth, this.currentRenderHeight));
+    
+    @SuppressWarnings("resource")
+    final Game game = this;
+
+    this.window.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        game.isClosed = true;
+      }
+    });
+    
+    this.window.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        game.outputAreaInWindow = game.calcOutputArea();
+        game.mouseState.setWatchedArea(game.outputAreaInWindow);
+        game.currentRenderWidth = (int) game.outputAreaInWindow.getSize().x();
+        game.currentRenderHeight = (int) game.outputAreaInWindow.getSize().y();
+        game.getCamera().setOutputSize(game.outputAreaInWindow.getSize());
+      }
+    });
   }
   
   void handleRespawnCat() {
@@ -146,15 +149,11 @@ public class Game implements AutoCloseable {
   }
 
   public int getOutputHeight() {
-    int ret = this.gameBuffer.getHeight();
-    assert ret > 0;
-    return ret;
+    return this.currentRenderHeight;
   }
 
   public int getOutputWidth() {
-    int ret = this.gameBuffer.getWidth();
-    assert ret > 0;
-    return ret;
+    return this.currentRenderWidth;
   }
 
   public void runOnce() {
@@ -206,24 +205,24 @@ public class Game implements AutoCloseable {
   }
   
   FloatRectangle calcOutputArea() {
-    float renderWidth = (float) this.gameBuffer.getWidth();
-    float renderHeight = (float) this.gameBuffer.getHeight();
-    float renderAspect = renderWidth / renderHeight;
+    float somethingWidth = Game.VIEW_WIDTH;
+    float somethingHeight = Game.VIEW_HEIGHT;
+    float somethingAspect = somethingWidth / somethingHeight;
     
     float actualWidth = (float) this.window.getWidth();
     float actualHeight = (float) this.window.getHeight();
     
-    float neededWidthIfHeightIsScaledToFit = actualHeight * renderAspect;
+    float neededWidthIfHeightIsScaledToFit = actualHeight * somethingAspect;
     
     float scale;
     if (neededWidthIfHeightIsScaledToFit > actualWidth) {
-      scale = actualWidth / renderWidth;
+      scale = actualWidth / somethingWidth;
     } else {
-      scale = actualHeight / renderHeight;
+      scale = actualHeight / somethingHeight;
     }
     
-    float letterBoxedWidth = renderWidth * scale;
-    float letterBoxedHeight = renderHeight * scale;
+    float letterBoxedWidth = somethingWidth * scale;
+    float letterBoxedHeight = somethingHeight * scale;
     float xOffset = Math.max((actualWidth - letterBoxedWidth) / 2.0f, 0.0f);
     float yOffset = Math.max((actualHeight - letterBoxedHeight) / 2.0f, 0.0f);
     
@@ -234,26 +233,20 @@ public class Game implements AutoCloseable {
   }
 
   void render(float deltaTime) {
-    Graphics2D g = this.gameBuffer.createGraphics();
-    try {
-      this.getCurrentWorld().render(g, deltaTime);
-      this.currentScreen.render(g, deltaTime);
-    } finally {
-      g.dispose();
-    }
-
     do {
       do {
-        Graphics gr = this.windowBufferStrategy.getDrawGraphics();
-        gr.drawImage(
-          this.gameBuffer,
-          (int) this.outputAreaInWindow.getTopLeftCorner().x(),
-          (int) this.outputAreaInWindow.getTopLeftCorner().y(),
-          (int) this.outputAreaInWindow.getSize().x(),
-          (int) this.outputAreaInWindow.getSize().y(),
-          null
-        );
-        gr.dispose();
+        FloatRectangle outputAreaInWindow = this.outputAreaInWindow;
+        
+        Graphics2D g = (Graphics2D) this.windowBufferStrategy.getDrawGraphics();
+        g.translate(outputAreaInWindow.getTopLeftCorner().x(), outputAreaInWindow.getTopLeftCorner().y());
+        
+        try {
+          this.getCurrentWorld().render(g, deltaTime);
+          this.currentScreen.render(g, deltaTime);
+        } finally {
+          g.dispose();
+        }
+        g.dispose();
       } while (this.windowBufferStrategy.contentsRestored());
 
       this.windowBufferStrategy.show();
