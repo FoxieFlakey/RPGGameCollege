@@ -262,6 +262,12 @@ public class Game implements AutoCloseable {
         FloatRectangle outputAreaInWindow = this.outputAreaInWindow;
         
         Graphics2D g = (Graphics2D) this.windowBufferStrategy.getDrawGraphics();
+        g.setClip(
+          (int) outputAreaInWindow.getTopLeftCorner().x(),
+          (int) outputAreaInWindow.getTopLeftCorner().y(),
+          (int) outputAreaInWindow.getSize().x(),
+          (int) outputAreaInWindow.getSize().y()
+        );
         g.translate(outputAreaInWindow.getTopLeftCorner().x(), outputAreaInWindow.getTopLeftCorner().y());
         
         try {
