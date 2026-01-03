@@ -24,6 +24,12 @@ import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
+  private Object lock = new Object();
+  private boolean shared_isClosed = false;
+  private int shared_currentRenderWidth = INITIAL_RENDER_WIDTH;
+  private int shared_currentRenderHeight = INITIAL_RENDER_HEIGHT;
+  private FloatRectangle shared_outputAreaInWindow;
+  
   private boolean isRunning = false;
   private boolean isClosed = false;
   private int currentRenderWidth = INITIAL_RENDER_WIDTH;
@@ -58,10 +64,7 @@ public class Game implements AutoCloseable {
     this.window.setFocusable(true);
     this.window.setUndecorated(false);
     this.window.setVisible(true);
-    this.outputAreaInWindow = this.calcOutputArea();
-    this.currentRenderWidth = (int) this.outputAreaInWindow.getSize().x();
-    this.currentRenderHeight = (int) this.outputAreaInWindow.getSize().y();
-
+    
     this.mouseState = new Mouse(this.window, this.outputAreaInWindow, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT));
     this.keyboardState = new Keyboard(this.window);
     
@@ -82,26 +85,47 @@ public class Game implements AutoCloseable {
     this.currentScreen = new InGame(this);
     this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.currentRenderWidth, this.currentRenderHeight));
     
+    this.updateState();
+    this.captureState();
+    
     @SuppressWarnings("resource")
     final Game game = this;
 
     this.window.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        game.isClosed = true;
+        synchronized (game.lock) {
+          game.isClosed = true;
+        }
       }
     });
     
     this.window.addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
-        game.outputAreaInWindow = game.calcOutputArea();
-        game.mouseState.setWatchedArea(game.outputAreaInWindow);
-        game.currentRenderWidth = (int) game.outputAreaInWindow.getSize().x();
-        game.currentRenderHeight = (int) game.outputAreaInWindow.getSize().y();
-        game.getCamera().setOutputSize(game.outputAreaInWindow.getSize());
+        game.updateState();
       }
     });
+  }
+  
+  void captureState() {
+    synchronized (this.lock) {
+      this.outputAreaInWindow = this.shared_outputAreaInWindow;
+      this.currentRenderWidth = this.shared_currentRenderWidth;
+      this.currentRenderHeight = this.shared_currentRenderHeight;
+      this.isClosed = this.shared_isClosed;
+    }
+  }
+  
+  void updateState() {
+    synchronized (this.lock) {
+      FloatRectangle outputArea = this.calcOutputArea();
+      this.mouseState.setWatchedArea(outputArea);
+      this.shared_outputAreaInWindow = outputArea;
+      this.shared_currentRenderWidth = (int) outputArea.getSize().x();
+      this.shared_currentRenderHeight = (int) outputArea.getSize().y();
+      this.getCamera().setOutputSize(outputArea.getSize());
+    }
   }
   
   void handleRespawnCat() {
@@ -162,9 +186,9 @@ public class Game implements AutoCloseable {
     }
     this.isRunning = true;
 
+    this.captureState();
     this.mouseState.updateState();
     this.keyboardState.updateState();
-
 
     float now = Util.getTime();
     float deltaTime = now - this.lastRenderTime;
