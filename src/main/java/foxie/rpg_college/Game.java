@@ -47,7 +47,7 @@ public class Game implements AutoCloseable {
   private static final float VIEW_HEIGHT = 720.0f;
   
   private static final int INITIAL_RENDER_WIDTH = 1280;
-  private static final int INITIAL_RENDER_HEIGHT = 200;
+  private static final int INITIAL_RENDER_HEIGHT = 720;
   
   private float lastRenderTime = Util.getTime();
   
