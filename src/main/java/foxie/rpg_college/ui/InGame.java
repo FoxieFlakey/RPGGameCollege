@@ -28,6 +28,10 @@ public class InGame extends Screen {
     Vec2 hudStart = new Vec2(10.0f, this.getGame().getOutputHeight() - 20.0f);
     Vec2 hudSize = new Vec2(620.0f, 10.0f);
 
+    // Name bar sizing
+    Vec2 nameBarSize = new Vec2(400.0f, 30.0f);
+    boolean hasNameBar = false;
+
     // Health bar sizing
     Vec2 healthBarSize = new Vec2(400.0f, 30.0f);
     boolean hasHealthBar = false;
@@ -41,6 +45,12 @@ public class InGame extends Screen {
     Optional<Entity> maybePlayer = this.getGame().getPlayer();
     
     // Determining what HUD elements can be rendered
+    if (maybePlayer.isPresent()) {
+      hudStart = hudStart.sub(new Vec2(0.0f, nameBarSize.y() + padding));
+      hudSize = hudSize.add(new Vec2(0.0f, nameBarSize.y() + padding));
+      hasNameBar = true;
+    }
+    
     if (maybePlayer.isPresent() && maybePlayer.get() instanceof LivingEntity) {
       hudStart = hudStart.sub(new Vec2(0.0f, healthBarSize.y() + padding));
       hudSize = hudSize.add(new Vec2(0.0f, healthBarSize.y() + padding));
@@ -65,6 +75,11 @@ public class InGame extends Screen {
     Vec2 currentContentStart = hudStart.add(new Vec2(10.0f, 10.0f));
     
     // Now do the rendering
+    if (hasNameBar) {
+      this.renderNameBar(g, deltaTime, maybePlayer.get(), currentContentStart, nameBarSize);
+      currentContentStart = currentContentStart.add(new Vec2(0.0f, nameBarSize.y() + padding));
+    }
+    
     if (hasHealthBar) {
       this.renderHealthBar(g, deltaTime, (LivingEntity) maybePlayer.get(), currentContentStart, healthBarSize);
       currentContentStart = currentContentStart.add(new Vec2(0.0f, healthBarSize.y() + padding));
@@ -74,6 +89,13 @@ public class InGame extends Screen {
       this.renderManaBar(g, deltaTime, (CharacterEntity) maybePlayer.get(), currentContentStart, manaBarSize);
       currentContentStart = currentContentStart.add(new Vec2(0.0f, manaBarSize.y() + padding));
     }
+  }
+  
+  void renderNameBar(Graphics2D g, float deltaTime, Entity player, Vec2 pos, Vec2 size) {
+    Vec2 textStart = new Vec2(pos.x(), pos.y() + size.y() * 0.5f);
+    g.setColor(Color.WHITE);
+    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30));
+    g.drawString("Name: " + player.getName(), (int) textStart.x(), (int) textStart.y() + Fonts.calcYOffsetSoItsCenter(g));
   }
   
   void renderManaBar(Graphics2D g, float deltaTime, CharacterEntity player, Vec2 manaBarPos, Vec2 manaBarSize) {
