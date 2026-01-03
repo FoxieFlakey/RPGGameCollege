@@ -48,6 +48,10 @@ public class Camera {
   public Vec2 translateScreenToAWTGraphicsCoord(Vec2 coord) {
     return coord.mul(this.getScale());
   }
+  
+  public Vec2 translateScreenToWorldCoord(Vec2 coord) {
+    return this.translateAWTGraphicsToWorldCoord(this.translateScreenToAWTGraphicsCoord(coord));
+  }
 
   public void setPosition(Vec2 newPos) {
     this.pos = this.possiblePosition.clampCoordinate(newPos);

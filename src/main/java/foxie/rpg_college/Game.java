@@ -40,8 +40,8 @@ public class Game implements AutoCloseable {
   private static final float VIEW_WIDTH = 1280.0f;
   private static final float VIEW_HEIGHT = 720.0f;
   
-  private static final float RENDER_WIDTH = 2160.0f;
-  private static final float RENDER_HEIGHT = 300.0f;
+  private static final float RENDER_WIDTH = 900.0f;
+  private static final float RENDER_HEIGHT = 900.0f;
   
   private float lastRenderTime = Util.getTime();
   
@@ -190,7 +190,7 @@ public class Game implements AutoCloseable {
     }
     
     if (this.mouseState.getButtonState(Mouse.Button.Middle) == State.Clicked) {
-      Vec2 selectedPoint = this.getCamera().translateAWTGraphicsToWorldCoord(this.mouseState.getMousePosition());
+      Vec2 selectedPoint = this.getCamera().translateScreenToWorldCoord(this.mouseState.getMousePosition());
       
       // Control other entity lol
       Iterator<Entity> eligibleEntities = this.getCurrentWorld()
