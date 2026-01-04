@@ -33,6 +33,7 @@ public class Game implements AutoCloseable {
   private static final int INITIAL_RENDER_HEIGHT = 720;
   
   private float lastRenderTime = Util.getTime();
+  private boolean debugEnabled = false;
   
   public final TileList TILES;
   
@@ -146,8 +147,16 @@ public class Game implements AutoCloseable {
 
     this.isRunning = false;
   }
+  
+  public boolean isDebugEnabled() {
+    return this.debugEnabled;
+  }
 
   void handleInput(float deltaTime) {
+    if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
+      this.debugEnabled = !this.debugEnabled;
+    }
+    
     this.player.handleInput(deltaTime);
     
     if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {

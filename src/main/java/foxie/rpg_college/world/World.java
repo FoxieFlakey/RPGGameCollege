@@ -288,18 +288,20 @@ public abstract class World {
       IVec2 start = entityPosOnScreen.round();
       IVec2 end = entityPosOnScreen.add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f)).round();
 
-      Stroke oldStroke = g.getStroke();
-      
-      g.setColor(Color.GREEN);
-      g.setStroke(new BasicStroke(5.0f));
-      g.drawLine(
-        start.x(),
-        start.y(),
-        end.x(),
-        end.y()
-      );
+      if (this.getGame().isDebugEnabled()) {
+        Stroke oldStroke = g.getStroke();
+        
+        g.setColor(Color.GREEN);
+        g.setStroke(new BasicStroke(5.0f));
+        g.drawLine(
+          start.x(),
+          start.y(),
+          end.x(),
+          end.y()
+        );
 
-      g.setStroke(oldStroke);
+        g.setStroke(oldStroke);
+      }
     }
   }
 
