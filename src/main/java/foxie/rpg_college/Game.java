@@ -1,15 +1,6 @@
 package foxie.rpg_college;
 
-import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferStrategy;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -27,21 +18,9 @@ import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
-  private Object lock = new Object();
-  private boolean shared_isClosed = false;
-  private int shared_currentRenderWidth = INITIAL_RENDER_WIDTH;
-  private int shared_currentRenderHeight = INITIAL_RENDER_HEIGHT;
-  private FloatRectangle shared_outputAreaInWindow;
-  
   private boolean isRunning = false;
-  private boolean isClosed = false;
-  private boolean isFullScreened = false;
-  private int currentRenderWidth = INITIAL_RENDER_WIDTH;
-  private int currentRenderHeight = INITIAL_RENDER_HEIGHT;
-  private FloatRectangle outputAreaInWindow;
 
-  private final Frame window;
-  private final BufferStrategy windowBufferStrategy;
+  private final Window window;
 
   private final Overworld overworld;
   private final InputToControllerBridge player;
@@ -55,26 +34,18 @@ public class Game implements AutoCloseable {
   
   private float lastRenderTime = Util.getTime();
   
-  public final Mouse mouseState;
-  public final Keyboard keyboardState;
   public final TileList TILES;
   
   public static final int TICK_RATE = 20;
   public static final int REFRESH_RATE = 30;
 
   public Game() {
-    this.window = new Frame();
-    this.window.setSize(this.getOutputWidth(), this.getOutputHeight());
-    this.window.setMinimumSize(new Dimension(this.getOutputWidth(), this.getOutputHeight()));
-    this.window.setFocusable(true);
-    this.window.setUndecorated(false);
-    this.window.setVisible(true);
-    
-    this.mouseState = new Mouse(this.window, this.outputAreaInWindow, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT));
-    this.keyboardState = new Keyboard(this.window);
-    
-    this.window.createBufferStrategy(2);
-    this.windowBufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
+    this.window = new Window(
+      new IVec2(Game.INITIAL_RENDER_WIDTH, Game.INITIAL_RENDER_HEIGHT),
+      new IVec2(Game.INITIAL_RENDER_WIDTH, Game.INITIAL_RENDER_HEIGHT),
+      new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT),
+      VIEW_WIDTH / VIEW_HEIGHT
+    );
     
     this.TILES = new TileList(this);
     this.overworld = new Overworld(this);
@@ -88,49 +59,14 @@ public class Game implements AutoCloseable {
     catEntity.setPos(new Vec2(-300.0f, 300.0f));
     
     this.currentScreen = new InGame(this);
-    this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.currentRenderWidth, this.currentRenderHeight));
+    this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.window.getRenderWidth(), this.window.getRenderHeight()));
     
     this.updateState();
-    this.captureState();
-    
-    @SuppressWarnings("resource")
-    final Game game = this;
-
-    this.window.addWindowListener(new WindowAdapter() {
-      @Override
-      public void windowClosing(WindowEvent e) {
-        synchronized (game.lock) {
-          game.isClosed = true;
-        }
-      }
-    });
-    
-    this.window.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        game.updateState();
-      }
-    });
-  }
-  
-  void captureState() {
-    synchronized (this.lock) {
-      this.outputAreaInWindow = this.shared_outputAreaInWindow;
-      this.currentRenderWidth = this.shared_currentRenderWidth;
-      this.currentRenderHeight = this.shared_currentRenderHeight;
-      this.isClosed = this.shared_isClosed;
-    }
   }
   
   void updateState() {
-    synchronized (this.lock) {
-      FloatRectangle outputArea = this.calcOutputArea();
-      this.mouseState.setWatchedArea(outputArea);
-      this.shared_outputAreaInWindow = outputArea;
-      this.shared_currentRenderWidth = (int) outputArea.getSize().x();
-      this.shared_currentRenderHeight = (int) outputArea.getSize().y();
-      this.getCamera().setOutputSize(outputArea.getSize());
-    }
+    this.window.updateState();
+    this.getCamera().setOutputSize(this.window.getOutputArea().getSize());
   }
   
   void handleRespawnCat() {
@@ -153,12 +89,11 @@ public class Game implements AutoCloseable {
 
   @Override
   public void close() throws Exception {
-    this.windowBufferStrategy.dispose();
-    this.window.dispose();
+    this.window.close();
   }
 
   public boolean isClosed() {
-    return this.isClosed;
+    return this.window.isClosed();
   }
 
   public World getCurrentWorld() {
@@ -178,11 +113,19 @@ public class Game implements AutoCloseable {
   }
 
   public int getOutputHeight() {
-    return this.currentRenderHeight;
+    return this.window.getRenderHeight();
   }
 
   public int getOutputWidth() {
-    return this.currentRenderWidth;
+    return this.window.getRenderWidth();
+  }
+  
+  public Keyboard getKeyboard() {
+    return this.window.keyboard;
+  }
+  
+  public Mouse getMouse() {
+    return this.window.mouse;
   }
 
   public void runOnce() {
@@ -191,9 +134,7 @@ public class Game implements AutoCloseable {
     }
     this.isRunning = true;
 
-    this.captureState();
-    this.mouseState.updateState();
-    this.keyboardState.updateState();
+    this.updateState();
 
     float now = Util.getTime();
     float deltaTime = now - this.lastRenderTime;
@@ -209,29 +150,20 @@ public class Game implements AutoCloseable {
   void handleInput(float deltaTime) {
     this.player.handleInput(deltaTime);
     
-    if (this.keyboardState.getState(Keyboard.Button.F11) == State.Clicked) {
-      GraphicsDevice dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-      if (dev.isFullScreenSupported()) {
-        this.isFullScreened = !this.isFullScreened;
-        
-        if (this.isFullScreened) {
-          dev.setFullScreenWindow(this.window);
-        } else {
-          dev.setFullScreenWindow(null);
-        }
-      }
+    if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {
+      this.window.toggleFullscreen();
     }
     
     if (this.getPlayer().isEmpty()) {
-      if (this.keyboardState.getState(Keyboard.Button.R) == State.Clicked) {
+      if (this.getKeyboard().getState(Keyboard.Button.R) == State.Clicked) {
         this.handleRespawnCat();
-      } else if (this.keyboardState.getState(Keyboard.Button.T) == State.Clicked) {
+      } else if (this.getKeyboard().getState(Keyboard.Button.T) == State.Clicked) {
         this.handleRespawnPlayer();
       }
     }
     
-    if (this.mouseState.getButtonState(Mouse.Button.Middle) == State.Clicked) {
-      Vec2 selectedPoint = this.getCamera().translateScreenToWorldCoord(this.mouseState.getMousePosition());
+    if (this.getMouse().getButtonState(Mouse.Button.Middle) == State.Clicked) {
+      Vec2 selectedPoint = this.getCamera().translateScreenToWorldCoord(this.getMouse().getMousePosition());
       
       // Control other entity lol
       Iterator<Entity> eligibleEntities = this.getCurrentWorld()
@@ -245,41 +177,13 @@ public class Game implements AutoCloseable {
       }
     }
   }
-  
-  FloatRectangle calcOutputArea() {
-    float somethingWidth = Game.VIEW_WIDTH;
-    float somethingHeight = Game.VIEW_HEIGHT;
-    float somethingAspect = somethingWidth / somethingHeight;
-    
-    float actualWidth = (float) this.window.getWidth();
-    float actualHeight = (float) this.window.getHeight();
-    
-    float neededWidthIfHeightIsScaledToFit = actualHeight * somethingAspect;
-    
-    float scale;
-    if (neededWidthIfHeightIsScaledToFit > actualWidth) {
-      scale = actualWidth / somethingWidth;
-    } else {
-      scale = actualHeight / somethingHeight;
-    }
-    
-    float letterBoxedWidth = somethingWidth * scale;
-    float letterBoxedHeight = somethingHeight * scale;
-    float xOffset = Math.max((actualWidth - letterBoxedWidth) / 2.0f, 0.0f);
-    float yOffset = Math.max((actualHeight - letterBoxedHeight) / 2.0f, 0.0f);
-    
-    return new FloatRectangle(
-      new Vec2(xOffset, yOffset),
-      new Vec2(xOffset + letterBoxedWidth, yOffset + letterBoxedHeight)
-    );
-  }
 
   void render(float deltaTime) {
     do {
       do {
-        FloatRectangle outputAreaInWindow = this.outputAreaInWindow;
+        FloatRectangle outputAreaInWindow = this.window.getOutputArea();
         
-        Graphics2D g = (Graphics2D) this.windowBufferStrategy.getDrawGraphics();
+        Graphics2D g = (Graphics2D) this.window.bufferStrategy.getDrawGraphics();
         g.setClip(
           (int) outputAreaInWindow.getTopLeftCorner().x(),
           (int) outputAreaInWindow.getTopLeftCorner().y(),
@@ -295,10 +199,10 @@ public class Game implements AutoCloseable {
           g.dispose();
         }
         g.dispose();
-      } while (this.windowBufferStrategy.contentsRestored());
+      } while (this.window.bufferStrategy.contentsRestored());
 
-      this.windowBufferStrategy.show();
-    } while (this.windowBufferStrategy.contentsLost());
+      this.window.bufferStrategy.show();
+    } while (this.window.bufferStrategy.contentsLost());
   }
 
   void tick(float deltaTime) {

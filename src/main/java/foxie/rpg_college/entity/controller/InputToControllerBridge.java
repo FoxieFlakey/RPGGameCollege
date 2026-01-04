@@ -116,8 +116,8 @@ public class InputToControllerBridge implements AutoCloseable {
     
     Controller controller = this.controller.get();
     
-    Keyboard keyboard = this.getWorld().getGame().keyboardState;
-    Mouse mouse = this.getWorld().getGame().mouseState;
+    Keyboard keyboard = this.getWorld().getGame().getKeyboard();
+    Mouse mouse = this.getWorld().getGame().getMouse();
     Optional<LivingEntity> maybeLiving = this.getLivingEntity();
     
     this.spawnCatCooldown -= deltaTime;
