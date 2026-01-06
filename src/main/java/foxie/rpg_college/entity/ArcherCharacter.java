@@ -8,14 +8,14 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 
-public class PlayerEntity extends CharacterEntity implements Attackable {
+public class ArcherCharacter extends CharacterEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
     50.0f,
     100.0f
   );
   private static final float ATTACK_MANA_POINT = 7.0f;
 
-  private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), PlayerEntity.SIZE);
+  private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
   
   @Override
@@ -40,7 +40,7 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, PlayerEntity.SIZE);
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArcherCharacter.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
     int y = (int) renderBox.getTopLeftCorner().y();
@@ -90,7 +90,7 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
     return new FloatRectangle(
       new Vec2(
         topLeftCollision.x(),
-        bottomRightCollision.y() - PlayerEntity.SIZE.y() * 0.5f
+        bottomRightCollision.y() - ArcherCharacter.SIZE.y() * 0.5f
       ),
       bottomRightCollision
     );
@@ -116,7 +116,7 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
       return false;
     }
     
-    if (!this.consumeManaPoint(PlayerEntity.ATTACK_MANA_POINT)) {
+    if (!this.consumeManaPoint(ArcherCharacter.ATTACK_MANA_POINT)) {
       return false;
     }
     
@@ -133,6 +133,6 @@ public class PlayerEntity extends CharacterEntity implements Attackable {
 
   @Override
   public boolean canAttack() {
-    return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= PlayerEntity.ATTACK_MANA_POINT;
+    return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= ArcherCharacter.ATTACK_MANA_POINT;
   }
 }
