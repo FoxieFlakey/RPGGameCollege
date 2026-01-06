@@ -106,7 +106,7 @@ public class InGame extends Screen {
     Color manaBarColor = new Color(0.0f, 0.0f, 0.9f, 1.0f);
 
     // Create the mana bar
-    g.setColor(new Color(0.7f, 0.4f, 0.4f, 1.0f));
+    g.setColor(new Color(0.8f, 0.8f, 0.9f, 1.0f));
     if (player.isDead()) {
       g.setColor(new Color(0.0f, 0.0f, 0.3f, 1.0f));
       manaPercent = 0.0f;

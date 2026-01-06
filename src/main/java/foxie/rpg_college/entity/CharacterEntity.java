@@ -16,7 +16,7 @@ public abstract class CharacterEntity extends LivingEntity {
       this.manaPoint,
       this.getMaxManaPoint(),
       new Color(0.0f, 0.0f, 0.9f, 1.0f),
-      new Color(0.7f, 0.4f, 0.4f, 1.0f)
+      new Color(0.8f, 0.8f, 0.9f, 1.0f)
     );
     this.addBar(this.manaBar);
   }
