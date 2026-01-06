@@ -2,7 +2,6 @@ package foxie.rpg_college.world;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -95,9 +94,6 @@ public class Overworld extends World {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-
     this.drawBackground(g);
   
     // Now the world itself

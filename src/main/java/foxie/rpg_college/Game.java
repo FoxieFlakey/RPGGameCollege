@@ -1,6 +1,7 @@
 package foxie.rpg_college;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -193,6 +194,8 @@ public class Game implements AutoCloseable {
         FloatRectangle outputAreaInWindow = this.window.getOutputArea();
         
         Graphics2D g = (Graphics2D) this.window.bufferStrategy.getDrawGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g.setClip(
           (int) outputAreaInWindow.getTopLeftCorner().x(),
           (int) outputAreaInWindow.getTopLeftCorner().y(),
