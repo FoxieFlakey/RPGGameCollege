@@ -23,6 +23,11 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
     200.0f
   );
   private static final float ATTACK_MANA_POINT = 7.0f;
+  
+  private static final float MINIMAL_MANA_POINT_TO_DODGE = 70.0f;
+  private static final float MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT = 40.0f;
+  private static final float DODGE_MANA_POINT = 15.0f;
+  private static final float REDUCE_ARROW_DAMAGE_MANA_POINT = 10.0f;
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
@@ -173,7 +178,9 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
   
   @Override
   public boolean canDefense() {
-    return true;
+    return
+      this.getManaPoint() >= ArcherCharacter.MINIMAL_MANA_POINT_TO_DODGE ||
+      this.getManaPoint() >= ArcherCharacter.MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT;
   }
   
   @Override
@@ -181,9 +188,17 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
     if (source instanceof EntityDamageSource) {
       EntityDamageSource entitySource = (EntityDamageSource) source;
       if (entitySource.getSource() instanceof ArrowEntity) {
-        // Take 75% less damage from arrows. So only 25% of
-        // damage is inflicted
-        source.setDamagePoint(source.getDamagePoint() * 0.25f);
+        if (this.getManaPoint() >= ArcherCharacter.MINIMAL_MANA_POINT_TO_DODGE) {
+          if (this.consumeManaPoint(ArcherCharacter.DODGE_MANA_POINT)) {
+            source.setDamagePoint(0.0f);
+          }
+        } else if (this.getManaPoint() >= ArcherCharacter.MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT) {
+          if (this.consumeManaPoint(ArcherCharacter.REDUCE_ARROW_DAMAGE_MANA_POINT)) {
+            // Take 75% less damage from arrows. So only 25% of
+            // damage is inflicted
+            source.setDamagePoint(source.getDamagePoint() * 0.25f);
+          }
+        }
       }
     }
   }

@@ -11,6 +11,10 @@ public abstract class DamageSource {
     this.damagePoint = Math.max(0.0f, newDamage);
   }
   
+  public boolean isCanceled() {
+    return Math.signum(this.getDamagePoint()) < 1.0f && Math.signum(this.getDamagePoint()) > -1.0f;
+  }
+  
   public float getDamagePoint() {
     return this.damagePoint;
   }

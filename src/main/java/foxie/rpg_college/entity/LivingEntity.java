@@ -64,6 +64,11 @@ public abstract class LivingEntity extends Entity {
       }
     }
     
+    if (damageSource.isCanceled()) {
+      // Damage is fully cancelled
+      return;
+    }
+    
     float damage = damageSource.getDamagePoint();
     if (damage < 0.0f) {
       damage = 0.0f;
