@@ -35,6 +35,7 @@ public class Game implements AutoCloseable {
   private static final int INITIAL_RENDER_HEIGHT = 720;
   
   private float lastRenderTime = Util.getTime();
+  private float gameTime = 0.0f;
   private boolean debugEnabled = false;
   
   public final TileList TILES;
@@ -136,6 +137,10 @@ public class Game implements AutoCloseable {
   public WorldManager getWorldManager() {
     return this.worldManager;
   }
+  
+  public float getGameTime() {
+    return this.gameTime;
+  }
 
   public void runOnce() {
     if (this.isRunning) {
@@ -226,6 +231,7 @@ public class Game implements AutoCloseable {
 
   void tick(float deltaTime) {
     // Tick the world and stuffs :3
-    this.getCurrentWorld().tick(deltaTime);
+    this.getWorldManager().tick(deltaTime);
+    gameTime += deltaTime;
   }
 }

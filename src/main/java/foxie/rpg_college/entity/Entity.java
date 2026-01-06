@@ -1,8 +1,10 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
@@ -23,6 +25,7 @@ public abstract class Entity {
   private float rotation = 90.0f;
   private Optional<Controller> controller = Optional.empty();
   private String name;
+  private final HashMap<Object, Object> extraData = new HashMap<>();
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
@@ -102,6 +105,20 @@ public abstract class Entity {
   
   public final boolean canDispatchControllerEvents() {
     return this.canBeControlled() && this.controller.isPresent();
+  }
+  
+  public final Optional<Object> getExtraData(Object key) {
+    return Optional.ofNullable(this.extraData.get(key));
+  }
+  
+  public final Object getExtraDataOrInsert(Object key, Supplier<Object> constructor) {
+    if (!this.extraData.containsKey(key)) {
+      Object newData = constructor.get();
+      this.extraData.put(key, newData);
+      return newData;
+    }
+    
+    return this.extraData.get(key);
   }
   
   public String getName() {

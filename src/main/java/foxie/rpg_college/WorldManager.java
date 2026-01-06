@@ -22,4 +22,10 @@ public class WorldManager {
     
     this.worlds.put(id, Optional.of(world).get());
   }
+  
+  public void tick(float deltaTime) {
+    for (World world : this.worlds.values()) {
+      world.tick(deltaTime);
+    }
+  }
 }
