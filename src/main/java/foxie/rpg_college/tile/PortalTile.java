@@ -18,7 +18,8 @@ public class PortalTile extends Tile {
     this.targetWorldId = targetWorld;
   }
   
-  public void teleport(Entity e) {
+  @Override
+  public void steppedBy(Entity e, IVec2 coord) {
     World targetWorld = this.getGame().getWorldManager().getWorld(this.targetWorldId).get();
     targetWorld.addEntity(e);
     e.setPos(new Vec2(0.0f, 0.0f));

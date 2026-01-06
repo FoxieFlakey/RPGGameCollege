@@ -11,7 +11,6 @@ import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
-import foxie.rpg_college.tile.PortalTile;
 import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
@@ -110,9 +109,6 @@ public abstract class Entity {
   }
   
   public void onTileStep(Tile tile, IVec2 tileCoord) {
-    if (tile instanceof PortalTile) {
-      ((PortalTile) tile).teleport(this);
-    }
   }
 
   // This prefer 'false', so if there two entities

@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
+import foxie.rpg_college.entity.Entity;
 
 public class WallTile extends Tile {
   public WallTile(Game game) {
@@ -41,5 +42,9 @@ public class WallTile extends Tile {
   @Override
   public boolean canBeTicked() {
     return false;
+  }
+  
+  @Override
+  public void steppedBy(Entity e, IVec2 coord) {
   }
 }

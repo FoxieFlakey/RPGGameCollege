@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
+import foxie.rpg_college.entity.Entity;
 
 public class LavaTile extends Tile {
   public static final float DAMAGE = 15.0f;
@@ -40,5 +41,9 @@ public class LavaTile extends Tile {
 
   @Override
   public void tick(float deltaTime, IVec2 position) { 
+  }
+  
+  @Override
+  public void steppedBy(Entity e, IVec2 coord) {
   }
 }

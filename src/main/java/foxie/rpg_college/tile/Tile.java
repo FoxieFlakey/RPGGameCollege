@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.Entity;
 
 // A tile instance is reused multiple time
 // for differing positions
@@ -34,6 +35,7 @@ public abstract class Tile {
     );
   }
   
+  public abstract void steppedBy(Entity e, IVec2 coord);
   public abstract boolean isCollisionEnabled();
   public abstract boolean canBeTicked();
   public abstract void render(Graphics2D g, float deltaTime, IVec2 position);

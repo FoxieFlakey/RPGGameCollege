@@ -254,6 +254,7 @@ public abstract class World {
           
           if (tileRect.isIntersects(checkBounds)) {
             e.onTileStep(tile, coord);
+            tile.steppedBy(e, coord);
           }
         }
       }
