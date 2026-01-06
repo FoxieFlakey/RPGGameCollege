@@ -5,6 +5,7 @@ import java.util.Optional;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.Attackable;
 import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
@@ -134,6 +135,17 @@ public class InputToControllerBridge implements AutoCloseable {
       
       Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
       cat.setPos(pos);
+    }
+    
+    if (keyboard.getState(Button.V).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = 0.1f;
+      
+      // Spawn cat
+      ArcherCharacter archer = new ArcherCharacter();
+      this.getWorld().addEntity(archer);
+      
+      Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
+      archer.setPos(pos);
     }
     
     if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {
