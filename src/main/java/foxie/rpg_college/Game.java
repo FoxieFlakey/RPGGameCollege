@@ -15,6 +15,7 @@ import foxie.rpg_college.input.State;
 import foxie.rpg_college.tile.TileList;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
+import foxie.rpg_college.world.BattleArena;
 import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
@@ -52,6 +53,7 @@ public class Game implements AutoCloseable {
     this.TILES = new TileList(this);
     Overworld overworld = new Overworld(this);
     this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
+    this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, new BattleArena(this));
     
     PlayerEntity playerEntity = new PlayerEntity();
     overworld.addEntity(playerEntity);
@@ -129,6 +131,10 @@ public class Game implements AutoCloseable {
   
   public Mouse getMouse() {
     return this.window.mouse;
+  }
+  
+  public WorldManager getWorldManager() {
+    return this.worldManager;
   }
 
   public void runOnce() {

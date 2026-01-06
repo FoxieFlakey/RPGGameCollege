@@ -73,6 +73,7 @@ public class Overworld extends World {
     this.addTile(new IVec2(6, 3), game.TILES.WALL_TILE);
     this.addTile(new IVec2(6, 2), game.TILES.WALL_TILE);
     this.addTile(new IVec2(6, 1), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(7, 1), game.TILES.PORTAL_TO_BATTLE);
 
     // Add test for lava tile
     this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);

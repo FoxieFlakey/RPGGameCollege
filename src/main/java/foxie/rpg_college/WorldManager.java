@@ -9,6 +9,7 @@ public class WorldManager {
   private final HashMap<String, World> worlds = new HashMap<>();
   
   public static final String OVERWORLD_ID = "overworld";
+  public static final String BATTLE_ARENA_ID = "battle_arena";
   
   public Optional<World> getWorld(String id) {
     return Optional.ofNullable(this.worlds.get(id));

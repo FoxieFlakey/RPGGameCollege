@@ -95,6 +95,8 @@ public abstract class LivingEntity extends Entity {
   
   @Override
   public void onTileStep(Tile tile, IVec2 tileCoord) {
+    super.onTileStep(tile, tileCoord);
+    
     // Harm the living entity when stepped on lava
     if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
       if (this.canBurn()) {

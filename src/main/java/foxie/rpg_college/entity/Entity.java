@@ -11,6 +11,7 @@ import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
+import foxie.rpg_college.tile.PortalTile;
 import foxie.rpg_college.tile.Tile;
 import foxie.rpg_college.world.World;
 
@@ -107,6 +108,12 @@ public abstract class Entity {
   public String getName() {
     return this.name;
   }
+  
+  public void onTileStep(Tile tile, IVec2 tileCoord) {
+    if (tile instanceof PortalTile) {
+      ((PortalTile) tile).teleport(this);
+    }
+  }
 
   // This prefer 'false', so if there two entities
   // one say true other say false, the result is false
@@ -118,7 +125,6 @@ public abstract class Entity {
   public abstract boolean isVisible(Camera cam);
   public abstract void render(Graphics2D g, float deltaTime);
   public abstract void tick(float deltaTime);
-  public abstract void onTileStep(Tile tile, IVec2 tileCoord);
   public abstract Optional<FloatRectangle> getBoxToBeCheckedForTileStep();
   public abstract boolean canBeControlled();
   protected abstract Controller createController();
