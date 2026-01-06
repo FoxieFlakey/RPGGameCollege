@@ -78,30 +78,9 @@ public class Overworld extends World {
     this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);
   }
 
-  private void drawBackground(Graphics2D g) {
-    WorldUtil.renderBackground(this, g, this.backgroundImage);
-  }
-
-  @Override
-  public Vec2 validatePos(Vec2 pos) {
-    return this.getWorldBound().clampCoordinate(pos);
-  }
-
-  @Override
-  public boolean isValidPos(Vec2 pos) {
-    return this.getWorldBound().contains(pos);
-  }
-
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    this.drawBackground(g);
-  
-    // Now the world itself
-    this.renderEntities(g, deltaTime);
-  }
-
-  @Override
-  public void tick(float deltaTime) {
-    this.tickEntities(deltaTime);
+    WorldUtil.renderBackground(this, g, this.backgroundImage);
+    super.render(g, deltaTime);
   }
 }

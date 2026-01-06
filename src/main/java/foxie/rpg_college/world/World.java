@@ -309,8 +309,19 @@ public abstract class World {
     return Optional.ofNullable(this.tiles.get(pos));
   }
 
-  public abstract Vec2 validatePos(Vec2 pos);
-  public abstract boolean isValidPos(Vec2 pos);
-  public abstract void render(Graphics2D g, float deltaTime);
-  public abstract void tick(float deltaTime);
+  public void render(Graphics2D g, float deltaTime) {
+    this.renderEntities(g, deltaTime);
+  }
+  
+  public void tick(float deltaTime) {
+    this.tickEntities(deltaTime);
+  }
+  
+  public Vec2 validatePos(Vec2 pos) {
+    return this.getWorldBound().clampCoordinate(pos);
+  }
+  
+  public boolean isValidPos(Vec2 pos) {
+    return this.getWorldBound().contains(pos);
+  }
 }
