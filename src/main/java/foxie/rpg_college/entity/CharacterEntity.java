@@ -21,7 +21,7 @@ public abstract class CharacterEntity extends LivingEntity {
       return false;
     }
     
-    this.manaPoint -= val;
+    this.setManaPoint(this.manaPoint - val);
     
     if (this.timeUntilManaRefill < 0.0f) {
       this.timeUntilManaRefill = this.getManaRefillPeriod();
