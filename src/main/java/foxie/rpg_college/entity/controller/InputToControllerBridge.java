@@ -120,6 +120,7 @@ public class InputToControllerBridge implements AutoCloseable {
     Keyboard keyboard = this.getWorld().getGame().getKeyboard();
     Mouse mouse = this.getWorld().getGame().getMouse();
     Optional<LivingEntity> maybeLiving = this.getLivingEntity();
+    float spawnCooldown = 0.3f;
     
     this.spawnCatCooldown -= deltaTime;
     if (this.spawnCatCooldown < 0.0f) {
@@ -127,7 +128,7 @@ public class InputToControllerBridge implements AutoCloseable {
     }
 
     if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = 0.1f;
+      this.spawnCatCooldown = spawnCooldown;
       
       // Spawn cat
       CatEntity cat = new CatEntity();
@@ -138,7 +139,7 @@ public class InputToControllerBridge implements AutoCloseable {
     }
     
     if (keyboard.getState(Button.V).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = 0.1f;
+      this.spawnCatCooldown = spawnCooldown;
       
       // Spawn cat
       ArcherCharacter archer = new ArcherCharacter();
