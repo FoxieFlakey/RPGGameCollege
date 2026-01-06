@@ -33,7 +33,7 @@ public abstract class CharacterEntity extends LivingEntity {
   public void tick(float deltaTime) {
     super.tick(deltaTime);
     
-    if (this.getManaPoint() < this.getMaxManaPoint()) {
+    if (this.getManaPoint() < this.getMaxManaPoint() && !this.isDead()) {
       this.timeUntilManaRefill -= deltaTime;
       if (this.timeUntilManaRefill < 0.0f) {
         this.timeUntilManaRefill = this.getManaRefillPeriod();
