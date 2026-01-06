@@ -15,12 +15,15 @@ import foxie.rpg_college.world.World;
 public class PortalTile extends Tile {
   private static final Object EXTRA_DATA_KEY = new Object();
   private static final float COOLDOWN_TIME = 2.0f;
+  private static final float TIME_BEFORE_TELEPORT = 1.0f;
   
   private final String targetWorldId;
   
   private static class PortalData {
     public final HashMap<World, Vec2> savedPositions = new HashMap<>();
     public float lastStepTime = 0.0f;
+    public float timeToTeleport = 0.0f;
+    public boolean isWaitingToTeleport = false;
   };
   
   public PortalTile(Game game, String targetWorld) {
@@ -30,19 +33,27 @@ public class PortalTile extends Tile {
   
   @Override
   public void steppedBy(Entity e, IVec2 coord) {
+    float currentTime = e.getWorld().getGame().getGameTime();
     PortalData data = (PortalData) e.getExtraDataOrInsert(PortalTile.EXTRA_DATA_KEY, PortalData::new);
-    if (e.getWorld().getGame().getGameTime() - data.lastStepTime < PortalTile.COOLDOWN_TIME) {
+    if (currentTime - data.lastStepTime < PortalTile.COOLDOWN_TIME) {
       // In cooldown
       return;
     }
     
-    World targetWorld = this.getGame().getWorldManager().getWorld(this.targetWorldId).get();
-    Vec2 targetTeleportCoord = Optional.ofNullable(data.savedPositions.get(targetWorld)).orElseGet(() -> new Vec2(0.0f, 0.0f));
-    data.savedPositions.put(e.getWorld(), e.getPos());
-    data.lastStepTime = e.getWorld().getGame().getGameTime();
-    
-    targetWorld.addEntity(e);
-    e.setPos(targetTeleportCoord);
+    if (!data.isWaitingToTeleport) {
+      data.isWaitingToTeleport = true;
+      data.timeToTeleport = currentTime + PortalTile.TIME_BEFORE_TELEPORT;
+    } else if (data.isWaitingToTeleport && currentTime >= data.timeToTeleport) {
+      data.savedPositions.put(e.getWorld(), e.getPos());
+      data.isWaitingToTeleport = false;
+      data.lastStepTime = currentTime;
+      
+      World targetWorld = this.getGame().getWorldManager().getWorld(this.targetWorldId).get();
+      Vec2 targetTeleportCoord = Optional.ofNullable(data.savedPositions.get(targetWorld)).orElseGet(() -> new Vec2(0.0f, 0.0f));
+      
+      targetWorld.addEntity(e);
+      e.setPos(targetTeleportCoord);
+    }
   }
 
   @Override
