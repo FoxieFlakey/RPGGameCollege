@@ -10,7 +10,7 @@ import foxie.rpg_college.Vec2;
 
 public class ArcherCharacter extends CharacterEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
-    50.0f,
+    70.0f,
     100.0f
   );
   private static final float ATTACK_MANA_POINT = 7.0f;
