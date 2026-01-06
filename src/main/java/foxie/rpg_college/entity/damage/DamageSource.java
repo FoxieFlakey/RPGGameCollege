@@ -1,10 +1,14 @@
 package foxie.rpg_college.entity.damage;
 
 public abstract class DamageSource {
-  private final float damagePoint;
+  private float damagePoint;
   
   public DamageSource(float damagePoint) {
-    this.damagePoint = damagePoint;
+    this.setDamagePoint(damagePoint);
+  }
+  
+  public void setDamagePoint(float newDamage) {
+    this.damagePoint = Math.max(0.0f, newDamage);
   }
   
   public float getDamagePoint() {

@@ -57,6 +57,13 @@ public abstract class LivingEntity extends Entity {
   }
 
   public void doDamage(DamageSource damageSource) {
+    if (this instanceof Defenseable) {
+      Defenseable defenseableEntity = (Defenseable) this;
+      if (defenseableEntity.canDefense()) {
+        defenseableEntity.defend(damageSource);
+      }
+    }
+    
     float damage = damageSource.getDamagePoint();
     if (damage < 0.0f) {
       damage = 0.0f;

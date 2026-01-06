@@ -1,6 +1,5 @@
 package foxie.rpg_college.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -15,8 +14,10 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.damage.DamageSource;
+import foxie.rpg_college.entity.damage.EntityDamageSource;
 
-public class ArcherCharacter extends CharacterEntity implements Attackable {
+public class ArcherCharacter extends CharacterEntity implements Attackable, Defenseable {
   private static final Vec2 SIZE = new Vec2(
     140.0f,
     200.0f
@@ -97,9 +98,6 @@ public class ArcherCharacter extends CharacterEntity implements Attackable {
       ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE.getHeight(),
       null
     );
-    
-    g.setColor(Color.CYAN);
-    g.drawRoundRect(x, y, width, height, 5, 5);
   }
 
   @Override
@@ -171,5 +169,22 @@ public class ArcherCharacter extends CharacterEntity implements Attackable {
   @Override
   public boolean canAttack() {
     return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= ArcherCharacter.ATTACK_MANA_POINT;
+  }
+  
+  @Override
+  public boolean canDefense() {
+    return true;
+  }
+  
+  @Override
+  public void defend(DamageSource source) {
+    if (source instanceof EntityDamageSource) {
+      EntityDamageSource entitySource = (EntityDamageSource) source;
+      if (entitySource.getSource() instanceof ArrowEntity) {
+        // Take 75% less damage from arrows. So only 25% of
+        // damage is inflicted
+        source.setDamagePoint(source.getDamagePoint() * 0.25f);
+      }
+    }
   }
 }

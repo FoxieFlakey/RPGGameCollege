@@ -56,6 +56,10 @@ public abstract class ProjectileEntity extends Entity {
   public boolean hasProjectileHitSomething() {
     return this.hasProjectileHitSomething;
   }
+  
+  public Entity getShooter() {
+    return this.shooter;
+  }
 
   @Override
   public Optional<FloatRectangle> getBoxToBeCheckedForTileStep() {

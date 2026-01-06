@@ -10,6 +10,10 @@ public class EntityDamageSource extends DamageSource {
     this.source = source;
   }
   
+  public Entity getSource() {
+    return this.source;
+  }
+  
   @Override
   public String getName() {
     return this.source.getName();
