@@ -55,7 +55,7 @@ public class Overworld extends World {
     this.addTile(new IVec2(0, 1), game.TILES.WALL_TILE);
     // Gap
     // Gap
-    this.addTile(new IVec2(0, 4), game.TILES.WALL_TILE);
+    // Gap
     // Gap
     this.addTile(new IVec2(0, 6), game.TILES.WALL_TILE);
     this.addTile(new IVec2(0, 7), game.TILES.WALL_TILE);
