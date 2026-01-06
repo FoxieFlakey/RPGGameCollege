@@ -23,7 +23,7 @@ public class Game implements AutoCloseable {
 
   private final Window window;
 
-  private final Overworld overworld;
+  private final WorldManager worldManager = new WorldManager();
   private final InputToControllerBridge player;
   private final Screen currentScreen;
   
@@ -50,14 +50,15 @@ public class Game implements AutoCloseable {
     );
     
     this.TILES = new TileList(this);
-    this.overworld = new Overworld(this);
+    Overworld overworld = new Overworld(this);
+    this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
     
     PlayerEntity playerEntity = new PlayerEntity();
-    this.overworld.addEntity(playerEntity);
+    overworld.addEntity(playerEntity);
     playerEntity.setPos(new Vec2(-500.0f, 300.0f));
     
     CatEntity catEntity = new CatEntity();
-    this.overworld.addEntity(catEntity);
+    overworld.addEntity(catEntity);
     catEntity.setPos(new Vec2(-300.0f, 300.0f));
     
     this.currentScreen = new InGame(this);
@@ -74,7 +75,7 @@ public class Game implements AutoCloseable {
   void handleRespawnCat() {
     // Player request respawn
     CatEntity entity = new CatEntity();
-    this.overworld.addEntity(entity);
+    this.player.getWorld().addEntity(entity);
     this.player.setNewEntityToControl(entity);
     
     entity.setPos(new Vec2(-300.0f, 300.0f));
@@ -83,7 +84,7 @@ public class Game implements AutoCloseable {
   void handleRespawnPlayer() {
     // Player request respawn
     PlayerEntity entity = new PlayerEntity();
-    this.overworld.addEntity(entity);
+    this.player.getWorld().addEntity(entity);
     this.player.setNewEntityToControl(entity);
     
     entity.setPos(new Vec2(-500.0f, 300.0f));
