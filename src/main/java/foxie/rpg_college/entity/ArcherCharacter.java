@@ -27,7 +27,7 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
   private static final float MINIMAL_MANA_POINT_TO_DODGE = 70.0f;
   private static final float MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT = 40.0f;
   private static final float DODGE_MANA_POINT = 15.0f;
-  private static final float REDUCE_ARROW_DAMAGE_MANA_POINT = 10.0f;
+  private static final float REDUCE_ARROW_DAMAGE_MANA_POINT = 12.0f;
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
