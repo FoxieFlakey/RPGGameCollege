@@ -1,11 +1,14 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
+import foxie.rpg_college.Bar;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
@@ -26,6 +29,7 @@ public abstract class Entity {
   private Optional<Controller> controller = Optional.empty();
   private String name;
   private final HashMap<Object, Object> extraData = new HashMap<>();
+  private final ArrayList<Bar> bars = new ArrayList<>();
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
@@ -64,6 +68,14 @@ public abstract class Entity {
 
   public final World getWorld() {
     return this.currentWorld;
+  }
+  
+  public void addBar(Bar bar) {
+    this.bars.add(Optional.of(bar).get());
+  }
+  
+  public Collection<Bar> getBars() {
+    return this.bars;
   }
 
   // Be careful, THIS DOES NOT add/remove
@@ -127,6 +139,25 @@ public abstract class Entity {
   
   public void onTileStep(Tile tile, IVec2 tileCoord) {
   }
+  
+  protected void renderBars(Graphics2D g) {
+    Vec2 barStart = this.getRenderBound()
+      .map(bound -> {
+        Vec2 topLeft = bound.getTopLeftCorner();
+        float right = bound.getBottomRightCorner().x();
+        
+        return new Vec2((right + topLeft.x()) / 2.0f, topLeft.y() - 20.0f);
+      })
+      .orElseGet(() -> new Vec2(0.0f, 20.0f));
+    
+    float x = barStart.x();
+    float y = barStart.y();
+    
+    for (Bar bar : this.getBars()) {
+      bar.render(g, new Vec2(x, y));
+      y -= Bar.HEIGHT + 5.0f;
+    }
+  }
 
   // This prefer 'false', so if there two entities
   // one say true other say false, the result is false
@@ -136,6 +167,7 @@ public abstract class Entity {
   public abstract void onEntityCollision(Entity other);
   public abstract Optional<CollisionBox> getCollisionBox();
   public abstract boolean isVisible(Camera cam);
+  public abstract Optional<FloatRectangle> getRenderBound();
   public abstract void render(Graphics2D g, float deltaTime);
   public abstract void tick(float deltaTime);
   public abstract Optional<FloatRectangle> getBoxToBeCheckedForTileStep();

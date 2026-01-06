@@ -94,6 +94,11 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
     
     g.drawImage(ArrowEntity.ARROW_TEXTURE, transform, null);
   }
+  
+  @Override
+  public Optional<FloatRectangle> getRenderBound() {
+    return Optional.of(EntityHelper.calculateRenderBox(this, ArrowEntity.RENDER_SIZE));
+  }
 
   @Override
   public boolean isVisible(Camera cam) {

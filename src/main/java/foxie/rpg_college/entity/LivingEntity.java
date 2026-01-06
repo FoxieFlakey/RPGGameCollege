@@ -1,7 +1,10 @@
 package foxie.rpg_college.entity;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.Optional;
 
+import foxie.rpg_college.Bar;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
@@ -14,7 +17,8 @@ import foxie.rpg_college.tile.Tile;
 
 public abstract class LivingEntity extends Entity {
   private float healthPoint;
-
+  private Bar healthBar;
+  
   // When timer hits 0, a burn happens
   // from fire source like lava or fire
   private float burnTimer = -1.0f;
@@ -30,6 +34,14 @@ public abstract class LivingEntity extends Entity {
   
   public LivingEntity() {
     this.healthPoint = this.getMaxHealth();
+    this.healthBar = new Bar(
+      0.0f,
+      this.healthPoint,
+      this.getMaxHealth(),
+      new Color(0.9f, 0.0f, 0.0f, 1.0f),
+      new Color(0.7f, 0.4f, 0.4f, 1.0f)
+    );
+    this.addBar(this.healthBar);
   }
 
   public boolean canBurn() {
@@ -54,6 +66,8 @@ public abstract class LivingEntity extends Entity {
     if (this.healthPoint <= 0.0f) {
       this.healthPoint = -1.0f;
     }
+    
+    this.healthBar.val = this.getHealth();
   }
 
   public void doDamage(DamageSource damageSource) {
@@ -147,6 +161,8 @@ public abstract class LivingEntity extends Entity {
         this.die();
       }
     }
+    
+    this.healthBar.max = this.getMaxHealth();
   }
 
   public Vec2 getLegPos() {
@@ -183,6 +199,11 @@ public abstract class LivingEntity extends Entity {
   @Override
   protected Controller createController() {
     return new LivingEntityController(this);
+  }
+  
+  @Override
+  public void render(Graphics2D g, float deltaTime) {
+    super.renderBars(g);
   }
   
   public abstract FloatRectangle getLegBox();

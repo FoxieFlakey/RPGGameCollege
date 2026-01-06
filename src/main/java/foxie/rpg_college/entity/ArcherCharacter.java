@@ -74,6 +74,8 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
+    super.render(g, deltaTime);
+    
     Image texture = ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE;
     
     if (this.getFlashState()) {
@@ -201,5 +203,10 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
         }
       }
     }
+  }
+  
+  @Override
+  public Optional<FloatRectangle> getRenderBound() {
+    return Optional.of(EntityHelper.calculateRenderBox(this, ArcherCharacter.SIZE));
   }
 }

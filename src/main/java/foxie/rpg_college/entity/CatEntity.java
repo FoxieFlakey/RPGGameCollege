@@ -35,6 +35,8 @@ public class CatEntity extends LivingEntity {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
+    super.render(g, deltaTime);
+    
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, CatEntity.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
@@ -75,5 +77,10 @@ public class CatEntity extends LivingEntity {
   @Override
   public float getMovementSpeed() {
     return 200.0f;
+  }
+  
+  @Override
+  public Optional<FloatRectangle> getRenderBound() {
+    return Optional.of(EntityHelper.calculateRenderBox(this, CatEntity.SIZE));
   }
 }
