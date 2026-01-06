@@ -2,21 +2,49 @@ package foxie.rpg_college.entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 
 public class ArcherCharacter extends CharacterEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
-    70.0f,
-    100.0f
+    140.0f,
+    200.0f
   );
   private static final float ATTACK_MANA_POINT = 7.0f;
 
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
+  
+  private static final URL ARCHER_ORIENT_DOWN_TEXTURE_URL = Util.getResource("/archer_facing_down.png");
+  private static final URL ARCHER_DEAD_TEXTURE_URL = Util.getResource("/archer_dead.png");
+  
+  private static BufferedImage ARCHER_ORIENT_DOWN_TEXTURE;
+  private static BufferedImage ARCHER_ORIENT_DOWN_TEXTURE_FLASHED;
+  
+  private static BufferedImage ARCHER_DEAD_TEXTURE;
+  
+  static {
+    try {
+      ARCHER_ORIENT_DOWN_TEXTURE = ImageIO.read(ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE_URL.openStream());
+      ARCHER_DEAD_TEXTURE = ImageIO.read(ArcherCharacter.ARCHER_DEAD_TEXTURE_URL.openStream());
+      
+      ARCHER_ORIENT_DOWN_TEXTURE_FLASHED = new RescaleOp(new float[] {2.0f, 1.3f, 1.3f, 1.0f}, new float[4], null)
+        .filter(ARCHER_ORIENT_DOWN_TEXTURE, null);
+    } catch (IOException e) {
+      throw new RuntimeException("Error loading arrow texture", e);
+    }
+  }
   
   @Override
   public float getMaxHealth() {
@@ -40,29 +68,38 @@ public class ArcherCharacter extends CharacterEntity implements Attackable {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
+    Image texture = ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE;
+    
+    if (this.getFlashState()) {
+      texture = ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE_FLASHED;
+    }
+    
+    if (this.isDead()) {
+      texture = ArcherCharacter.ARCHER_DEAD_TEXTURE;
+    }
+    
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArcherCharacter.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
     int y = (int) renderBox.getTopLeftCorner().y();
     int width = (int) renderBox.getSize().x();
     int height = (int) renderBox.getSize().y();
-
-    Color color = new Color(0.98f, 0.63f, 0.28f, 1.00f);
-    if (this.getFlashState()) {
-      color = new Color(1.00f, 0.93f, 0.58f, 1.00f);
-    }
-
-    if (this.isDead()) {
-      color = new Color(0.68f, 0.33f, 0.00f, 1.00f);
-    }
-
-    g.setColor(color);
-
-    g.fillRoundRect(
-      x, y,
-      width, height,
-      5, 5
+    
+    g.drawImage(
+      texture,
+      x,
+      y,
+      x + width,
+      y + height,
+      0,
+      0,
+      ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE.getWidth(),
+      ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE.getHeight(),
+      null
     );
+    
+    g.setColor(Color.CYAN);
+    g.drawRoundRect(x, y, width, height, 5, 5);
   }
 
   @Override
