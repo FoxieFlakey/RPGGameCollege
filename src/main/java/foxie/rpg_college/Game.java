@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
-import foxie.rpg_college.entity.PlayerEntity;
+import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.controller.InputToControllerBridge;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
@@ -56,7 +56,7 @@ public class Game implements AutoCloseable {
     this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
     this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, new BattleArena(this));
     
-    PlayerEntity playerEntity = new PlayerEntity();
+    ArcherCharacter playerEntity = new ArcherCharacter();
     overworld.addEntity(playerEntity);
     playerEntity.setPos(new Vec2(-500.0f, 300.0f));
     
@@ -86,7 +86,7 @@ public class Game implements AutoCloseable {
   
   void handleRespawnPlayer() {
     // Player request respawn
-    PlayerEntity entity = new PlayerEntity();
+    ArcherCharacter entity = new ArcherCharacter();
     this.player.getWorld().addEntity(entity);
     this.player.setNewEntityToControl(entity);
     
