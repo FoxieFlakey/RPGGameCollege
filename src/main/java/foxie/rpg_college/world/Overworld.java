@@ -19,7 +19,6 @@ public class Overworld extends World {
   private static final URL backroundImageUrl = Optional.ofNullable(Util.getResource("/world.png")).get();
   
   private final Image backgroundImage;
-  private final Vec2 backgroundImageSize;
 
   public Overworld(Game game) {
     Image backgroundImage;
@@ -45,7 +44,6 @@ public class Overworld extends World {
     );
 
     super(game, bound);
-    this.backgroundImageSize = backgroundImageSize;
     this.backgroundImage = backgroundImage;
 
     this.addTile(new IVec2(6, 0), game.TILES.WALL_TILE);
@@ -82,22 +80,7 @@ public class Overworld extends World {
   }
 
   private void drawBackground(Graphics2D g) {
-    FloatRectangle visible = this.getGame().getCamera().getVisibleWorld();
-    Vec2 coord = visible.getTopLeftCorner().add(this.backgroundImageSize.mul(0.5f));
-    Vec2 visibleSize = visible.getSize();
-    Vec2 visibleSizeOutput = visible.getSize().mul(this.getGame().getCamera().getScale());
-
-    // Image might be not ready, but lets ignore
-    g.drawImage(
-      this.backgroundImage,
-      // Dest coords
-      0, 0,
-      (int) visibleSizeOutput.x(), (int) visibleSizeOutput.y(),
-      // Source coords
-      (int) coord.x(), (int) coord.y(),
-      (int) (visibleSize.x() + coord.x()), (int) (visibleSize.y() + coord.y()),
-      null
-    );
+    WorldUtil.renderBackground(this, g, this.backgroundImage);
   }
 
   @Override
