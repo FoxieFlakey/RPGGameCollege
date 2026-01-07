@@ -202,24 +202,55 @@ public class Game implements AutoCloseable {
     }
   }
 
+  private int currentWidth = 0;
+  private int currentHeight = 0;
+  private BufferedImage buffer = null;
+  private static boolean doubleBuffer = true;
+  
+  void renderContent(Graphics2D g, float deltaTime) {
+    FloatRectangle outputAreaInWindow = this.window.getOutputArea();
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+    g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+    g.setClip(
+      (int) outputAreaInWindow.getTopLeftCorner().x(),
+      (int) outputAreaInWindow.getTopLeftCorner().y(),
+      (int) outputAreaInWindow.getSize().x(),
+      (int) outputAreaInWindow.getSize().y()
+    );
+    g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
+    
+    this.getCurrentWorld().render(g, deltaTime);
+    this.currentScreen.render(g, deltaTime);
+  }
+  
   void render(float deltaTime) {
-    Graphics2D g = (Graphics2D) this.window.window.getGraphics();
-    try {
-      FloatRectangle outputAreaInWindow = this.window.getOutputArea();
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-      g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-      g.setClip(
-        (int) outputAreaInWindow.getTopLeftCorner().x(),
-        (int) outputAreaInWindow.getTopLeftCorner().y(),
-        (int) outputAreaInWindow.getSize().x(),
-        (int) outputAreaInWindow.getSize().y()
-      );
-      g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
+    if (doubleBuffer) {
+      if (this.currentWidth != this.window.getWindowWidth() || this.currentHeight != this.window.getWindowHeight()) {
+        this.currentWidth = this.window.getWindowWidth();
+        this.currentHeight = this.window.getWindowHeight();
+        this.buffer = new BufferedImage(this.currentWidth, this.currentHeight, BufferedImage.TYPE_INT_RGB);
+      }
       
-      this.getCurrentWorld().render(g, deltaTime);
-      this.currentScreen.render(g, deltaTime);
-    } finally {
-      g.dispose();
+      Graphics2D g = this.buffer.createGraphics();
+      try {
+        this.renderContent(g, deltaTime);
+      } finally {
+        g.dispose();
+      }
+      
+      Graphics2D g2 = (Graphics2D) this.window.window.getGraphics();
+      try {
+        g2.drawImage(this.buffer, 0, 0, null);
+      } finally {
+        g2.dispose();
+      }
+    } else {
+      Graphics2D g = (Graphics2D) this.window.window.getGraphics();
+      try {
+        this.renderContent(g, deltaTime);
+      } finally {
+        g.dispose();
+      }
     }
   }
 
