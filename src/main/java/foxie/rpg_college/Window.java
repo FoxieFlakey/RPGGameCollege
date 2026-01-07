@@ -15,10 +15,10 @@ import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
 
 public class Window implements AutoCloseable {
-  public final Frame window;
-  public final Mouse mouse;
-  public final Keyboard keyboard;
-  public final BufferStrategy bufferStrategy;
+  public Frame window;
+  public Mouse mouse;
+  public Keyboard keyboard;
+  public BufferStrategy bufferStrategy;
   
   private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT = GraphicsEnvironment.getLocalGraphicsEnvironment();
   private static final GraphicsDevice GRAPHICS_DEVICE = GRAPHICS_ENVIRONMENT.getDefaultScreenDevice();
@@ -37,22 +37,32 @@ public class Window implements AutoCloseable {
   
   private final Listener listener;
   private final float outputAspectRatio;
+  private final Vec2 mouseRemappedArea;
+  private final IVec2 size;
+  private final IVec2 minSize;
   
   public Window(IVec2 size, IVec2 minSize, Vec2 mouseRemappedArea, float outputAspectRatio) {
+    this.outputAspectRatio = outputAspectRatio;
+    this.listener = new Listener();
+    this.mouseRemappedArea = mouseRemappedArea;
+    this.size = size;
+    this.minSize = minSize;
+    this.initWindowStuffs(true);
+  }
+  
+  private void initWindowStuffs(boolean isDecorated) {
     this.window = new Frame();
     this.window.setSize(size.x(), size.y());
     this.window.setMinimumSize(new Dimension(minSize.x(), minSize.y()));
     this.window.setFocusable(true);
-    this.window.setUndecorated(false);
+    this.window.setUndecorated(!isDecorated);
     this.window.setVisible(true);
     
-    this.mouse = new Mouse(this.window, this.outputArea, mouseRemappedArea);
+    this.mouse = new Mouse(this.window, this.outputArea, this.mouseRemappedArea);
     this.keyboard = new Keyboard(this.window);
     
     this.window.createBufferStrategy(2);
     this.bufferStrategy = Optional.ofNullable(this.window.getBufferStrategy()).get();
-    this.listener = new Listener();
-    this.outputAspectRatio = outputAspectRatio;
     
     // Trigger resized event to fills the sizing fields
     this.listener.componentResized(null);
@@ -67,22 +77,20 @@ public class Window implements AutoCloseable {
       return;
     }
     
-    this.isFullscreen = !this.isFullscreen;
-    
-    if (this.isFullscreen) {
-      Window.GRAPHICS_DEVICE.setFullScreenWindow(this.window);
-    } else {
-      Window.GRAPHICS_DEVICE.setFullScreenWindow(null);
-    }
+    this.setFullscreen(!this.isFullscreen);
   }
   
   public void setFullscreen(boolean val) {
     if (val && !this.isFullscreen) {
+      this.window.dispose();
+      this.initWindowStuffs(false);
       Window.GRAPHICS_DEVICE.setFullScreenWindow(this.window);
     } else if (!val && this.isFullscreen) {
+      this.window.dispose();
+      this.initWindowStuffs(true);
       Window.GRAPHICS_DEVICE.setFullScreenWindow(null);
     }
-    this.isFullscreen = true;
+    this.isFullscreen = val;
   }
   
   public synchronized void updateState() {
