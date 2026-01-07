@@ -55,8 +55,8 @@ public record FloatRectangle(
     Vec2 bottomRight = this.getBottomRightCorner();
 
     return new Vec2(
-      Math.clamp(coord.x(), topLeft.x(), bottomRight.x()),
-      Math.clamp(coord.y(), topLeft.y(), bottomRight.y())
+      Util.clamp(coord.x(), topLeft.x(), bottomRight.x()),
+      Util.clamp(coord.y(), topLeft.y(), bottomRight.y())
     );
   }
   

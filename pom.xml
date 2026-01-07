@@ -13,7 +13,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>25</maven.compiler.release>
+    <maven.compiler.release>17</maven.compiler.release>
     <maven.compiler.source>25</maven.compiler.source>
     <exec.mainClass>foxie.rpg_college.Main</exec.mainClass>
   </properties>
@@ -51,6 +51,16 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.4.2</version>
+          <configuration>
+             <archive>
+                <manifest>
+                   <addClasspath>true</addClasspath>
+                </manifest>
+                <manifestEntries>
+                  <Main-Class>${exec.mainClass}</Main-Class>
+                </manifestEntries>
+             </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
@@ -73,3 +83,4 @@
     </pluginManagement>
   </build>
 </project>
+

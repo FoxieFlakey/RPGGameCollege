@@ -19,30 +19,13 @@ public class Overworld extends World {
   
   private final Image backgroundImage;
 
-  public Overworld(Game game) {
-    Image backgroundImage;
-    try {
-      backgroundImage = ImageIO.read(Overworld.backroundImageUrl);
-    } catch (IOException e) {
-      throw new RuntimeException("Cannot load world's background image", e);
-    }
-
-    float width = backgroundImage.getWidth(null);
-    float height = backgroundImage.getHeight(null);
-
-    // Height and width must be known now, the world cannot be constructed until
-    // that time
-    assert width > 0;
-    assert height > 0;
-
-    Vec2 backgroundImageSize = new Vec2((float) width, (float) height);
-
-    FloatRectangle bound = new FloatRectangle(
+  private Overworld(Game game, Vec2 backgroundImageSize, Image backgroundImage) {
+    super(game, new FloatRectangle(
       new Vec2(-backgroundImageSize.x() / 2.0f, -backgroundImageSize.y() / 2.0f),
       new Vec2(backgroundImageSize.x() / 2.0f, backgroundImageSize.y() / 2.0f)
-    );
-
-    super(game, bound);
+    ));
+    
+    
     this.backgroundImage = backgroundImage;
 
     this.addTile(new IVec2(6, 0), game.TILES.WALL_TILE);
@@ -77,6 +60,25 @@ public class Overworld extends World {
 
     // Add test for lava tile
     this.addTile(new IVec2(5, 5), game.TILES.LAVA_TILE);
+  }
+  
+  public static Overworld create(Game game) {
+    Image backgroundImage;
+    try {
+      backgroundImage = ImageIO.read(Overworld.backroundImageUrl);
+    } catch (IOException e) {
+      throw new RuntimeException("Cannot load world's background image", e);
+    }
+
+    float width = backgroundImage.getWidth(null);
+    float height = backgroundImage.getHeight(null);
+
+    // Height and width must be known now, the world cannot be constructed until
+    // that time
+    assert width > 0;
+    assert height > 0;
+
+    return new Overworld(game, new Vec2((float) width, (float) height), backgroundImage);
   }
 
   @Override

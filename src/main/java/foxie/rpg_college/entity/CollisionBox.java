@@ -27,9 +27,6 @@ public class CollisionBox {
   }
 
   public CollisionBox(Vec2 pos, Vec2 size, boolean isUnmoveable) {
-    if (!isUnmoveable) {
-      throw new IllegalArgumentException("This constructor only for creating unmoveable object specifically");
-    }
     this(0.0f, pos, size, isUnmoveable);
   }
 

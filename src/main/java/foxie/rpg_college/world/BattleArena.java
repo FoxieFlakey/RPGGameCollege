@@ -19,7 +19,17 @@ public class BattleArena extends World {
   
   private final Image backgroundImage;
 
-  public BattleArena(Game game) {
+  private BattleArena(Game game, Vec2 backgroundImageSize, Image backgroundImage) {
+    super(game, new FloatRectangle(
+      new Vec2(-backgroundImageSize.x() / 2.0f, -backgroundImageSize.y() / 2.0f),
+      new Vec2(backgroundImageSize.x() / 2.0f, backgroundImageSize.y() / 2.0f)
+    ));
+    this.backgroundImage = backgroundImage;
+    this.addTile(new IVec2(4,0), game.TILES.LAVA_TILE);
+    this.addTile(new IVec2(4,4), game.TILES.PORTAL_TO_OVERWORLD);
+  }
+  
+  public static BattleArena create(Game game) {
     Image backgroundImage;
     try {
       backgroundImage = ImageIO.read(BattleArena.backroundImageUrl);
@@ -35,17 +45,7 @@ public class BattleArena extends World {
     assert width > 0;
     assert height > 0;
 
-    Vec2 backgroundImageSize = new Vec2((float) width, (float) height);
-
-    FloatRectangle bound = new FloatRectangle(
-      new Vec2(-backgroundImageSize.x() / 2.0f, -backgroundImageSize.y() / 2.0f),
-      new Vec2(backgroundImageSize.x() / 2.0f, backgroundImageSize.y() / 2.0f)
-    );
-
-    super(game, bound);
-    this.backgroundImage = backgroundImage;
-    this.addTile(new IVec2(4,0), game.TILES.LAVA_TILE);
-    this.addTile(new IVec2(4,4), game.TILES.PORTAL_TO_OVERWORLD);
+    return new BattleArena(game, new Vec2((float) width, (float) height), backgroundImage);
   }
 
   @Override

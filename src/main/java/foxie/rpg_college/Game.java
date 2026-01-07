@@ -52,9 +52,9 @@ public class Game implements AutoCloseable {
     );
     
     this.TILES = new TileList(this);
-    Overworld overworld = new Overworld(this);
+    Overworld overworld = Overworld.create(this);
     this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
-    this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, new BattleArena(this));
+    this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, BattleArena.create(this));
     
     ArcherCharacter playerEntity = new ArcherCharacter();
     overworld.addEntity(playerEntity);

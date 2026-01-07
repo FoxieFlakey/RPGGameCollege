@@ -36,7 +36,7 @@ public class Bar {
   
   // NOTE: 'pos' is center of the bar
   public void render(Graphics2D g, Vec2 pos) {
-    float percent = Math.clamp((this.val - this.min) / (this.max - this.min), 0.0f, 1.0f);
+    float percent = Util.clamp((this.val - this.min) / (this.max - this.min), 0.0f, 1.0f);
     int x = (int) (pos.x() - Bar.WIDTH / 2.0f);
     int y = (int) (pos.y());
     
