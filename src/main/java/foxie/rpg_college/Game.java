@@ -1,7 +1,9 @@
 package foxie.rpg_college;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -201,31 +203,24 @@ public class Game implements AutoCloseable {
   }
 
   void render(float deltaTime) {
-    do {
-      do {
-        FloatRectangle outputAreaInWindow = this.window.getOutputArea();
-        Graphics2D g = (Graphics2D) this.window.bufferStrategy.getDrawGraphics();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        g.setClip(
-          (int) outputAreaInWindow.getTopLeftCorner().x(),
-          (int) outputAreaInWindow.getTopLeftCorner().y(),
-          (int) outputAreaInWindow.getSize().x(),
-          (int) outputAreaInWindow.getSize().y()
-        );
-        g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
-        
-        try {
-          this.getCurrentWorld().render(g, deltaTime);
-          this.currentScreen.render(g, deltaTime);
-        } finally {
-          g.dispose();
-        }
-        g.dispose();
-      } while (this.window.bufferStrategy.contentsRestored());
-
-      this.window.bufferStrategy.show();
-    } while (this.window.bufferStrategy.contentsLost());
+    Graphics2D g = (Graphics2D) this.window.window.getGraphics();
+    try {
+      FloatRectangle outputAreaInWindow = this.window.getOutputArea();
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+      g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+      g.setClip(
+        (int) outputAreaInWindow.getTopLeftCorner().x(),
+        (int) outputAreaInWindow.getTopLeftCorner().y(),
+        (int) outputAreaInWindow.getSize().x(),
+        (int) outputAreaInWindow.getSize().y()
+      );
+      g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
+      
+      this.getCurrentWorld().render(g, deltaTime);
+      this.currentScreen.render(g, deltaTime);
+    } finally {
+      g.dispose();
+    }
   }
 
   void tick(float deltaTime) {
