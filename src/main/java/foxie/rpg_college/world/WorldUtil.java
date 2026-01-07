@@ -13,7 +13,7 @@ public class WorldUtil {
     FloatRectangle visible = world.getGame().getCamera().getVisibleWorld();
     Vec2 coord = visible.getTopLeftCorner().add(backgroundImageSize.mul(0.5f));
     Vec2 visibleSize = visible.getSize();
-    Vec2 visibleSizeOutput = visible.getSize().mul(world.getGame().getCamera().getScale());
+    Vec2 visibleSizeOutput = visible.getSize().mul(world.getGame().getRenderScale());
 
     // Image might be not ready, but lets ignore
     g.drawImage(

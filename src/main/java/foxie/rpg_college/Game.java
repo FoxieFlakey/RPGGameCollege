@@ -30,6 +30,10 @@ public class Game implements AutoCloseable {
   private int currentHeight = 0;
   private BufferedImage buffer = null;
   private boolean doubleBuffer = false;
+  
+  // Render scaling (essentially what the size the game actually
+  // rendering at which is window size x render scale)
+  private float renderScale = 1.0f;
 
   private final Window window;
 
@@ -81,7 +85,7 @@ public class Game implements AutoCloseable {
   
   void updateState() {
     this.window.updateState();
-    this.getCamera().setOutputSize(this.window.getOutputArea().getSize());
+    this.getCamera().setOutputSize(new Vec2(this.getOutputWidth(), this.getOutputHeight()));
   }
   
   void handleRespawnCat() {
@@ -128,11 +132,11 @@ public class Game implements AutoCloseable {
   }
 
   public int getOutputHeight() {
-    return this.window.getRenderHeight();
+    return (int) ((float) this.window.getRenderHeight() * this.renderScale);
   }
 
   public int getOutputWidth() {
-    return this.window.getRenderWidth();
+    return (int) ((float) this.window.getRenderWidth() * this.renderScale);
   }
   
   public Keyboard getKeyboard() {
@@ -180,6 +184,18 @@ public class Game implements AutoCloseable {
   
   public void setFullscreen(boolean val) {
     this.window.setFullscreen(val);
+  }
+  
+  public void setRenderScale(float scale) {
+    if (scale < 0.1f) {
+      throw new IllegalArgumentException("scale must be above 0.1");
+    }
+    this.renderScale = scale;
+    this.doubleBuffer = true;
+  }
+  
+  public Vec2 getRenderScale() {
+    return this.getCamera().getScale();
   }
 
   void handleInput(float deltaTime) {
@@ -278,9 +294,9 @@ public class Game implements AutoCloseable {
   }
   
   void render(float deltaTime) {
-    if (doubleBuffer) {
-      int width = this.getOutputWidth();
-      int height = this.getOutputHeight();
+    if (this.doubleBuffer) {
+      int width = (int) Float.max((float) this.getOutputWidth(), 100.0f);
+      int height = (int) Float.max((float) this.getOutputHeight(), 100.0f);;
       
       if (this.currentWidth != width || this.currentHeight != height) {
         this.currentWidth = width;
@@ -304,6 +320,10 @@ public class Game implements AutoCloseable {
           0,
           this.window.getRenderWidth(),
           this.window.getRenderHeight(),
+          0,
+          0,
+          this.currentWidth,
+          this.currentHeight,
           null
         );
       } finally {

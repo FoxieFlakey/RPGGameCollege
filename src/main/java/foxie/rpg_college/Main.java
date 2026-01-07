@@ -1,6 +1,7 @@
 package foxie.rpg_college;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Arrays;
 
 /**
@@ -11,13 +12,40 @@ public class Main {
     System.out.println("Hello World!");
     List<String> argsList = Arrays.asList(args);
     
+    Optional<Float> scaling = Optional.empty();
+    boolean isFullscreen = false;
+    boolean doubleBuffer = false;
+    for (String arg : argsList) {
+      if (arg.startsWith("scaling=")) {
+        String argVal = arg.replaceFirst("^scaling=", "");
+        scaling = Optional.of(Float.parseFloat(argVal));
+      }
+    }
+    
+    if (argsList.contains("fullscreen")) {
+      isFullscreen = true;
+    }
+      
+    if (argsList.contains("double_buffering")) {
+      doubleBuffer = true;
+    }
+    
+    if (scaling.isPresent() && !doubleBuffer) {
+      System.out.println("Scaling render implies double buffering!");
+      doubleBuffer = true;
+    }
+    
     try (Game game = new Game()) {
-      if (argsList.contains("fullscreen")) {
+      if (isFullscreen) {
         game.setFullscreen(true);
       }
       
-      if (argsList.contains("double_buffering")) {
+      if (doubleBuffer) {
         game.setDoubleBuffer(true);
+      }
+      
+      if (scaling.isPresent()) {
+        game.setRenderScale(scaling.get());
       }
       
       while (!game.isClosed()) {
