@@ -1,7 +1,8 @@
 package foxie.rpg_college.input;
 
 import java.awt.Window;
-import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 
 import foxie.rpg_college.FloatRectangle;
@@ -17,6 +18,7 @@ public class Mouse implements AutoCloseable {
   // Shared with listener
   private final Object lock = new Object();
   private boolean buttonStateNow[] = {false, false, false};
+  private boolean buttonStateClickedNow[] = {false, false, false};
   private Vec2 positionNow = new Vec2(0.0f, 0.0f);
 
   private boolean buttonStatePrev[] = {false, false, false};
@@ -46,6 +48,11 @@ public class Mouse implements AutoCloseable {
       for (int i = 0; i < this.buttonState.length; i++) {
         boolean prev = this.buttonStatePrev[i];
         boolean now = this.buttonStateNow[i];
+        
+        if (this.buttonStateClickedNow[i]) {
+          this.buttonState[i] = State.Clicked;
+          continue;
+        }
 
         if (prev && now) {
           this.buttonState[i] = State.Hold;
@@ -60,6 +67,10 @@ public class Mouse implements AutoCloseable {
 
       for (int i = 0; i < this.buttonStatePrev.length; i++) {
         this.buttonStatePrev[i] = this.buttonStateNow[i];
+      }
+      
+      for (int i = 0; i < this.buttonStateClickedNow.length; i++) {
+        this.buttonStateClickedNow[i] = false;
       }
 
       this.positionSaved = this.positionNow;
@@ -80,7 +91,7 @@ public class Mouse implements AutoCloseable {
     this.window.removeMouseListener(this.listener);
   }
 
-  private class Listener extends MouseAdapter {
+  private class Listener implements MouseListener, MouseMotionListener {
     private final Mouse owner;
 
     public Listener(Mouse owner) {
@@ -131,6 +142,20 @@ public class Mouse implements AutoCloseable {
       }
     }
     
+    void updateButtonClicked(MouseEvent e, boolean val) {
+      switch (e.getButton()) {
+        case MouseEvent.BUTTON1:
+          this.owner.buttonStateClickedNow[0] = val;
+          break;
+        case MouseEvent.BUTTON2:
+          this.owner.buttonStateClickedNow[1] = val;
+          break;
+        case MouseEvent.BUTTON3:
+          this.owner.buttonStateClickedNow[2] = val;
+          break;
+      }
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
       synchronized (this.owner.lock) {
@@ -151,6 +176,7 @@ public class Mouse implements AutoCloseable {
         }
         
         this.updateButton(e, false);
+        this.updateButtonClicked(e, false);
         this.updatePosition(e);
       }
     }
@@ -173,6 +199,20 @@ public class Mouse implements AutoCloseable {
         }
         this.updatePosition(e);
       }
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      if (!this.isInteresting(e)) {
+        return;
+      }
+      
+      this.updatePosition(e);
+      this.updateButtonClicked(e, true);
+    }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) {      
     }
   }
 }
