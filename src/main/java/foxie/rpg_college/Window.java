@@ -76,6 +76,15 @@ public class Window implements AutoCloseable {
     }
   }
   
+  public void setFullscreen(boolean val) {
+    if (val && !this.isFullscreen) {
+      Window.GRAPHICS_DEVICE.setFullScreenWindow(this.window);
+    } else if (!val && this.isFullscreen) {
+      Window.GRAPHICS_DEVICE.setFullScreenWindow(null);
+    }
+    this.isFullscreen = true;
+  }
+  
   public synchronized void updateState() {
     this.mouse.updateState();
     this.keyboard.updateState();

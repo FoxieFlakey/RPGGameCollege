@@ -23,6 +23,12 @@ import foxie.rpg_college.world.World;
 
 public class Game implements AutoCloseable {
   private boolean isRunning = false;
+  
+  // Double buffer stuffs
+  private int currentWidth = 0;
+  private int currentHeight = 0;
+  private BufferedImage buffer = null;
+  private boolean doubleBuffer = false;
 
   private final Window window;
 
@@ -166,6 +172,14 @@ public class Game implements AutoCloseable {
   public boolean isDebugEnabled() {
     return this.debugEnabled;
   }
+  
+  public void setDoubleBuffer(boolean val) {
+    this.doubleBuffer = val;
+  }
+  
+  public void setFullscreen(boolean val) {
+    this.window.setFullscreen(val);
+  }
 
   void handleInput(float deltaTime) {
     if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
@@ -201,11 +215,6 @@ public class Game implements AutoCloseable {
       }
     }
   }
-
-  private int currentWidth = 0;
-  private int currentHeight = 0;
-  private BufferedImage buffer = null;
-  private static boolean doubleBuffer = true;
   
   void renderContent(Graphics2D g, float deltaTime) {
     FloatRectangle outputAreaInWindow = this.window.getOutputArea();
@@ -238,16 +247,16 @@ public class Game implements AutoCloseable {
         g.dispose();
       }
       
-      Graphics2D g2 = (Graphics2D) this.window.window.getGraphics();
+      Graphics g2 = this.window.window.getGraphics();
       try {
         g2.drawImage(this.buffer, 0, 0, null);
       } finally {
         g2.dispose();
       }
     } else {
-      Graphics2D g = (Graphics2D) this.window.window.getGraphics();
+      Graphics g = this.window.window.getGraphics();
       try {
-        this.renderContent(g, deltaTime);
+        this.renderContent((Graphics2D) g, deltaTime);
       } finally {
         g.dispose();
       }
