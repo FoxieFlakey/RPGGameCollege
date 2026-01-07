@@ -123,6 +123,7 @@ public class Window implements AutoCloseable {
   public void close() throws Exception {
     this.window.removeComponentListener(this.listener);
     this.window.removeWindowListener(this.listener);
+    this.window.dispose();
   }
   
   private FloatRectangle calcOutputArea() {
