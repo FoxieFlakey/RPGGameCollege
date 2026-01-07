@@ -85,6 +85,10 @@ public class Game implements AutoCloseable {
   
   void updateState() {
     this.window.updateState();
+    this.updateCamera();
+  }
+  
+  void updateCamera() {
     this.getCamera().setOutputSize(new Vec2(this.getOutputWidth(), this.getOutputHeight()));
   }
   
@@ -132,11 +136,11 @@ public class Game implements AutoCloseable {
   }
 
   public int getOutputHeight() {
-    return (int) ((float) this.window.getRenderHeight() * this.renderScale);
+    return (int) Float.max((float) this.window.getRenderHeight() * this.renderScale, Game.VIEW_HEIGHT * 0.05f);
   }
 
   public int getOutputWidth() {
-    return (int) ((float) this.window.getRenderWidth() * this.renderScale);
+    return (int) Float.max((float) this.window.getRenderWidth() * this.renderScale, Game.VIEW_WIDTH * 0.05f);
   }
   
   public int getUnscaledOutputHeight() {
@@ -200,6 +204,8 @@ public class Game implements AutoCloseable {
     }
     this.renderScale = scale;
     this.doubleBuffer = true;
+    
+    this.updateCamera();
   }
   
   public float getRenderScale() {
@@ -207,6 +213,13 @@ public class Game implements AutoCloseable {
   }
 
   void handleInput(float deltaTime) {
+    if (this.getKeyboard().getState(Keyboard.Button.Minus) == State.Clicked) {
+      this.setRenderScale(Float.max(0.1f, this.renderScale - 0.1f));
+    }
+    if (this.getKeyboard().getState(Keyboard.Button.Equal) == State.Clicked) {
+      this.setRenderScale(Float.min(3.0f, this.renderScale + 0.1f));
+    }
+    
     if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
       this.debugEnabled = !this.debugEnabled;
     }
@@ -303,8 +316,8 @@ public class Game implements AutoCloseable {
   
   void render(float deltaTime) {
     if (this.doubleBuffer) {
-      int width = (int) Float.max((float) this.getOutputWidth(), 100.0f);
-      int height = (int) Float.max((float) this.getOutputHeight(), 100.0f);;
+      int width = this.getOutputWidth();
+      int height = this.getOutputHeight();
       
       if (this.currentWidth != width || this.currentHeight != height) {
         this.currentWidth = width;
