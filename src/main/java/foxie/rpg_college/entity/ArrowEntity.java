@@ -1,6 +1,5 @@
 package foxie.rpg_college.entity;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
