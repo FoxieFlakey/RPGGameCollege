@@ -1,5 +1,6 @@
 package foxie.rpg_college.entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
@@ -86,11 +87,11 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   public void render(Graphics2D g, float deltaTime) {
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArrowEntity.RENDER_SIZE);
     AffineTransform transform = EntityHelper.calculateCameraTransform(this);
-    transform.translate(-ArrowEntity.RENDER_SIZE.x() * 0.5f, -ArrowEntity.RENDER_SIZE.x() * 0.5f);
     transform.scale(
       renderBox.getSize().x() / (float) ArrowEntity.ARROW_TEXTURE.getWidth(null),
       renderBox.getSize().y() / (float) ArrowEntity.ARROW_TEXTURE.getHeight(null)
     );
+    transform.translate(-ArrowEntity.RENDER_SIZE.x() * 0.25f, -ArrowEntity.RENDER_SIZE.y() * 0.05f);
     
     g.drawImage(ArrowEntity.ARROW_TEXTURE, transform, null);
   }
