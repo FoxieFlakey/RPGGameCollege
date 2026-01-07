@@ -1,5 +1,6 @@
 package foxie.rpg_college;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -216,8 +217,49 @@ public class Game implements AutoCloseable {
     }
   }
   
-  void renderContent(Graphics2D g, float deltaTime) {
+  void translateAndClipGraphics2D(Graphics2D g) {
     FloatRectangle outputAreaInWindow = this.window.getOutputArea();
+    
+    // Clear posibly empty left
+    int left = (int) outputAreaInWindow.getTopLeftCorner().x();
+    int right = (int) outputAreaInWindow.getBottomRightCorner().x();
+    int top = (int) outputAreaInWindow.getTopLeftCorner().y();
+    int bottom = (int) outputAreaInWindow.getBottomRightCorner().y();
+    g.setColor(Color.BLACK);
+    g.fillRect(
+      0,
+      0,
+      left,
+      bottom
+    );
+    
+    // Clear posibly empty right
+    g.setColor(Color.BLACK);
+    g.fillRect(
+      right,
+      0,
+      this.window.getWindowWidth() - right,
+      bottom
+    );
+    
+    // Clear posibly empty top
+    g.setColor(Color.BLACK);
+    g.fillRect(
+      0,
+      0,
+      this.window.getWindowWidth(),
+      top
+    );
+    
+    // Clear posibly empty bottom
+    g.setColor(Color.BLACK);
+    g.fillRect(
+      0,
+      bottom,
+      this.window.getWindowWidth(),
+      this.window.getWindowHeight() - bottom
+    );
+    
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
     g.setClip(
@@ -226,17 +268,23 @@ public class Game implements AutoCloseable {
       (int) outputAreaInWindow.getSize().x(),
       (int) outputAreaInWindow.getSize().y()
     );
-    g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
     
+    g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
+  }
+  
+  void renderContent(Graphics2D g, float deltaTime) {
     this.getCurrentWorld().render(g, deltaTime);
     this.currentScreen.render(g, deltaTime);
   }
   
   void render(float deltaTime) {
     if (doubleBuffer) {
-      if (this.currentWidth != this.window.getWindowWidth() || this.currentHeight != this.window.getWindowHeight()) {
-        this.currentWidth = this.window.getWindowWidth();
-        this.currentHeight = this.window.getWindowHeight();
+      int width = this.getOutputWidth();
+      int height = this.getOutputHeight();
+      
+      if (this.currentWidth != width || this.currentHeight != height) {
+        this.currentWidth = width;
+        this.currentHeight = height;
         this.buffer = new BufferedImage(this.currentWidth, this.currentHeight, BufferedImage.TYPE_INT_RGB);
       }
       
@@ -249,13 +297,22 @@ public class Game implements AutoCloseable {
       
       Graphics g2 = this.window.window.getGraphics();
       try {
-        g2.drawImage(this.buffer, 0, 0, null);
+        this.translateAndClipGraphics2D((Graphics2D) g2);
+        g2.drawImage(
+          this.buffer,
+          0,
+          0,
+          this.window.getRenderWidth(),
+          this.window.getRenderHeight(),
+          null
+        );
       } finally {
         g2.dispose();
       }
     } else {
       Graphics g = this.window.window.getGraphics();
       try {
+        this.translateAndClipGraphics2D((Graphics2D) g);
         this.renderContent((Graphics2D) g, deltaTime);
       } finally {
         g.dispose();
