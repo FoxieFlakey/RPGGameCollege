@@ -4,6 +4,10 @@ public record Vec2(
   float x,
   float y
 ) {
+  public Vec2(float n) {
+    this(n, n);
+  }
+  
   public Vec2 add(Vec2 rhs) {
     return new Vec2(this.x + rhs.x, this.y + rhs.y);
   }

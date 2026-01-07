@@ -25,7 +25,7 @@ public class InGame extends Screen {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    Vec2 hudStart = new Vec2(10.0f, this.getGame().getOutputHeight() - 20.0f);
+    Vec2 hudStart = new Vec2(10.0f, this.getGame().getUnscaledOutputHeight() - 20.0f);
     Vec2 hudSize = new Vec2(620.0f, 10.0f);
 
     // Name bar sizing
@@ -65,11 +65,13 @@ public class InGame extends Screen {
 
     // Create the background
     g.setColor(Color.GRAY);
+    Vec2 startFixed = hudStart.mul(this.getGame().getRenderScale());
+    Vec2 sizeFixed = hudSize.mul(this.getGame().getRenderScale());
     g.fillRect(
-      (int) hudStart.x(),
-      (int) hudStart.y(),
-      (int) hudSize.x(),
-      (int) hudSize.y()
+      (int) startFixed.x(),
+      (int) startFixed.y(),
+      (int) sizeFixed.x(),
+      (int) sizeFixed.y()
     );
     
     Vec2 currentContentStart = hudStart.add(new Vec2(10.0f, 10.0f));
@@ -94,8 +96,9 @@ public class InGame extends Screen {
   void renderNameBar(Graphics2D g, float deltaTime, Entity player, Vec2 pos, Vec2 size) {
     Vec2 textStart = new Vec2(pos.x(), pos.y() + size.y() * 0.5f);
     g.setColor(Color.WHITE);
-    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30));
-    g.drawString("Name: " + player.getName(), (int) textStart.x(), (int) textStart.y() + Fonts.calcYOffsetSoItsCenter(g));
+    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30.0f * this.getGame().getCamera().getScale().x()));
+    Vec2 textStartFixed = textStart.mul(this.getGame().getRenderScale());
+    g.drawString("Name: " + player.getName(), (int) textStartFixed.x(), (int) textStartFixed.y() + Fonts.calcYOffsetSoItsCenter(g));
   }
   
   void renderManaBar(Graphics2D g, float deltaTime, CharacterEntity player, Vec2 manaBarPos, Vec2 manaBarSize) {
@@ -112,40 +115,43 @@ public class InGame extends Screen {
       manaPercent = 0.0f;
     }
 
+    Vec2 barFixed = bar.mul(this.getGame().getRenderScale());
+    Vec2 barSizeFixed = manaBarSize.mul(this.getGame().getRenderScale());
     g.fillRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) manaBarSize.x(),
-      (int) manaBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) barSizeFixed.x(),
+      (int) barSizeFixed.y()
     );
 
     // Create the health bar filled with actual health
     g.setColor(manaBarColor);
     g.fillRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) (manaBarSize.x() * manaPercent),
-      (int) manaBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) (barSizeFixed.x() * manaPercent),
+      (int) barSizeFixed.y()
     );
 
     // Now the border
     Stroke oldStroke = g.getStroke();
-    g.setStroke(new BasicStroke(5.0f));
+    g.setStroke(new BasicStroke(5.0f * this.getGame().getRenderScale()));
 
     g.setColor(Color.BLACK);
     g.drawRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) (manaBarSize.x() - manaPercent),
-      (int) manaBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) barSizeFixed.x(),
+      (int) barSizeFixed.y()
     );
 
     g.setStroke(oldStroke);
 
     // Draw text 'health'
     g.setColor(Color.WHITE);
-    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30));
-    g.drawString("Mana: ", (int) healthTextStart.x(), (int) healthTextStart.y() + Fonts.calcYOffsetSoItsCenter(g));
+    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30.0f * this.getGame().getCamera().getScale().x()));
+    Vec2 textStartFixed = healthTextStart.mul(this.getGame().getRenderScale());
+    g.drawString("Mana: ", (int) textStartFixed.x(), (int) textStartFixed.y() + Fonts.calcYOffsetSoItsCenter(g));
   }
   
   void renderHealthBar(Graphics2D g, float deltaTime, LivingEntity player, Vec2 healthBarPos, Vec2 healthBarSize) {
@@ -164,39 +170,42 @@ public class InGame extends Screen {
       g.setColor(new Color(0.3f, 0.0f, 0.0f, 1.0f));
     }
 
+    Vec2 barFixed = bar.mul(this.getGame().getRenderScale());
+    Vec2 barSizeFixed = healthBarSize.mul(this.getGame().getRenderScale());
     g.fillRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) healthBarSize.x(),
-      (int) healthBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) barSizeFixed.x(),
+      (int) barSizeFixed.y()
     );
 
     // Create the health bar filled with actual health
     g.setColor(healthBarColor);
     g.fillRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) (healthBarSize.x() * healthPercent),
-      (int) healthBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) (barSizeFixed.x() * healthPercent),
+      (int) barSizeFixed.y()
     );
 
     // Now the border
     Stroke oldStroke = g.getStroke();
-    g.setStroke(new BasicStroke(5.0f));
+    g.setStroke(new BasicStroke(5.0f * this.getGame().getRenderScale()));
 
     g.setColor(Color.BLACK);
     g.drawRect(
-      (int) bar.x(),
-      (int) bar.y(),
-      (int) (healthBarSize.x() - healthPercent),
-      (int) healthBarSize.y()
+      (int) barFixed.x(),
+      (int) barFixed.y(),
+      (int) barSizeFixed.x(),
+      (int) barSizeFixed.y()
     );
 
     g.setStroke(oldStroke);
 
     // Draw text 'health'
     g.setColor(Color.WHITE);
-    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30));
-    g.drawString("Health: ", (int) healthTextStart.x(), (int) healthTextStart.y() + Fonts.calcYOffsetSoItsCenter(g));
+    g.setFont(Fonts.getDefault().deriveFont(Font.BOLD, 30.0f * this.getGame().getCamera().getScale().x()));
+    Vec2 textStartFixed = healthTextStart.mul(this.getGame().getRenderScale());
+    g.drawString("Health: ", (int) textStartFixed.x(), (int) textStartFixed.y() + Fonts.calcYOffsetSoItsCenter(g));
   }
 }

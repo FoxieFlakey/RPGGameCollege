@@ -35,9 +35,9 @@ public class Bar {
   }
   
   // NOTE: 'pos' is center of the bar
-  public void render(Graphics2D g, Vec2 pos) {
+  public void render(float renderScale, Graphics2D g, Vec2 pos) {
     float percent = Util.clamp((this.val - this.min) / (this.max - this.min), 0.0f, 1.0f);
-    int x = (int) (pos.x() - Bar.WIDTH / 2.0f);
+    int x = (int) (pos.x() - ((Bar.WIDTH * renderScale) / 2.0f));
     int y = (int) (pos.y());
     
     // Draw background
@@ -45,26 +45,26 @@ public class Bar {
     g.fillRect(
       x,
       y,
-      (int) Bar.WIDTH,
-      (int) Bar.HEIGHT
+      (int) (Bar.WIDTH * renderScale),
+      (int) (Bar.HEIGHT * renderScale)
     );
     
     // Draw the empty bar
     g.setColor(this.unfilledColor);
     g.fillRect(
-      x + 5,
-      y + 5,
-      (int) Bar.WIDTH - 10,
-      (int) Bar.HEIGHT - 10
+      (int) (x + (5.0f * renderScale)),
+      (int) (y + (5.0f * renderScale)),
+      (int) ((Bar.WIDTH - 10.0f) * renderScale),
+      (int) ((Bar.HEIGHT - 10.0f) * renderScale)
     );
     
     // Draw the filled bar
     g.setColor(this.filledColor);
     g.fillRect(
-      x + 5,
-      y + 5,
-      (int) ((Bar.WIDTH - 10.0f) * percent),
-      (int) Bar.HEIGHT - 10
+      (int) (x + (5.0f * renderScale)),
+      (int) (y + (5.0f * renderScale)),
+      (int) ((Bar.WIDTH - 10.0f) * percent * renderScale),
+      (int) ((Bar.HEIGHT - 10.0f) * renderScale)
     );
   }
 }

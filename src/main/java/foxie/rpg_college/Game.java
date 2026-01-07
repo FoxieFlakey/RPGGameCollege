@@ -139,6 +139,14 @@ public class Game implements AutoCloseable {
     return (int) ((float) this.window.getRenderWidth() * this.renderScale);
   }
   
+  public int getUnscaledOutputHeight() {
+    return this.window.getRenderHeight();
+  }
+  
+  public int getUnscaledOutputWidth() {
+    return this.window.getRenderWidth();
+  }
+  
   public Keyboard getKeyboard() {
     return this.window.keyboard;
   }
@@ -194,8 +202,8 @@ public class Game implements AutoCloseable {
     this.doubleBuffer = true;
   }
   
-  public Vec2 getRenderScale() {
-    return this.getCamera().getScale();
+  public float getRenderScale() {
+    return this.renderScale;
   }
 
   void handleInput(float deltaTime) {

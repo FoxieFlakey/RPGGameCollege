@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import foxie.rpg_college.Bar;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Util;
@@ -141,21 +142,23 @@ public abstract class Entity {
   }
   
   protected void renderBars(Graphics2D g) {
+    Game game = this.getWorld().getGame();
+    float renderScale = game.getRenderScale();
     Vec2 barStart = this.getRenderBound()
       .map(bound -> {
         Vec2 topLeft = bound.getTopLeftCorner();
         float right = bound.getBottomRightCorner().x();
         
-        return new Vec2((right + topLeft.x()) / 2.0f, topLeft.y() - 20.0f);
+        return new Vec2((right + topLeft.x()) / 2.0f, topLeft.y() - (20.0f * renderScale));
       })
-      .orElseGet(() -> new Vec2(0.0f, 20.0f));
+      .orElseGet(() -> new Vec2(0.0f, (20.0f * renderScale)));
     
     float x = barStart.x();
     float y = barStart.y();
     
     for (Bar bar : this.getBars()) {
-      bar.render(g, new Vec2(x, y));
-      y -= Bar.HEIGHT + 5.0f;
+      bar.render(renderScale, g, new Vec2(x, y));
+      y -= (Bar.HEIGHT + 5.0f) * renderScale;
     }
   }
 
