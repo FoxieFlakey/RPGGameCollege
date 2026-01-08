@@ -87,7 +87,6 @@ public abstract class ProjectileEntity extends Entity {
     
     // Arrow collided a target
     this.velocity = 0.0f;
-    this.hasProjectileHitSomething = true;
   }
   
   @Override
