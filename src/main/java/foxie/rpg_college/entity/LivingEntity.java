@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.Bar;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
@@ -32,7 +33,8 @@ public abstract class LivingEntity extends Entity {
   public static final float FLASH_DURATION = 1.2f;
   public static final float FLASH_PERIOD = 0.1f;
   
-  public LivingEntity() {
+  public LivingEntity(Game game) {
+    super(game);
     this.healthPoint = this.getMaxHealth();
     this.healthBar = new Bar(
       0.0f,

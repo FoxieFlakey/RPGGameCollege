@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 
 public class MageCharacter extends CharacterEntity {
@@ -14,6 +15,10 @@ public class MageCharacter extends CharacterEntity {
     200.0f
   );
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), MageCharacter.SIZE);
+  
+  public MageCharacter(Game game) {
+    super(game);
+  }
 
   @Override
   public float getManaRefillPeriod() {

@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.EntityDamageSource;
@@ -33,8 +34,8 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
     }
   }
   
-  public ArrowEntity(Entity shooter) {
-    super(shooter, 5.0f, 400.0f);
+  public ArrowEntity(Game game, Entity shooter) {
+    super(game, shooter, 5.0f, 400.0f);
   }
   
   @Override

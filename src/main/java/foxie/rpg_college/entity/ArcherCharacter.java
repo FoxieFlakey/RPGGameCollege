@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.DamageSource;
@@ -50,6 +51,10 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
     } catch (IOException e) {
       throw new RuntimeException("Error loading arrow texture", e);
     }
+  }
+  
+  public ArcherCharacter(Game game) {
+    super(game);
   }
   
   @Override
@@ -165,7 +170,7 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
     this.fireArrowCooldown = 0.1f;
     
     // Spawn arrow
-    ArrowEntity arrow = new ArrowEntity(this);
+    ArrowEntity arrow = new ArrowEntity(this.getGame(), this);
     this.getWorld().addEntity(arrow);
     arrow.setPos(this.getPos());
     arrow.setRotation(this.getRotation());

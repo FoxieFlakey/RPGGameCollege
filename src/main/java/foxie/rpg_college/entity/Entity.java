@@ -31,11 +31,13 @@ public abstract class Entity {
   private String name;
   private final HashMap<Object, Object> extraData = new HashMap<>();
   private final ArrayList<Bar> bars = new ArrayList<>();
+  private final Game game;
   
   public final long id;
   private static final AtomicLong ID_COUNTER = new AtomicLong(0);
 
-  public Entity() {
+  public Entity(Game game) {
+    this.game = game;
     this.id = Entity.ID_COUNTER.getAndUpdate(x -> {
       if (x == Long.MAX_VALUE) {
         return Long.MAX_VALUE;
@@ -139,6 +141,10 @@ public abstract class Entity {
   }
   
   public void onTileStep(Tile tile, IVec2 tileCoord) {
+  }
+  
+  public final Game getGame() {
+    return this.game;
   }
   
   protected void renderBars(Graphics2D g) {

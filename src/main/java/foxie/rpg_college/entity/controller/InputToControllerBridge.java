@@ -132,7 +132,7 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = spawnCooldown;
       
       // Spawn cat
-      CatEntity cat = new CatEntity();
+      CatEntity cat = new CatEntity(this.getWorld().getGame());
       this.getWorld().addEntity(cat);
       
       Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
@@ -143,7 +143,7 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = spawnCooldown;
       
       // Spawn cat
-      ArcherCharacter archer = new ArcherCharacter();
+      ArcherCharacter archer = new ArcherCharacter(this.getWorld().getGame());
       this.getWorld().addEntity(archer);
       
       Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
@@ -153,7 +153,7 @@ public class InputToControllerBridge implements AutoCloseable {
     if (keyboard.getState(Button.B).isNowPressed() && this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = spawnCooldown;
       
-      MageCharacter mage = new MageCharacter();
+      MageCharacter mage = new MageCharacter(this.getWorld().getGame());
       this.getWorld().addEntity(mage);
       
       Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
@@ -164,7 +164,7 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = 0.1f;
       
       // Spawn cat
-      CatEntity cat = new CatEntity();
+      CatEntity cat = new CatEntity(this.getWorld().getGame());
       this.getWorld().addEntity(cat);
       cat.setPos(this.camera.translateScreenToWorldCoord(mouse.getMousePosition()));
     }

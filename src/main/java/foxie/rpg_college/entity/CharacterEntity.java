@@ -3,13 +3,15 @@ package foxie.rpg_college.entity;
 import java.awt.Color;
 
 import foxie.rpg_college.Bar;
+import foxie.rpg_college.Game;
 
 public abstract class CharacterEntity extends LivingEntity {
   private float manaPoint;
   private Bar manaBar;
   private float timeUntilManaRefill = -1.0f;
   
-  public CharacterEntity() {
+  public CharacterEntity(Game game) {
+    super(game);
     this.manaPoint = this.getMaxManaPoint();
     this.manaBar = new Bar(
       0.0f,

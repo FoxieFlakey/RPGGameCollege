@@ -3,6 +3,7 @@ package foxie.rpg_college.entity;
 import java.util.Optional;
 
 import foxie.rpg_college.FloatRectangle;
+import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
@@ -15,7 +16,8 @@ public abstract class ProjectileEntity extends Entity {
   private float velocity;
   private float timeToLive;
   
-  public ProjectileEntity(Entity shooter, float timeToLive, float velocity) {
+  public ProjectileEntity(Game game, Entity shooter, float timeToLive, float velocity) {
+    super(game);
     this.shooter = shooter;
     this.timeToLive = timeToLive;
     this.velocity = velocity;
