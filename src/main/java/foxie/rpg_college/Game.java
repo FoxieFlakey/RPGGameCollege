@@ -316,34 +316,6 @@ public class Game implements AutoCloseable {
       this.player.getWorld().addEntity(cat);
       cat.setPos(camera.translateScreenToWorldCoord(mouse.getMousePosition()));
     }
-  }
-
-  void handleInput(float deltaTime) {
-    if (this.getKeyboard().getState(Keyboard.Button.Minus) == State.Clicked) {
-      this.setRenderScale(Float.max(0.1f, this.renderScale - 0.1f));
-    }
-    if (this.getKeyboard().getState(Keyboard.Button.Equal) == State.Clicked) {
-      this.setRenderScale(Float.min(3.0f, this.renderScale + 0.1f));
-    }
-    
-    if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
-      this.debugEnabled = !this.debugEnabled;
-    }
-    
-    // Input is consumed by screen
-    if (!this.getScreen().handleInput()) {
-      return;
-    }
-    
-    if (this.isDebugEnabled()) {
-      this.handleDebugInputs(deltaTime);
-    }
-    
-    this.player.handleInput(deltaTime);
-    
-    if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {
-      this.window.toggleFullscreen();
-    }
     
     if (this.getMouse().getButtonState(Mouse.Button.Middle) == State.Clicked) {
       Vec2 selectedPoint = this.getCamera().translateScreenToWorldCoord(this.getMouse().getMousePosition());
@@ -359,6 +331,34 @@ public class Game implements AutoCloseable {
         this.player.setNewEntityToControl(entity);
       }
     }
+  }
+
+  void handleInput(float deltaTime) {
+    if (this.getKeyboard().getState(Keyboard.Button.Minus) == State.Clicked) {
+      this.setRenderScale(Float.max(0.1f, this.renderScale - 0.1f));
+    }
+    if (this.getKeyboard().getState(Keyboard.Button.Equal) == State.Clicked) {
+      this.setRenderScale(Float.min(3.0f, this.renderScale + 0.1f));
+    }
+    
+    if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
+      this.debugEnabled = !this.debugEnabled;
+    }
+    
+    if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {
+      this.window.toggleFullscreen();
+    }
+    
+    // Input is consumed by screen
+    if (!this.getScreen().handleInput()) {
+      return;
+    }
+    
+    if (this.isDebugEnabled()) {
+      this.handleDebugInputs(deltaTime);
+    }
+    
+    this.player.handleInput(deltaTime);
   }
   
   void translateAndClipGraphics2D(Graphics2D g) {
