@@ -167,6 +167,16 @@ public abstract class Entity {
       y -= (Bar.HEIGHT + 5.0f) * renderScale;
     }
   }
+  
+  public Optional<FloatRectangle> getRenderBoundInWorld() {
+    return this.getRenderBound().map(bound -> {
+      Camera cam = this.getGame().getCamera();
+      return new FloatRectangle(
+        cam.translateAWTGraphicsToWorldCoord(bound.getTopLeftCorner()),
+        cam.translateAWTGraphicsToWorldCoord(bound.getBottomRightCorner())
+      );
+    });
+  }
 
   // This prefer 'false', so if there two entities
   // one say true other say false, the result is false

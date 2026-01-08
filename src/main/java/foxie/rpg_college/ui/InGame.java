@@ -3,6 +3,7 @@ package foxie.rpg_college.ui;
 import java.awt.Graphics2D;
 import java.util.Optional;
 
+import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
@@ -54,7 +55,7 @@ public class InGame extends Screen {
     }
     
     Entity e = maybeEntity.get();
-    FloatRectangle renderBox = e.getRenderBound().orElseGet(() -> {
+    FloatRectangle renderBox = e.getRenderBoundInWorld().orElseGet(() -> {
       return new FloatRectangle(
         e.getPos().add(new Vec2(-100.0f)),
         e.getPos().add(new Vec2(100.0f))
@@ -62,55 +63,41 @@ public class InGame extends Screen {
     });
     
     Vec2 cornerSize = new Vec2(20.0f);
-    Vec2 drawTopLeft = renderBox.getTopLeftCorner()
+    Vec2 topLeft = renderBox.getTopLeftCorner()
       .sub(new Vec2(5.0f))
-      .sub(new Vec2(20.0f * offsetMultiplier))
-      .sub(cornerSize.mul(0.5f));
-    Vec2 drawBottomRight = renderBox.getBottomRightCorner()
+      .sub(new Vec2(20.0f * offsetMultiplier));
+    Vec2 bottomRight = renderBox.getBottomRightCorner()
       .add(new Vec2(5.0f))
-      .add(new Vec2(20.0f * offsetMultiplier))
-      .sub(cornerSize.mul(0.5f));
+      .add(new Vec2(20.0f * offsetMultiplier));
     
-    Vec2 drawTopRight = new Vec2(drawBottomRight.x(), drawTopLeft.y());
-    Vec2 drawBottomLeft = new Vec2(drawTopLeft.x(), drawBottomRight.y());
+    Vec2 topRight = new Vec2(bottomRight.x(), topLeft.y());
+    Vec2 bottomLeft = new Vec2(topLeft.x(), bottomRight.y());
     
-    // Draw top left
-    g.drawImage(
-      this.topLeftCorner.image(),
-      (int) drawTopLeft.x(), (int) drawTopLeft.y(),
-      (int) (drawTopLeft.x() + cornerSize.x()), (int) (drawTopLeft.y() + cornerSize.y()),
-      0, 0,
-      this.topLeftCorner.width(), this.topLeftCorner.height(),
-      null
+    // Draw corners
+    this.drawCorner(g, topLeft, cornerSize, this.topLeftCorner);
+    this.drawCorner(g, topRight, cornerSize, this.topRightCorner);
+    this.drawCorner(g, bottomRight, cornerSize, this.bottomRightCorner);
+    this.drawCorner(g, bottomLeft, cornerSize, this.bottomLeftCorner);
+  }
+  
+  void drawCorner(Graphics2D g, Vec2 pos, Vec2 size, Texture cornerTexture) {
+    Camera camera = this.getGame().getCamera();
+    
+    FloatRectangle renderBox = new FloatRectangle(
+      camera.translateWorldToAWTGraphicsCoord(pos.sub(size.mul(0.5f))),
+      camera.translateWorldToAWTGraphicsCoord(pos.add(size.mul(0.5f)))
     );
     
-    // Draw top right
+    int x = (int) renderBox.getTopLeftCorner().x();
+    int y = (int) renderBox.getTopLeftCorner().y();
+    int width = (int) renderBox.getSize().x();
+    int height = (int) renderBox.getSize().y();
     g.drawImage(
-      this.topRightCorner.image(),
-      (int) drawTopRight.x(), (int) drawTopRight.y(),
-      (int) (drawTopRight.x() + cornerSize.x()), (int) (drawTopRight.y() + cornerSize.y()),
+      cornerTexture.image(),
+      x, y,
+      x + width, y + height,
       0, 0,
-      this.topRightCorner.width(), this.topRightCorner.height(),
-      null
-    );
-    
-    // Draw bottom right
-    g.drawImage(
-      this.bottomRightCorner.image(),
-      (int) drawBottomRight.x(), (int) drawBottomRight.y(),
-      (int) (drawBottomRight.x() + cornerSize.x()), (int) (drawBottomRight.y() + cornerSize.y()),
-      0, 0,
-      this.bottomRightCorner.width(), this.bottomRightCorner.height(),
-      null
-    );
-    
-    // Draw bottom left
-    g.drawImage(
-      this.bottomLeftCorner.image(),
-      (int) drawBottomLeft.x(), (int) drawBottomLeft.y(),
-      (int) (drawBottomLeft.x() + cornerSize.x()), (int) (drawBottomLeft.y() + cornerSize.y()),
-      0, 0,
-      this.bottomLeftCorner.width(), this.bottomLeftCorner.height(),
+      cornerTexture.width(), cornerTexture.height(),
       null
     );
   }
