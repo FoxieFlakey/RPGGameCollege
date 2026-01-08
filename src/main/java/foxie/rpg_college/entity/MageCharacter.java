@@ -110,7 +110,7 @@ public class MageCharacter extends CharacterEntity implements Attackable {
   
   @Override
   public boolean canAttack() {
-    return this.getManaPoint() >= MageCharacter.ATTACK_MANA && this.attackCooldown <= 0.0f;
+    return this.getManaPoint() >= MageCharacter.ATTACK_MANA && this.attackCooldown <= 0.0f && !this.isDead();
   }
   
   @Override

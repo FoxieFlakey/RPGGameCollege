@@ -1,6 +1,7 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 import java.util.Optional;
 
 import foxie.rpg_college.Camera;
@@ -12,7 +13,11 @@ import foxie.rpg_college.tile.Tile;
 
 public class TurretEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = Tile.SIZE;
-  private static final float COOLDOWN = 0.2f;
+  private static final float COOLDOWN = 0.5f;
+  
+  // Try look for new target every 1 second
+  private static final float POLL_TIME = 1.0f;
+  private static final float LOOKUP_RADIUS = 400.0f;
   
   private final Texture turretDead;
   private final Texture turretReady;
@@ -20,6 +25,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
   private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.05f), TurretEntity.SIZE, true);
   
   private float cooldown = -1.0f;
+  private float pollDelay = -1.0f;
+  private Optional<LivingEntity> currentTarget = Optional.empty();
   
   public TurretEntity(Game game) {
     super(game);
@@ -82,15 +89,65 @@ public class TurretEntity extends LivingEntity implements Attackable {
 
   @Override
   public boolean canAttack() {
-    return this.cooldown < 0.0f;
+    return this.cooldown < 0.0f && !this.isDead();
   }
   
   @Override
   public void tick(float deltaTime) {
     super.tick(deltaTime);
+    if (this.isDead()) {
+      return;
+    }
+    
     this.cooldown -= deltaTime;
+    this.pollDelay -= deltaTime;
     if (this.cooldown < 0.0f) {
       this.cooldown = -1.0f;
+    }
+    
+    if (this.pollDelay < 0.0f) {
+      this.pollDelay = TurretEntity.POLL_TIME;
+      
+      // Looking for new target
+      Iterator<LivingEntity> potentialTargets = this.getWorld()
+        .findEntities(this.getPos(), TurretEntity.LOOKUP_RADIUS)
+        .filter(e -> e != this)
+        .filter(e -> e instanceof LivingEntity)
+        .map(e -> (LivingEntity) e)
+        .filter(e -> !e.isDead())
+        .iterator();
+      
+      LivingEntity bestEntity = null;
+      float bestDistance = Float.POSITIVE_INFINITY;
+      
+      while (potentialTargets.hasNext()) {
+        LivingEntity candidate = potentialTargets.next();
+        float candidateDistance = EntityHelper.distanceBetween(this, candidate);
+        
+        if (candidateDistance < bestDistance) {
+          bestEntity = candidate;
+          bestDistance = candidateDistance;
+        }
+      }
+      
+      if (bestEntity != null) {
+        // We have found new target
+        this.currentTarget = Optional.of(bestEntity);
+      }
+    }
+    
+    if (this.currentTarget.isPresent() && this.currentTarget.get().isDead()) {
+      this.currentTarget = Optional.empty();
+    }
+    
+    if (this.currentTarget.isPresent() && !this.currentTarget.get().isDead()) {
+      // Target still alive try aim to them
+      LivingEntity target = this.currentTarget.get();
+      this.setRotation(target.getPos().sub(this.getPos()).calculateAngle());
+    }
+    
+    if (this.canAttack() && this.currentTarget.isPresent()) {
+      this.attack();
     }
   }
 

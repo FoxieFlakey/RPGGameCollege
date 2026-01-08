@@ -164,7 +164,7 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
 
   @Override
   public boolean canAttack() {
-    return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= ArcherCharacter.ATTACK_MANA_POINT;
+    return this.fireArrowCooldown < 0.0f && this.getManaPoint() >= ArcherCharacter.ATTACK_MANA_POINT && !this.isDead();
   }
   
   @Override
