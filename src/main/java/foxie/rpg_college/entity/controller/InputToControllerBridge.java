@@ -8,6 +8,7 @@ import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.Attackable;
 import foxie.rpg_college.entity.CatEntity;
+import foxie.rpg_college.entity.DummyLivingEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.entity.MageCharacter;
@@ -165,6 +166,14 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = spawnCooldown;
       
       TurretEntity turret = new TurretEntity(this.getWorld().getGame());
+      this.getWorld().addEntity(turret);
+      turret.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.M).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = spawnCooldown;
+      
+      DummyLivingEntity turret = new DummyLivingEntity(this.getWorld().getGame());
       this.getWorld().addEntity(turret);
       turret.setPos(spawnPos);
     }
