@@ -23,7 +23,7 @@ public class FireballEntity extends ProjectileEntity {
   private final CollisionBox collisionBox = new CollisionBox(
     100.0f,
     new Vec2(0.0f, 0.0f),
-    new Vec2(100.0f, 100.0f),
+    new Vec2(150.0f, 150.0f),
     false
   );
   
