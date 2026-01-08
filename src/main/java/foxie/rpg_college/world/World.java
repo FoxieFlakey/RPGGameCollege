@@ -210,6 +210,7 @@ public abstract class World {
         }
         
         e.onCollision();
+        e.onWorldBorderCollision();
       }
     }
   }
