@@ -15,6 +15,14 @@ public class Fonts {
   public static Font getDefault() {
     return Optional.ofNullable(Fonts.defaultFont).get();
   }
+  
+  public static int getFontHeight(Graphics2D g, Font font) {
+    return g.getFontMetrics(font).getHeight();
+  }
+  
+  public static int getFontHeight(Graphics2D g) {
+    return Fonts.getFontHeight(g, g.getFont());
+  }
 
   public static int calcYOffsetSoItsCenter(Graphics2D g) {
     return Fonts.calcYOffsetSoItsCenter(g, g.getFont());

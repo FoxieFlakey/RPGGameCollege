@@ -95,4 +95,9 @@ public class InGame extends Screen {
       null
     );
   }
+  
+  @Override
+  public boolean canTickGame() {
+    return true;
+  }
 }

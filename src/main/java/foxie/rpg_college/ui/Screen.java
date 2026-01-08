@@ -20,5 +20,6 @@ public abstract class Screen {
   // empty zone where there no UI element
   public abstract boolean handleInput();
   public abstract void render(Graphics2D g, float deltaTime);
+  public abstract boolean canTickGame();
 }
 

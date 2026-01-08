@@ -23,6 +23,7 @@ import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.input.State;
 import foxie.rpg_college.texture.TextureManager;
 import foxie.rpg_college.tile.TileList;
+import foxie.rpg_college.ui.DeathScreen;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
 import foxie.rpg_college.world.BattleArena;
@@ -46,7 +47,6 @@ public class Game implements AutoCloseable {
 
   private final WorldManager worldManager = new WorldManager();
   private final InputToControllerBridge player;
-  private final Screen currentScreen;
   private final TextureManager textureManager = new TextureManager();
   
   private static final float VIEW_WIDTH = 1280.0f;
@@ -61,6 +61,7 @@ public class Game implements AutoCloseable {
   private float gameTime = 0.0f;
   private boolean debugEnabled = false;
   private float spawnCatCooldown = -1.0f;
+  private Screen currentScreen;
   
   public final TileList TILES;
   
@@ -121,24 +122,16 @@ public class Game implements AutoCloseable {
     this.getCamera().setOutputSize(new Vec2(this.getOutputWidth(), this.getOutputHeight()));
   }
   
-  void handleRespawnCat() {
-    // Player request respawn
-    CatEntity entity = new CatEntity(this);
-    this.player.getWorld().addEntity(entity);
-    this.player.setNewEntityToControl(entity);
+  public void respawn(Entity respawnedAs) {
+    this.getCurrentWorld().addEntity(respawnedAs);
+    this.player.setNewEntityToControl(respawnedAs);
+    this.currentScreen = new InGame(this);
     
-    entity.setPos(new Vec2(-300.0f, 300.0f));
+    if (respawnedAs instanceof LivingEntity) {
+      ((LivingEntity) respawnedAs).flash();
+    }
   }
   
-  void handleRespawnPlayer() {
-    // Player request respawn
-    ArcherCharacter entity = new ArcherCharacter(this);
-    this.player.getWorld().addEntity(entity);
-    this.player.setNewEntityToControl(entity);
-    
-    entity.setPos(new Vec2(-500.0f, 300.0f));
-  }
-
   @Override
   public void close() throws Exception {
     this.window.close();
@@ -335,6 +328,11 @@ public class Game implements AutoCloseable {
       this.debugEnabled = !this.debugEnabled;
     }
     
+    // Input is consumed by screen
+    if (!this.getScreen().handleInput()) {
+      return;
+    }
+    
     if (this.isDebugEnabled()) {
       this.handleDebugInputs(deltaTime);
     }
@@ -343,14 +341,6 @@ public class Game implements AutoCloseable {
     
     if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {
       this.window.toggleFullscreen();
-    }
-    
-    if (this.getPlayer().isEmpty()) {
-      if (this.getKeyboard().getState(Keyboard.Button.R) == State.Clicked) {
-        this.handleRespawnCat();
-      } else if (this.getKeyboard().getState(Keyboard.Button.T) == State.Clicked) {
-        this.handleRespawnPlayer();
-      }
     }
     
     if (this.getMouse().getButtonState(Mouse.Button.Middle) == State.Clicked) {
@@ -477,8 +467,24 @@ public class Game implements AutoCloseable {
   }
 
   void tick(float deltaTime) {
+    if (!this.getScreen().canTickGame()) {
+      return;
+    }
+    
     // Tick the world and stuffs :3
     this.getWorldManager().tick(deltaTime);
+    
+    boolean isPlayerDead = this.getPlayer().isEmpty();
+    if (this.getPlayer().isPresent() && this.getPlayer().get() instanceof LivingEntity) {
+      LivingEntity player = (LivingEntity) this.getPlayer().get();
+      isPlayerDead = player.isDead();
+    }
+    
+    if (isPlayerDead) {
+      // Player is dead
+      this.currentScreen = new DeathScreen(this);
+    }
+    
     gameTime += deltaTime;
   }
 }
