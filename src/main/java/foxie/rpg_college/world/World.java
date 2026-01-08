@@ -321,6 +321,20 @@ public abstract class World {
           g.drawRect(x, y, w, h);
         }
         
+        // Render the render bound
+        if (e.getRenderBoundInWorld().isPresent()) {
+          g.setColor(Color.MAGENTA);
+          FloatRectangle boxWorld = e.getRenderBoundInWorld().get();
+          FloatRectangle boxRender = camera.translateWorldToAWTGraphicsCoord(boxWorld.getCenter(), boxWorld.getSize());
+          
+          int x = (int) boxRender.getTopLeftCorner().x();
+          int y = (int) boxRender.getTopLeftCorner().y();
+          int w = (int) boxRender.getSize().x();
+          int h = (int) boxRender.getSize().y();
+          
+          g.drawRect(x, y, w, h);
+        }
+        
         g.setStroke(oldStroke);
       }
     }
