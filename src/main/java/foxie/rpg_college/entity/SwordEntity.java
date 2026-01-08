@@ -30,6 +30,7 @@ public class SwordEntity extends Entity {
   private final float angleDone;
   private final HashSet<Long> damagedEntities = new HashSet<>();
   private final float damage;
+  private final Vec2 offset;
   
   private float angleCurrent = 0.0f;
   private boolean doneSwinging = false;
@@ -49,7 +50,7 @@ public class SwordEntity extends Entity {
   
   */
   
-  public SwordEntity(Game game, Entity wielder, float damage, float swingStart, float swingEnd, boolean isClockwise) {
+  public SwordEntity(Game game, Entity wielder, float damage, float swingStart, float swingEnd, boolean isClockwise, Vec2 offset) {
     super(game);
     
     if (isClockwise) {
@@ -61,8 +62,13 @@ public class SwordEntity extends Entity {
     
     this.wielder = wielder;
     this.damage = damage;
+    this.offset = offset;
     this.isClockwise = isClockwise;
     this.texture = game.getTextureManager().getTexture("entity/sword");
+  }
+  
+  public SwordEntity(Game game, Entity wielder, float damage, float swingStart, float swingEnd, boolean isClockwise) {
+    this(game, wielder, damage, swingStart, swingEnd, isClockwise, new Vec2(0.0f));
   }
   
   public boolean isDoneSwinging() {
@@ -78,6 +84,10 @@ public class SwordEntity extends Entity {
     );
     
     g.drawImage(this.texture.image(), transform, null);
+  }
+  
+  public void updatePos() {
+    this.setPos(this.wielder.getPos().add(this.offset));
   }
   
   @Override
@@ -128,7 +138,7 @@ public class SwordEntity extends Entity {
       return;
     }
     
-    this.setPos(this.wielder.getPos());
+    this.updatePos();
     this.setRotation(this.swingStart + this.angleCurrent * (this.isClockwise ? 1.0f : -1.0f));
     
     Iterator<LivingEntity> affectedEntities = this.getWorld().findEntities(this.getPos(), SwordEntity.SWING_DISTANCE)

@@ -136,9 +136,22 @@ public class WarriorCharacter extends CharacterEntity implements Attackable {
         break;
     }
     
-    SwordEntity sword = new SwordEntity(this.getGame(), this, WarriorCharacter.SWORD_DAMAGE, this.getRotation() - 80.0f, this.getRotation() + 80.0f, isClockwise);
+    SwordEntity sword = new SwordEntity(
+      this.getGame(),
+      this, WarriorCharacter.SWORD_DAMAGE,
+      this.getRotation() - 80.0f,
+      this.getRotation() + 80.0f,
+      isClockwise,
+      Vec2.unitVectorOfAngle(this.getRotation())
+        .mul(
+          Float.min(
+            WarriorCharacter.SIZE.x(),
+            WarriorCharacter.SIZE.y()
+          ) / 2.0f - 25.0f
+        )
+    );
     this.getWorld().addEntity(sword);
-    sword.setPos(this.getPos());
+    sword.updatePos();
     
     this.sword = Optional.of(sword);
     return true;
