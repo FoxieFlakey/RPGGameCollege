@@ -70,6 +70,7 @@ public class Game implements AutoCloseable {
     this.textureManager.addTexture("character/archer/dead", "/archer_dead.png");
     this.textureManager.addTexture("character/archer/facing_down", "/archer_facing_down.png");
     this.textureManager.addTexture("entity/arrow", "/arrow.png");
+    this.textureManager.addTexture("entity/fireball", "/fireball.png");
     this.textureManager.addTexture("world/battle_arena/background", "/battle_arena.png");
     this.textureManager.addTexture("world/overworld/background", "/world.png");
     

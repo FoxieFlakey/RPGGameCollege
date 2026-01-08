@@ -9,12 +9,16 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 
-public class MageCharacter extends CharacterEntity {
+public class MageCharacter extends CharacterEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(
     140.0f,
     200.0f
   );
+  private static final float ATTACK_COOLDOWN = 1.5f;
+  private static final float ATTACK_MANA = 40.0f;
+  
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), MageCharacter.SIZE);
+  private float attackCooldown = -1.0f;
   
   public MageCharacter(Game game) {
     super(game);
@@ -92,5 +96,40 @@ public class MageCharacter extends CharacterEntity {
       (int) renderBox.getSize().x(),
       (int) renderBox.getSize().y()
     );
+  }
+  
+  @Override
+  public boolean canAttack() {
+    return this.getManaPoint() >= MageCharacter.ATTACK_MANA && this.attackCooldown <= 0.0f;
+  }
+  
+  @Override
+  public void tick(float deltaTime) {
+    super.tick(deltaTime);
+    this.attackCooldown -= deltaTime;
+    
+    if (this.attackCooldown < 0.0f) {
+      this.attackCooldown = -1.0f;
+    }
+  }
+  
+  @Override
+  public boolean attack() {
+    if (!this.canAttack()) {
+      return false;
+    }
+    
+    if (!this.consumeManaPoint(MageCharacter.ATTACK_MANA)) {
+      return false;
+    }
+    
+    this.attackCooldown = MageCharacter.ATTACK_COOLDOWN;
+    
+    FireballEntity fireball = new FireballEntity(this.getGame(), this);
+    this.getWorld().addEntity(fireball);
+    fireball.setRotation(this.getRotation());
+    fireball.setPos(this.getPos());
+    
+    return true;
   }
 }
