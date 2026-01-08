@@ -194,6 +194,10 @@ public abstract class LivingEntity extends Entity {
   }
   
   @Override
+  public void onWorldBorderCollision() {
+  }
+  
+  @Override
   public boolean canBeControlled() {
     return true;
   }

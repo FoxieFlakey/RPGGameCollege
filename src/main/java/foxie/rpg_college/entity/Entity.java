@@ -189,6 +189,7 @@ public abstract class Entity {
   public abstract boolean canCollideWith(Entity other);
   public abstract void onTileCollision(IVec2 coord, Tile other);
   public abstract void onEntityCollision(Entity other);
+  public abstract void onWorldBorderCollision();
   public abstract Optional<CollisionBox> getCollisionBox();
   public abstract boolean isVisible(Camera cam);
   public abstract Optional<FloatRectangle> getRenderBound();

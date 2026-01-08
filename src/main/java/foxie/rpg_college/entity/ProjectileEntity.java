@@ -87,6 +87,7 @@ public abstract class ProjectileEntity extends Entity {
     
     // Arrow collided a target
     this.velocity = 0.0f;
+    this.hasProjectileHitSomething = true;
   }
   
   @Override
@@ -96,6 +97,11 @@ public abstract class ProjectileEntity extends Entity {
       this.hasProjectileHitSomething = true;
     }
     this.die();
+  }
+  
+  @Override
+  public void onWorldBorderCollision() {
+    this.hasProjectileHitSomething = true;
   }
   
   @Override

@@ -100,6 +100,10 @@ public class SwordEntity extends Entity {
   }
   
   @Override
+  public void onWorldBorderCollision() {
+  }
+  
+  @Override
   public void onEntityCollision(Entity other) {
   }
   
