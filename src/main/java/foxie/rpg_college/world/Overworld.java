@@ -67,6 +67,6 @@ public class Overworld extends World {
   
   @Override
   public Vec2 getWorldSpawnPoint() {
-    return new Vec2(0.0f, 0.0f);
+    return new Vec2(-300.0f, 0.0f);
   }
 }

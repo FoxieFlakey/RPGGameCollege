@@ -124,6 +124,8 @@ public class Game implements AutoCloseable {
   
   public void respawn(Entity respawnedAs) {
     this.getCurrentWorld().addEntity(respawnedAs);
+    respawnedAs.setPos(this.getCurrentWorld().getWorldSpawnPoint());
+    
     this.player.setNewEntityToControl(respawnedAs);
     this.currentScreen = new InGame(this);
     
