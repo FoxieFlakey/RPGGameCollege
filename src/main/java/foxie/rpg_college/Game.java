@@ -9,10 +9,16 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import foxie.rpg_college.entity.CatEntity;
+import foxie.rpg_college.entity.DummyLivingEntity;
 import foxie.rpg_college.entity.Entity;
+import foxie.rpg_college.entity.LivingEntity;
+import foxie.rpg_college.entity.MageCharacter;
+import foxie.rpg_college.entity.TurretEntity;
+import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.controller.InputToControllerBridge;
 import foxie.rpg_college.input.Keyboard;
+import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.input.State;
 import foxie.rpg_college.texture.TextureManager;
@@ -49,9 +55,12 @@ public class Game implements AutoCloseable {
   private static final int INITIAL_RENDER_WIDTH = 1280;
   private static final int INITIAL_RENDER_HEIGHT = 720;
   
+  private static final float SPAWN_COOLDOWN = 0.3f;
+  
   private float lastRenderTime = Util.getTime();
   private float gameTime = 0.0f;
   private boolean debugEnabled = false;
+  private float spawnCatCooldown = -1.0f;
   
   public final TileList TILES;
   
@@ -235,6 +244,84 @@ public class Game implements AutoCloseable {
   public float getRenderScale() {
     return this.renderScale;
   }
+  
+  void handleDebugInputs(float deltaTime) {
+    Camera camera = this.getCamera();
+    Keyboard keyboard = this.getKeyboard();
+    Mouse mouse = this.getMouse();
+    
+    Optional<Entity> maybeEntity = this.player.getEntity();
+    Optional<LivingEntity> maybeLiving = this.player.getLivingEntity();
+    
+    this.spawnCatCooldown -= deltaTime;
+    if (this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = -1.0f;
+    }
+
+    Vec2 spawnPos = maybeLiving.map(e -> e.getLegPos())
+        .orElseGet(() -> {
+          return maybeEntity.map(e -> e.getPos())
+            .orElseGet(() -> new Vec2(0.0f));
+        });
+    if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+      
+      // Spawn cat
+      CatEntity cat = new CatEntity(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(cat);
+      cat.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.V).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+      
+      // Spawn cat
+      ArcherCharacter archer = new ArcherCharacter(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(archer);
+      archer.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.B).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+      
+      MageCharacter mage = new MageCharacter(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(mage);
+      mage.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.N).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+      
+      TurretEntity turret = new TurretEntity(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(turret);
+      turret.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.M).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+      
+      DummyLivingEntity turret = new DummyLivingEntity(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(turret);
+      turret.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.Comma).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = SPAWN_COOLDOWN;
+     
+      WarriorCharacter turret = new WarriorCharacter(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(turret);
+      turret.setPos(spawnPos);
+    }
+    
+    if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = 0.1f;
+      
+      // Spawn cat
+      CatEntity cat = new CatEntity(this.player.getWorld().getGame());
+      this.player.getWorld().addEntity(cat);
+      cat.setPos(camera.translateScreenToWorldCoord(mouse.getMousePosition()));
+    }
+  }
 
   void handleInput(float deltaTime) {
     if (this.getKeyboard().getState(Keyboard.Button.Minus) == State.Clicked) {
@@ -246,6 +333,10 @@ public class Game implements AutoCloseable {
     
     if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
       this.debugEnabled = !this.debugEnabled;
+    }
+    
+    if (this.isDebugEnabled()) {
+      this.handleDebugInputs(deltaTime);
     }
     
     this.player.handleInput(deltaTime);

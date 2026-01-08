@@ -5,15 +5,9 @@ import java.util.Optional;
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.Orientation;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.Attackable;
-import foxie.rpg_college.entity.CatEntity;
-import foxie.rpg_college.entity.DummyLivingEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
-import foxie.rpg_college.entity.MageCharacter;
-import foxie.rpg_college.entity.TurretEntity;
-import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
@@ -26,8 +20,6 @@ public class InputToControllerBridge implements AutoCloseable {
   
   private final Camera camera;
   private final ControlEventListener listener;
-  
-  private float spawnCatCooldown = -1.0f;
   
   public InputToControllerBridge(Entity entity, Vec2 viewSize, Vec2 outputSize) {
     if (!entity.canBeControlled()) {
@@ -123,79 +115,7 @@ public class InputToControllerBridge implements AutoCloseable {
     
     Keyboard keyboard = this.getWorld().getGame().getKeyboard();
     Mouse mouse = this.getWorld().getGame().getMouse();
-    Optional<Entity> maybeEntity = this.getEntity();
-    Optional<LivingEntity> maybeLiving = this.getLivingEntity();
-    float spawnCooldown = 0.3f;
     
-    this.spawnCatCooldown -= deltaTime;
-    if (this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = -1.0f;
-    }
-
-    Vec2 spawnPos = maybeLiving.map(e -> e.getLegPos())
-        .orElseGet(() -> {
-          return maybeEntity.map(e -> e.getPos())
-            .orElseGet(() -> new Vec2(0.0f));
-        });
-    if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      // Spawn cat
-      CatEntity cat = new CatEntity(this.getWorld().getGame());
-      this.getWorld().addEntity(cat);
-      cat.setPos(spawnPos);
-    }
-    
-    if (keyboard.getState(Button.V).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      // Spawn cat
-      ArcherCharacter archer = new ArcherCharacter(this.getWorld().getGame());
-      this.getWorld().addEntity(archer);
-      archer.setPos(spawnPos);
-    }
-    
-    if (keyboard.getState(Button.B).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      MageCharacter mage = new MageCharacter(this.getWorld().getGame());
-      this.getWorld().addEntity(mage);
-      mage.setPos(spawnPos);
-    }
-    
-    if (keyboard.getState(Button.N).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      TurretEntity turret = new TurretEntity(this.getWorld().getGame());
-      this.getWorld().addEntity(turret);
-      turret.setPos(spawnPos);
-    }
-    
-    if (keyboard.getState(Button.M).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      DummyLivingEntity turret = new DummyLivingEntity(this.getWorld().getGame());
-      this.getWorld().addEntity(turret);
-      turret.setPos(spawnPos);
-    }
-    
-    if (keyboard.getState(Button.Comma).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = spawnCooldown;
-      
-      WarriorCharacter turret = new WarriorCharacter(this.getWorld().getGame());
-      this.getWorld().addEntity(turret);
-      turret.setPos(spawnPos);
-    }
-    
-    if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {
-      this.spawnCatCooldown = 0.1f;
-      
-      // Spawn cat
-      CatEntity cat = new CatEntity(this.getWorld().getGame());
-      this.getWorld().addEntity(cat);
-      cat.setPos(this.camera.translateScreenToWorldCoord(mouse.getMousePosition()));
-    }
-
     if (controller.shouldControlDisabled()) {
       // Control is disabled temporarily
       return;
