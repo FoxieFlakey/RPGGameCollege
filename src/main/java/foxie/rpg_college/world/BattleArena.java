@@ -41,10 +41,13 @@ public class BattleArena extends World {
     this.addTile(new IVec2(1,1), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1,2), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1,3), game.TILES.WALL_TILE);
-    this.addTile(new IVec2(1,4), game.TILES.WALL_TILE);
-    this.addTile(new IVec2(1,5), game.TILES.WALL_TILE);
     
     this.spawnTurrets();
+  }
+  
+  @Override
+  public Vec2 getWorldSpawnPoint() {
+    return new Vec2(-100.0f, 300.0f);
   }
   
   private void spawnTurrets() {

@@ -64,4 +64,9 @@ public class Overworld extends World {
     WorldUtil.renderBackground(this, g, this.backgroundTexture.image());
     super.render(g, deltaTime);
   }
+  
+  @Override
+  public Vec2 getWorldSpawnPoint() {
+    return new Vec2(0.0f, 0.0f);
+  }
 }

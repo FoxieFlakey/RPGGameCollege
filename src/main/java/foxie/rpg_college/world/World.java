@@ -389,4 +389,6 @@ public abstract class World {
         return false;
       });
   }
+  
+  public abstract Vec2 getWorldSpawnPoint();
 }

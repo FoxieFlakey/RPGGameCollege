@@ -49,7 +49,7 @@ public class PortalTile extends Tile {
       data.lastStepTime = currentTime;
       
       World targetWorld = this.getGame().getWorldManager().getWorld(this.targetWorldId).get();
-      Vec2 targetTeleportCoord = Optional.ofNullable(data.savedPositions.get(targetWorld)).orElseGet(() -> new Vec2(0.0f, 0.0f));
+      Vec2 targetTeleportCoord = Optional.ofNullable(data.savedPositions.get(targetWorld)).orElseGet(() -> targetWorld.getWorldSpawnPoint());
       
       targetWorld.addEntity(e);
       e.setPos(targetTeleportCoord);
