@@ -24,6 +24,7 @@ import foxie.rpg_college.input.State;
 import foxie.rpg_college.texture.TextureManager;
 import foxie.rpg_college.tile.TileList;
 import foxie.rpg_college.ui.DeathScreen;
+import foxie.rpg_college.ui.HelpScreen;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
 import foxie.rpg_college.world.BattleArena;
@@ -110,7 +111,9 @@ public class Game implements AutoCloseable {
     this.currentScreen = new InGame(this);
     this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.window.getRenderWidth(), this.window.getRenderHeight()));
     
-    this.updateState();
+    // Tick the game once to stabilize things
+    this.runOnce();
+    this.currentScreen = new HelpScreen(this, this.currentScreen);
   }
   
   void updateState() {
@@ -151,6 +154,10 @@ public class Game implements AutoCloseable {
     return this.player.getEntity();
   }
 
+  public void setScreen(Screen newScreen) {
+    this.currentScreen = newScreen;
+  }
+  
   public Screen getScreen() {
     return this.currentScreen;
   }
@@ -351,6 +358,11 @@ public class Game implements AutoCloseable {
     
     // Input is consumed by screen
     if (!this.getScreen().handleInput()) {
+      return;
+    }
+    
+    if (this.getKeyboard().getState(Keyboard.Button.F1) == State.Clicked) {
+      this.currentScreen = new HelpScreen(this, this.currentScreen);
       return;
     }
     
