@@ -12,7 +12,7 @@ import foxie.rpg_college.tile.Tile;
 
 public class CatEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
-  private static final float SWORD_DAMAGE = 16.0f;
+  private static final float SWORD_DAMAGE = 35.0f;
   
   private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), CatEntity.SIZE);
   
