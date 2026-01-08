@@ -13,6 +13,7 @@ import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.entity.MageCharacter;
 import foxie.rpg_college.entity.TurretEntity;
+import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.world.World;
@@ -174,6 +175,14 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = spawnCooldown;
       
       DummyLivingEntity turret = new DummyLivingEntity(this.getWorld().getGame());
+      this.getWorld().addEntity(turret);
+      turret.setPos(spawnPos);
+    }
+    
+    if (keyboard.getState(Button.Comma).isNowPressed() && this.spawnCatCooldown < 0.0f) {
+      this.spawnCatCooldown = spawnCooldown;
+      
+      WarriorCharacter turret = new WarriorCharacter(this.getWorld().getGame());
       this.getWorld().addEntity(turret);
       turret.setPos(spawnPos);
     }
