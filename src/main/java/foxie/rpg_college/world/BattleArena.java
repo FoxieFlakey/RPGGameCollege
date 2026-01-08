@@ -36,7 +36,7 @@ public class BattleArena extends World {
     this.addTile(new IVec2(1,5), game.TILES.WALL_TILE);
     
     float currentY = -this.backgroundTexture.height() / 2.0f + 100.0f;
-    float intervalY = 40.0f;
+    float intervalY = 300.0f;
     float maxY = this.backgroundTexture.height() / 2.0f;
     float x = this.backgroundTexture.width() / 2.0f - 100.0f;
     

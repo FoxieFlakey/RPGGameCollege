@@ -14,7 +14,7 @@ import foxie.rpg_college.texture.Texture;
 import foxie.rpg_college.tile.Tile;
 
 public class FireballEntity extends ProjectileEntity {
-  private static final Vec2 RENDER_SIZE = new Vec2(200.0f, 1.783f * 200.0f);
+  private static final Vec2 RENDER_SIZE = new Vec2(150.0f, 1.783f * 150.0f);
   private static final float DAMAGE_INDIRECT_HIT = 70.0f;
   private static final float DAMAGE_DIRECT_HIT = 90.0f;
   private static final float EFFECT_RADIUS = 300.0f;
