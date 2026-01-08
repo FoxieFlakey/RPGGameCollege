@@ -10,9 +10,13 @@ import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.tile.Tile;
 
-public class CatEntity extends LivingEntity {
+public class CatEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = new Vec2(Tile.SIZE.x() * 0.7f, Tile.SIZE.x() * 0.7f);
+  private static final float SWORD_DAMAGE = 16.0f;
+  
   private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), CatEntity.SIZE);
+  
+  private Optional<SwordEntity> sword = Optional.empty();
   
   public CatEntity(Game game) {
     super(game);
@@ -64,6 +68,10 @@ public class CatEntity extends LivingEntity {
       width, height,
       5, 5
     );
+    
+    if (this.sword.isPresent() && !this.sword.get().isDoneSwinging()) {
+      this.sword.get().renderSword(g, deltaTime);
+    }
   }
 
   @Override
@@ -87,5 +95,38 @@ public class CatEntity extends LivingEntity {
   @Override
   public Optional<FloatRectangle> getRenderBound() {
     return Optional.of(EntityHelper.calculateRenderBox(this, CatEntity.SIZE));
+  }
+
+  @Override
+  public boolean canAttack() {
+    return this.sword.isEmpty() || this.sword.get().isDoneSwinging();
+  }
+
+  @Override
+  public boolean attack() {
+    if (!this.canAttack()) {
+      return false;
+    }
+    
+    boolean isClockwise;
+    
+    switch (this.getOrientation()) {
+      case Right:
+      case Down:
+      case Up:
+      default:
+        isClockwise = true;
+        break;
+      case Left:
+        isClockwise = false;
+        break;
+    }
+    
+    SwordEntity sword = new SwordEntity(this.getGame(), this, CatEntity.SWORD_DAMAGE, this.getRotation() - 80.0f, this.getRotation() + 80.0f, isClockwise);
+    this.getWorld().addEntity(sword);
+    sword.setPos(this.getPos());
+    
+    this.sword = Optional.of(sword);
+    return true;
   }
 }
