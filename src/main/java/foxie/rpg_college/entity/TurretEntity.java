@@ -54,8 +54,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
 
   @Override
   public boolean canCollideWith(Entity other) {
-    if (other instanceof ArrowEntity && ((ArrowEntity) other).getShooter() == this) {
-      // Turret cannot be harmed by arrows from turret itself
+    if (other instanceof ProjectileEntity && ((ProjectileEntity) other).getShooter() == this) {
+      // Turret cannot be harmed by projectiles from turret itself
       return false;
     }
     return true;
