@@ -14,7 +14,7 @@ public abstract class ScreenWithText extends Screen {
 
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    float renderScale = this.getGame().getRenderScale();
+    float renderScale = this.getGame().getCamera().getScale().x();
     float width = this.getGame().getOutputWidth();
     float height = this.getGame().getOutputHeight();
     
@@ -40,8 +40,8 @@ public abstract class ScreenWithText extends Screen {
       String line = lines.next();
       g.drawString(
         line,
-        textStart.x() + 10.0f * renderScale,
-        textStart.y() + 30.0f * renderScale + lineIndex * lineHeight
+        textStart.x() + (10.0f * renderScale),
+        textStart.y() + (30.0f * renderScale) + lineIndex * lineHeight
       );
       
       lineIndex++;
