@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
@@ -290,9 +291,11 @@ public abstract class World {
       e.render(g, deltaTime);
       
       if (this.getGame().isDebugEnabled()) {
+        Camera camera = this.game.getCamera();
+        
         // Render direction which the entity viewing
-        IVec2 start = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos()).round();
-        IVec2 end = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos().add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f))).round();
+        IVec2 start = camera.translateWorldToAWTGraphicsCoord(e.getPos()).round();
+        IVec2 end = camera.translateWorldToAWTGraphicsCoord(e.getPos().add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f))).round();
         
         Stroke oldStroke = g.getStroke();
         
@@ -305,6 +308,19 @@ public abstract class World {
           end.y()
         );
 
+        // Render the collision box too
+        if (e.getCollisionBox().isPresent()) {
+          FloatRectangle boxWorld = e.getCollisionBox().get().asRect();
+          FloatRectangle boxRender = camera.translateWorldToAWTGraphicsCoord(boxWorld.getCenter(), boxWorld.getSize());
+          
+          int x = (int) boxRender.getTopLeftCorner().x();
+          int y = (int) boxRender.getTopLeftCorner().y();
+          int w = (int) boxRender.getSize().x();
+          int h = (int) boxRender.getSize().y();
+          
+          g.drawRect(x, y, w, h);
+        }
+        
         g.setStroke(oldStroke);
       }
     }
