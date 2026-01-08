@@ -40,7 +40,9 @@ public class Mouse implements AutoCloseable {
   }
   
   public void setWatchedArea(FloatRectangle watchedArea) {
-    this.watchedArea = watchedArea;
+    synchronized (this.lock) {
+      this.watchedArea = watchedArea;
+    }
   }
 
   public void updateState() {
@@ -203,12 +205,14 @@ public class Mouse implements AutoCloseable {
     
     @Override
     public void mouseClicked(MouseEvent e) {
-      if (!this.isInteresting(e)) {
-        return;
+      synchronized (this.owner.lock) {
+        if (!this.isInteresting(e)) {
+          return;
+        }
+        
+        this.updatePosition(e);
+        this.updateButtonClicked(e, true);
       }
-      
-      this.updatePosition(e);
-      this.updateButtonClicked(e, true);
     }
     
     @Override
