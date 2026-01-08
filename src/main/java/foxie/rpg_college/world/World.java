@@ -32,8 +32,8 @@ public abstract class World {
     this.game = game;
     this.renderBound = bound;
     this.validBound = new FloatRectangle(
-      this.renderBound.getTopLeftCorner().add(new Vec2(World.BORDER_INNER_DEPTH, World.BORDER_INNER_DEPTH)),
-      this.renderBound.getBottomRightCorner().add(new Vec2(World.BORDER_INNER_DEPTH, World.BORDER_INNER_DEPTH))
+      this.renderBound.getTopLeftCorner(),
+      this.renderBound.getBottomRightCorner()
     );
 
     float left = this.renderBound.getTopLeftCorner().x();
