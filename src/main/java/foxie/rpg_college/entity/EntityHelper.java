@@ -19,6 +19,10 @@ public class EntityHelper {
     );
   }
   
+  public static float distanceBetween(Entity a, Entity b) {
+    return a.getPos().sub(b.getPos()).magnitude();
+  }
+  
   // returned affine transform can be applied so 0, 0 is the center of the entity
   // also properly rotated, where 0 degree rotation is pointing to negative Y
   //

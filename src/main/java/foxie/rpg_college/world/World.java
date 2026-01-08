@@ -160,7 +160,7 @@ public abstract class World {
         continue;
       }
 
-      if (e.getCollisionBox().isEmpty()) {
+      if (e.getWorld() == null || e.getCollisionBox().isEmpty()) {
         // Entity decided that it don't want colliding anymore
         return;
       }
@@ -174,7 +174,7 @@ public abstract class World {
   }
 
   void checkCollision(Entity e) {
-    if (e.getCollisionBox().isEmpty()) {
+    if (e.getWorld() == null || e.getCollisionBox().isEmpty()) {
       return;
     }
 
@@ -184,7 +184,7 @@ public abstract class World {
 
     // Try fix the collision with other entities
     for (Entity other : this.entities.values()) {
-      if (e.getCollisionBox().isEmpty()) {
+      if (e.getWorld() == null || e.getCollisionBox().isEmpty()) {
         // Entity decided it doesnt want colliding
         return;
       }
@@ -203,7 +203,7 @@ public abstract class World {
     // Check collision against world border
     for (CollisionBox otherBox : this.worldBorder) {
       if (thisBox.checkCollisionAndFix(otherBox)) {
-        if (e.getCollisionBox().isEmpty()) {
+        if (e.getWorld() == null || e.getCollisionBox().isEmpty()) {
           // Entity decided that it don't want colliding anymore
           return;
         }
@@ -252,6 +252,11 @@ public abstract class World {
             tileCoord.add(Tile.SIZE.mul(0.5f))
           );
           
+          if (e.getWorld() == null || e.getBoxToBeCheckedForTileStep().isEmpty()) {
+            // Entity decided that it don't want to collide anymore
+            return;
+          }
+          
           if (tileRect.isIntersects(checkBounds)) {
             e.onTileStep(tile, coord);
             tile.steppedBy(e, coord);
@@ -268,7 +273,7 @@ public abstract class World {
       for (Entity e : this.entities.values()) {
         checkCollision(e);
         
-        if (e.getCollisionBox().isEmpty()) {
+        if (e.getWorld() == null || e.getCollisionBox().isEmpty()) {
           // Entity decided that it don't want colliding anymore
           continue;
         }
@@ -324,5 +329,17 @@ public abstract class World {
   
   public boolean isValidPos(Vec2 pos) {
     return this.getWorldBound().contains(pos);
+  }
+  
+  public Stream<Entity> findEntities(Vec2 pos, float radius)  {
+    return this.entities.values()
+      .stream()
+      .filter(e -> {
+        if (e.getCollisionBox().isEmpty()) {
+          return false;
+        }
+        
+        return e.getPos().sub(pos).magnitude() <= radius;
+      });
   }
 }

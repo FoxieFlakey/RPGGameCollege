@@ -1,6 +1,7 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 import java.util.Optional;
 
 import foxie.rpg_college.Camera;
@@ -13,8 +14,10 @@ import foxie.rpg_college.texture.Texture;
 import foxie.rpg_college.tile.Tile;
 
 public class FireballEntity extends ProjectileEntity {
-  private static final Vec2 RENDER_SIZE = new Vec2(100.0f, 178.3f);
-  private static final float DAMAGE = 70.0f;
+  private static final Vec2 RENDER_SIZE = new Vec2(200.0f, 1.783f * 200.0f);
+  private static final float DAMAGE_INDIRECT_HIT = 70.0f;
+  private static final float DAMAGE_DIRECT_HIT = 90.0f;
+  private static final float EFFECT_RADIUS = 300.0f;
   
   private final Texture fireballTexture;
   private final CollisionBox collisionBox = new CollisionBox(
@@ -37,12 +40,32 @@ public class FireballEntity extends ProjectileEntity {
   @Override
   public void onHit(Entity other) {
     LivingEntity living = (LivingEntity) other;
-    living.doDamage(new EntityDamageSource(this, FireballEntity.DAMAGE));
+    living.doDamage(new EntityDamageSource(this, FireballEntity.DAMAGE_DIRECT_HIT));
+    this.doAreaOfEffect(other.getPos(), living);
+  }
+  
+  void doAreaOfEffect(Vec2 pos, Entity avoidThis) {
+    Iterator<Entity> entitiesInEffect = this.getWorld()
+      .findEntities(pos, EFFECT_RADIUS)
+      .iterator();
+    
+    while (entitiesInEffect.hasNext()) {
+      Entity current = entitiesInEffect.next();
+      if (!(current instanceof LivingEntity) || current == avoidThis || current == this.getShooter()) {
+        // Entity is either not living or its the same one we already damaged
+        // or its the shooter
+        continue;
+      }
+      LivingEntity currentLiving = (LivingEntity) current;
+      float multiplier = 1.0f - (EntityHelper.distanceBetween(this, currentLiving) / FireballEntity.EFFECT_RADIUS);
+      currentLiving.doDamage(new EntityDamageSource(this, FireballEntity.DAMAGE_INDIRECT_HIT * multiplier));
+    }
   }
   
   @Override
   public void onTileCollision(IVec2 coord, Tile other) {
     super.onTileCollision(coord, other);
+    this.doAreaOfEffect(this.getPos(), null);
     this.die();
   }
 
