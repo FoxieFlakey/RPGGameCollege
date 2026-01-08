@@ -481,6 +481,7 @@ public class Game implements AutoCloseable {
   }
 
   void tick(float deltaTime) {
+    this.getScreen().tick(deltaTime);
     if (!this.getScreen().canTickGame()) {
       return;
     }

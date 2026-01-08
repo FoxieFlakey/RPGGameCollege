@@ -34,9 +34,8 @@ public class InGame extends Screen {
   }
 
   @Override
-  public void render(Graphics2D g, float deltaTime) {
+  public void tick(float deltaTime) {
     Optional<Entity> maybeEntity = this.getGame().getPlayer();
-    
     if (!this.currentEntity.equals(maybeEntity)) {
       this.beatTimeLeft = InGame.BEAT_TIME;
     } else {
@@ -47,6 +46,11 @@ public class InGame extends Screen {
     if (this.beatTimeLeft < 0.0f) {
       this.beatTimeLeft = 0.0f;
     }
+  }
+  
+  @Override
+  public void render(Graphics2D g, float deltaTime) {
+    Optional<Entity> maybeEntity = this.getGame().getPlayer();
     float offsetMultiplier = this.beatTimeLeft / InGame.BEAT_TIME;
     
     if (maybeEntity.isEmpty()) {

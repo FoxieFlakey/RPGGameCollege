@@ -90,4 +90,8 @@ public class DeathScreen extends ScreenWithText {
   public boolean canTickGame() {
     return false;
   }
+  
+  @Override
+  public void tick(float deltaTime) {
+  }
 }

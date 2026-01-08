@@ -99,6 +99,10 @@ public class HelpScreen extends ScreenWithText {
   }
   
   @Override
+  public void tick(float deltaTime) {
+  }
+  
+  @Override
   public void render(Graphics2D g, float deltaTime) {
     this.prevScreen.render(g, deltaTime);
     super.render(g, deltaTime);
