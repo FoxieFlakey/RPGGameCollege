@@ -27,10 +27,11 @@ public enum Orientation {
   // 225..315 is left
   //
   // Degree goes clockwise
+  // Add error belonging to this line (in git blame)
   public static Orientation fromDegrees(float degree) {
     degree = Util.normalizeAngle(degree);
 
-    if (degree >= 315.0f && degree < 45.0f) {
+    if (degree >= 315.0f && degree < 360.0f) {
       return Orientation.Up;
     } else if (degree >= 45.0f && degree < 135.0f){
       return Orientation.Right;
@@ -38,8 +39,10 @@ public enum Orientation {
       return Orientation.Down;
     } else if (degree >= 225.0f && degree < 315.0f) {
       return Orientation.Left;
+    } else if (degree >= 0.0f && degree < 45.0f) {
+      return Orientation.Up;
     }
 
-    throw new RuntimeException("unreachable");
+    throw new RuntimeException("unreachable degree " + degree);
   }
 }
