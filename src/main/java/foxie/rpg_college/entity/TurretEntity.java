@@ -107,37 +107,13 @@ public class TurretEntity extends LivingEntity implements Attackable {
     
     if (this.pollDelay < 0.0f) {
       this.pollDelay = TurretEntity.POLL_TIME;
-      
-      // Looking for new target
-      Iterator<LivingEntity> potentialTargets = this.getWorld()
-        .findEntities(this.getPos(), TurretEntity.LOOKUP_RADIUS)
-        .filter(e -> e != this)
-        .filter(e -> e instanceof LivingEntity)
-        .map(e -> (LivingEntity) e)
-        .filter(e -> !e.isDead())
-        .iterator();
-      
-      LivingEntity bestEntity = null;
-      float bestDistance = Float.POSITIVE_INFINITY;
-      
-      while (potentialTargets.hasNext()) {
-        LivingEntity candidate = potentialTargets.next();
-        float candidateDistance = EntityHelper.distanceBetween(this, candidate);
-        
-        if (candidateDistance < bestDistance) {
-          bestEntity = candidate;
-          bestDistance = candidateDistance;
-        }
-      }
-      
-      if (bestEntity != null) {
-        // We have found new target
-        this.currentTarget = Optional.of(bestEntity);
-      }
+      this.tryLookForTarget();
     }
     
     if (this.currentTarget.isPresent() && this.currentTarget.get().isDead()) {
+      this.pollDelay = TurretEntity.POLL_TIME;
       this.currentTarget = Optional.empty();
+      this.tryLookForTarget();
     }
     
     if (this.currentTarget.isPresent() && !this.currentTarget.get().isDead()) {
@@ -150,6 +126,35 @@ public class TurretEntity extends LivingEntity implements Attackable {
       this.attack();
     }
   }
+  
+  private void tryLookForTarget() {
+    // Looking for new target
+    Iterator<LivingEntity> potentialTargets = this.getWorld()
+      .findEntities(this.getPos(), TurretEntity.LOOKUP_RADIUS)
+      .filter(e -> e != this)
+      .filter(e -> e instanceof LivingEntity)
+      .map(e -> (LivingEntity) e)
+      .filter(e -> !e.isDead())
+      .iterator();
+    
+    LivingEntity bestEntity = null;
+    float bestDistance = Float.POSITIVE_INFINITY;
+    
+    while (potentialTargets.hasNext()) {
+      LivingEntity candidate = potentialTargets.next();
+      float candidateDistance = EntityHelper.distanceBetween(this, candidate);
+      
+      if (candidateDistance < bestDistance) {
+        bestEntity = candidate;
+        bestDistance = candidateDistance;
+      }
+    }
+    
+    if (bestEntity != null) {
+      // We have found new target
+      this.currentTarget = Optional.of(bestEntity);
+    }
+  } 
 
   @Override
   public boolean attack() {
