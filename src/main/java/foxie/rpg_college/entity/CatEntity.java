@@ -122,7 +122,21 @@ public class CatEntity extends LivingEntity implements Attackable {
         break;
     }
     
-    SwordEntity sword = new SwordEntity(this.getGame(), this, CatEntity.SWORD_DAMAGE, this.getRotation() - 80.0f, this.getRotation() + 80.0f, isClockwise);
+    SwordEntity sword = new SwordEntity(
+      this.getGame(),
+      this,
+      CatEntity.SWORD_DAMAGE,
+      this.getRotation() - 80.0f,
+      this.getRotation() + 80.0f,
+      isClockwise,
+      Vec2.unitVectorOfAngle(this.getRotation())
+        .mul(
+          Float.min(
+            CatEntity.SIZE.x(),
+            CatEntity.SIZE.y()
+          ) / 2.0f - 25.0f
+        )
+    );
     this.getWorld().addEntity(sword);
     sword.updatePos();
     

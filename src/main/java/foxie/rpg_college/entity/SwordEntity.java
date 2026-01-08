@@ -18,10 +18,10 @@ import foxie.rpg_college.texture.Texture;
 import foxie.rpg_college.tile.Tile;
 
 public class SwordEntity extends Entity {
-  private static final Vec2 SIZE = new Vec2(90.0f, 2.63f * 90.0f);
+  private static final Vec2 SIZE = new Vec2(120.0f, 2.63f * 120.0f);
   private static final float Y_OFFSET = SIZE.y() * 0.25f;
   private static final float SWING_DISTANCE = SIZE.y() - Y_OFFSET;
-  private static final float SWING_SPEED = 300.0f /* deg/s */;
+  private static final float SWING_SPEED = 360.0f /* deg/s */;
   
   private final Entity wielder;
   private final float swingStart;
