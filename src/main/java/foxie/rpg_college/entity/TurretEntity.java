@@ -132,6 +132,7 @@ public class TurretEntity extends LivingEntity implements Attackable {
     Iterator<LivingEntity> potentialTargets = this.getWorld()
       .findEntities(this.getPos(), TurretEntity.LOOKUP_RADIUS)
       .filter(e -> e != this)
+      .filter(e -> !(e instanceof TurretEntity))
       .filter(e -> e instanceof LivingEntity)
       .map(e -> (LivingEntity) e)
       .filter(e -> !e.isDead())
