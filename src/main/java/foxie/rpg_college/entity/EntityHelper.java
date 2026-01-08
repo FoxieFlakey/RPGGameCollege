@@ -31,9 +31,8 @@ public class EntityHelper {
   // It does not need to be translated again by calculateRenderBox
   public static AffineTransform calculateCameraTransform(Entity e) {
     Camera camera = e.getWorld().getGame().getCamera();
-    Vec2 pos = camera.translateWorldToAWTGraphicsCoord(e.getPos());
-    AffineTransform transform = new AffineTransform();
-    transform.translate(pos.x(), pos.y());
+    AffineTransform transform = camera.getWorldToAWTGraphicsAffineTransform();
+    transform.translate(e.getPos().x(), e.getPos().y());
     transform.rotate(Math.toRadians(e.getRotation()));
     return transform;
   } 
@@ -46,12 +45,11 @@ public class EntityHelper {
     float textureWidth = texture.getWidth(null);
     float texureHeight = texture.getHeight(null);
     
-    FloatRectangle renderBox = EntityHelper.calculateRenderBox(e, renderSize);
     AffineTransform transform = EntityHelper.calculateCameraTransform(e);
     transform.translate(-renderSize.x() * 0.5f, -renderSize.y() * 0.5f);
     transform.scale(
-      renderBox.getSize().x() / textureWidth,
-      renderBox.getSize().y() / texureHeight
+      renderSize.x() / textureWidth,
+      renderSize.y() / texureHeight
     );
     
     g.drawImage(texture, transform, null); 

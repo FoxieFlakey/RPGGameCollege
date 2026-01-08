@@ -1,5 +1,7 @@
 package foxie.rpg_college;
 
+import java.awt.geom.AffineTransform;
+
 // Camera essentially describes the area in the world which
 // is visible to player and also handles clamping at the end of
 // the entire world
@@ -54,6 +56,15 @@ public class Camera {
   
   public Vec2 translateScreenToAWTGraphicsCoord(Vec2 coord) {
     return coord.mul(this.getScale());
+  }
+  
+  public AffineTransform getWorldToAWTGraphicsAffineTransform() {
+    AffineTransform transform = new AffineTransform();
+    transform.scale(this.getScale().x(), this.getScale().y());
+    
+    Vec2 visible = this.getVisibleWorld().getTopLeftCorner();
+    transform.translate(-visible.x(), -visible.y());
+    return transform;
   }
   
   public Vec2 translateScreenToWorldCoord(Vec2 coord) {
