@@ -1,22 +1,16 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-
-import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
-import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.DamageSource;
 import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.texture.Texture;
 
 public class ArcherCharacter extends CharacterEntity implements Attackable, Defenseable {
   private static final Vec2 SIZE = new Vec2(
@@ -33,28 +27,18 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
   
-  private static final URL ARCHER_ORIENT_DOWN_TEXTURE_URL = Util.getResource("/archer_facing_down.png");
-  private static final URL ARCHER_DEAD_TEXTURE_URL = Util.getResource("/archer_dead.png");
-  
-  private static BufferedImage ARCHER_ORIENT_DOWN_TEXTURE;
-  private static BufferedImage ARCHER_ORIENT_DOWN_TEXTURE_FLASHED;
-  
-  private static BufferedImage ARCHER_DEAD_TEXTURE;
-  
-  static {
-    try {
-      ARCHER_ORIENT_DOWN_TEXTURE = ImageIO.read(ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE_URL.openStream());
-      ARCHER_DEAD_TEXTURE = ImageIO.read(ArcherCharacter.ARCHER_DEAD_TEXTURE_URL.openStream());
-      
-      ARCHER_ORIENT_DOWN_TEXTURE_FLASHED = new RescaleOp(new float[] {2.0f, 1.3f, 1.3f, 1.0f}, new float[4], null)
-        .filter(ARCHER_ORIENT_DOWN_TEXTURE, null);
-    } catch (IOException e) {
-      throw new RuntimeException("Error loading arrow texture", e);
-    }
-  }
+  private final Texture facingDownTexture;
+  private final Texture facingDownTextureFlashed;
+  private final Texture deadTexture;
   
   public ArcherCharacter(Game game) {
     super(game);
+    this.facingDownTexture = game.getTextureManager().getTexture("character/archer/facing_down");
+    this.deadTexture = game.getTextureManager().getTexture("character/archer/dead");
+    
+    float[] scale = { 2.0f, 1.3f, 1.3f, 1.0f };
+    float[] offset = new float[4];
+    this.facingDownTextureFlashed = new Texture(new RescaleOp(scale, offset, null).filter(this.facingDownTexture.image(), null));
   }
   
   @Override
@@ -81,14 +65,14 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
   public void render(Graphics2D g, float deltaTime) {
     super.render(g, deltaTime);
     
-    Image texture = ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE;
+    Texture texture = this.facingDownTexture;
     
     if (this.getFlashState()) {
-      texture = ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE_FLASHED;
+      texture = this.facingDownTextureFlashed;
     }
     
     if (this.isDead()) {
-      texture = ArcherCharacter.ARCHER_DEAD_TEXTURE;
+      texture = this.deadTexture;
     }
     
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArcherCharacter.SIZE);
@@ -99,15 +83,15 @@ public class ArcherCharacter extends CharacterEntity implements Attackable, Defe
     int height = (int) renderBox.getSize().y();
     
     g.drawImage(
-      texture,
+      texture.image(),
       x,
       y,
       x + width,
       y + height,
       0,
       0,
-      ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE.getWidth(),
-      ArcherCharacter.ARCHER_ORIENT_DOWN_TEXTURE.getHeight(),
+      texture.width(),
+      texture.height(),
       null
     );
   }

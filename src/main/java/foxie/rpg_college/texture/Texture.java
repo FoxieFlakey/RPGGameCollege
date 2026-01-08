@@ -1,13 +1,13 @@
 package foxie.rpg_college.texture;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public record Texture(
   int width,
   int height,
-  Image image
+  BufferedImage image
 ) {
-  public Texture(Image image) {
+  public Texture(BufferedImage image) {
     this(Texture.validateSize(image.getWidth(null)), Texture.validateSize(image.getHeight(null)), image);
   }
   

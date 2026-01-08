@@ -1,19 +1,14 @@
 package foxie.rpg_college.entity;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-
-import javax.imageio.ImageIO;
 
 import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
-import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.texture.Texture;
 
 public class ArrowEntity extends ProjectileEntity implements Attackable {
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
@@ -23,19 +18,11 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   
   private float damage = 5.0f;
   
-  private static final URL ARROW_URL = Util.getResource("/arrow.png");
-  private static Image ARROW_TEXTURE;
-  
-  static {
-    try {
-      ARROW_TEXTURE = ImageIO.read(ArrowEntity.ARROW_URL.openStream());
-    } catch (IOException e) {
-      throw new RuntimeException("Error loading arrow texture", e);
-    }
-  }
+  private final Texture arrowTexture;
   
   public ArrowEntity(Game game, Entity shooter) {
     super(game, shooter, 5.0f, 400.0f);
+    this.arrowTexture = game.getTextureManager().getTexture("entity/arrow");
   }
   
   @Override
@@ -84,7 +71,7 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   
   @Override
   public void render(Graphics2D g, float deltaTime) {
-    ProjectileHelper.renderProjectile(this, g, ArrowEntity.ARROW_TEXTURE, ArrowEntity.RENDER_SIZE);
+    ProjectileHelper.renderProjectile(this, g, this.arrowTexture.image(), ArrowEntity.RENDER_SIZE);
   }
   
   @Override
