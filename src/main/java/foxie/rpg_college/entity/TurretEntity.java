@@ -13,7 +13,7 @@ import foxie.rpg_college.tile.Tile;
 
 public class TurretEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = Tile.SIZE;
-  private static final float COOLDOWN = 0.5f;
+  private static final float COOLDOWN = 0.0f;
   
   // Try look for new target every 1 second
   private static final float POLL_TIME = 1.0f;
