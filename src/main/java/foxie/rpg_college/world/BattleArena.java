@@ -6,6 +6,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.TurretEntity;
 import foxie.rpg_college.texture.Texture;
 
 public class BattleArena extends World {
@@ -26,6 +27,18 @@ public class BattleArena extends World {
     
     this.addTile(new IVec2(4,0), game.TILES.LAVA_TILE);
     this.addTile(new IVec2(4,4), game.TILES.PORTAL_TO_OVERWORLD);
+    
+    float currentY = -this.backgroundTexture.height() / 2.0f;
+    float intervalY = 100.0f;
+    float maxY = this.backgroundTexture.height() / 2.0f;
+    float x = this.backgroundTexture.width() / 2.0f - 100.0f;
+    
+    while (currentY < maxY) {
+      TurretEntity turret = new TurretEntity(game);
+      this.addEntity(turret);
+      turret.setPos(new Vec2(x, currentY));
+      currentY += intervalY;
+    }
   }
   
   @Override

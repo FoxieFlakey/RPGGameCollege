@@ -17,7 +17,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
   
   // Try look for new target every 1 second
   private static final float POLL_TIME = 1.0f;
-  private static final float LOOKUP_RADIUS = 400.0f;
+  private static final float LOOKUP_RADIUS = 700.0f;
+  private static final float ENGAGE_DISTANCE = 400.0f;
   
   private final Texture turretDead;
   private final Texture turretReady;
@@ -110,6 +111,11 @@ public class TurretEntity extends LivingEntity implements Attackable {
       this.tryLookForTarget();
     }
     
+    if (this.currentTarget.isPresent() && this.currentTarget.get().getWorld() != this.getWorld()) {
+      // Target moved to different world, forget them
+      this.currentTarget = Optional.empty();
+    }
+    
     if (this.currentTarget.isPresent() && this.currentTarget.get().isDead()) {
       this.pollDelay = TurretEntity.POLL_TIME;
       this.currentTarget = Optional.empty();
@@ -123,7 +129,11 @@ public class TurretEntity extends LivingEntity implements Attackable {
     }
     
     if (this.canAttack() && this.currentTarget.isPresent()) {
-      this.attack();
+      LivingEntity target = this.currentTarget.get();
+      if (EntityHelper.distanceBetween(this, target) <= TurretEntity.ENGAGE_DISTANCE) {
+        // Target within enganging distance, attack
+        this.attack();
+      }
     }
   }
   
