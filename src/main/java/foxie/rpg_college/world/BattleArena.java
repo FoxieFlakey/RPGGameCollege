@@ -28,8 +28,14 @@ public class BattleArena extends World {
     this.addTile(new IVec2(4,0), game.TILES.LAVA_TILE);
     this.addTile(new IVec2(4,4), game.TILES.PORTAL_TO_OVERWORLD);
     
-    float currentY = -this.backgroundTexture.height() / 2.0f;
-    float intervalY = 100.0f;
+    this.addTile(new IVec2(1,0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1,1), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1,2), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1,4), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(1,5), game.TILES.WALL_TILE);
+    
+    float currentY = -this.backgroundTexture.height() / 2.0f + 100.0f;
+    float intervalY = 40.0f;
     float maxY = this.backgroundTexture.height() / 2.0f;
     float x = this.backgroundTexture.width() / 2.0f - 100.0f;
     

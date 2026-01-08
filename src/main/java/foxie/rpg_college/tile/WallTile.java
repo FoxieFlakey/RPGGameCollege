@@ -22,7 +22,7 @@ public class WallTile extends Tile {
     int width = (int) renderBox.getSize().x();
     int height = (int) renderBox.getSize().y();
 
-    g.setColor(Color.GRAY);
+    g.setColor(Color.LIGHT_GRAY);
     g.fillRoundRect(
       x, y,
       width, height,
