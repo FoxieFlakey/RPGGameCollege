@@ -19,8 +19,9 @@ import foxie.rpg_college.tile.Tile;
 
 public class SwordEntity extends Entity {
   private static final Vec2 SIZE = new Vec2(90.0f, 2.63f * 90.0f);
-  private static final float SWING_DISTANCE = SIZE.y() + 15.0f;
-  private static final float SWING_SPEED = 250.0f /* deg/s */;
+  private static final float Y_OFFSET = SIZE.y() * 0.25f;
+  private static final float SWING_DISTANCE = SIZE.y() - Y_OFFSET;
+  private static final float SWING_SPEED = 300.0f /* deg/s */;
   
   private final Entity wielder;
   private final float swingStart;
@@ -70,7 +71,7 @@ public class SwordEntity extends Entity {
   
   public void renderSword(Graphics2D g, float deltaTime) {
     AffineTransform transform = EntityHelper.calculateCameraTransform(this);
-    transform.translate(-SwordEntity.SIZE.x() * 0.5f, -SwordEntity.SIZE.y() * 0.75f);
+    transform.translate(-SwordEntity.SIZE.x() * 0.5f, -(SwordEntity.SIZE.y() - Y_OFFSET));
     transform.scale(
       SwordEntity.SIZE.x() / this.texture.width(),
       SwordEntity.SIZE.y() / this.texture.height()
