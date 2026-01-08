@@ -10,10 +10,15 @@ import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.texture.Texture;
 
 public class InGame extends Screen {
+  private static final float BEAT_TIME = 0.2f;
+  
   private final Texture topLeftCorner;
   private final Texture topRightCorner;
   private final Texture bottomRightCorner;
   private final Texture bottomLeftCorner;
+  
+  private Optional<Entity> currentEntity = Optional.empty();
+  private float beatTimeLeft = 0.0f;
   
   public InGame(Game game) {
     super(game);
@@ -31,6 +36,19 @@ public class InGame extends Screen {
   @Override
   public void render(Graphics2D g, float deltaTime) {
     Optional<Entity> maybeEntity = this.getGame().getPlayer();
+    
+    if (!this.currentEntity.equals(maybeEntity)) {
+      this.beatTimeLeft = InGame.BEAT_TIME;
+    } else {
+      this.beatTimeLeft -= deltaTime;
+    }
+    this.currentEntity = maybeEntity;
+    
+    if (this.beatTimeLeft < 0.0f) {
+      this.beatTimeLeft = 0.0f;
+    }
+    float offsetMultiplier = this.beatTimeLeft / InGame.BEAT_TIME;
+    
     if (maybeEntity.isEmpty()) {
       return;
     }
@@ -46,27 +64,15 @@ public class InGame extends Screen {
     Vec2 cornerSize = new Vec2(20.0f);
     Vec2 drawTopLeft = renderBox.getTopLeftCorner()
       .sub(new Vec2(5.0f))
+      .sub(new Vec2(20.0f * offsetMultiplier))
       .sub(cornerSize.mul(0.5f));
     Vec2 drawBottomRight = renderBox.getBottomRightCorner()
       .add(new Vec2(5.0f))
+      .add(new Vec2(20.0f * offsetMultiplier))
       .sub(cornerSize.mul(0.5f));
     
     Vec2 drawTopRight = new Vec2(drawBottomRight.x(), drawTopLeft.y());
     Vec2 drawBottomLeft = new Vec2(drawTopLeft.x(), drawBottomRight.y());
-    
-    // Fix the coords
-    // drawTopLeft = this.getGame()
-    //   .getCamera()
-    //   .translateWorldToAWTGraphicsCoord(drawTopLeft);
-    // drawBottomRight = this.getGame()
-    //   .getCamera()
-    //   .translateWorldToAWTGraphicsCoord(drawBottomRight);
-    // drawTopRight = this.getGame()
-    //   .getCamera()
-    //   .translateWorldToAWTGraphicsCoord(drawTopRight);
-    // drawBottomLeft = this.getGame()
-    //   .getCamera()
-    //   .translateWorldToAWTGraphicsCoord(drawBottomLeft);
     
     // Draw top left
     g.drawImage(
