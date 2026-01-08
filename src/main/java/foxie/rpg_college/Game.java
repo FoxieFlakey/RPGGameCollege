@@ -73,6 +73,10 @@ public class Game implements AutoCloseable {
     this.textureManager.addTexture("entity/fireball", "/fireball.png");
     this.textureManager.addTexture("world/battle_arena/background", "/battle_arena.png");
     this.textureManager.addTexture("world/overworld/background", "/world.png");
+    this.textureManager.addTexture("ui/in_game/corner_top_left", "/corner_top_left.png");
+    this.textureManager.addTexture("ui/in_game/corner_top_right", "/corner_top_right.png");
+    this.textureManager.addTexture("ui/in_game/corner_bottom_left", "/corner_bottom_left.png");
+    this.textureManager.addTexture("ui/in_game/corner_bottom_right", "/corner_bottom_right.png");
     
     this.textureManager.loadAll();
     
