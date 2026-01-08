@@ -338,7 +338,25 @@ public abstract class World {
           return false;
         }
         
-        return e.getPos().sub(pos).magnitude() <= radius;
+        FloatRectangle box = e.getCollisionBox().get().asRect();
+        Vec2 topLeft = box.getTopLeftCorner();
+        Vec2 bottomRight = box.getBottomRightCorner();
+        Vec2 bottomLeft = new Vec2(topLeft.x(), bottomRight.y());
+        Vec2 topRight = new Vec2(bottomRight.x(), topLeft.y());
+        
+        if (topLeft.sub(pos).magnitude() <= radius) {
+          return true;
+        } else if (topRight.sub(pos).magnitude() <= radius) {
+          return true;
+        } else if (bottomLeft.sub(pos).magnitude() <= radius) {
+          return true;
+        } else if (bottomRight.sub(pos).magnitude() <= radius) {
+          return true;
+        } else if (e.getPos().sub(pos).magnitude() <= radius) {
+          return true;
+        }
+        
+        return false;
       });
   }
 }
