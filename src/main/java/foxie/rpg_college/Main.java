@@ -14,7 +14,7 @@ public class Main {
     
     Optional<Float> scaling = Optional.empty();
     boolean isFullscreen = false;
-    boolean doubleBuffer = false;
+    boolean doubleBuffer = true;
     for (String arg : argsList) {
       if (arg.startsWith("scaling=")) {
         String argVal = arg.replaceFirst("^scaling=", "");
@@ -26,8 +26,8 @@ public class Main {
       isFullscreen = true;
     }
       
-    if (argsList.contains("double_buffering")) {
-      doubleBuffer = true;
+    if (argsList.contains("no_double_buffering")) {
+      doubleBuffer = false;
     }
     
     if (scaling.isPresent() && !doubleBuffer) {
