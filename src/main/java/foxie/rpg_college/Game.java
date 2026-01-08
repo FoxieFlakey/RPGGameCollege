@@ -15,6 +15,7 @@ import foxie.rpg_college.entity.controller.InputToControllerBridge;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
 import foxie.rpg_college.input.State;
+import foxie.rpg_college.texture.TextureManager;
 import foxie.rpg_college.tile.TileList;
 import foxie.rpg_college.ui.InGame;
 import foxie.rpg_college.ui.Screen;
@@ -40,6 +41,7 @@ public class Game implements AutoCloseable {
   private final WorldManager worldManager = new WorldManager();
   private final InputToControllerBridge player;
   private final Screen currentScreen;
+  private final TextureManager textureManager = new TextureManager();
   
   private static final float VIEW_WIDTH = 1280.0f;
   private static final float VIEW_HEIGHT = 720.0f;
@@ -64,10 +66,19 @@ public class Game implements AutoCloseable {
       VIEW_WIDTH / VIEW_HEIGHT
     );
     
+    // Load textures
+    this.textureManager.addTexture("character/archer/dead", "/archer_dead.png");
+    this.textureManager.addTexture("character/archer/facing_down", "/archer_facing_down.png");
+    this.textureManager.addTexture("entity/arrow", "/arrow.png");
+    this.textureManager.addTexture("world/battle_arena/background", "/battle_arena.png");
+    this.textureManager.addTexture("world/overworld/background", "/world.png");
+    
+    this.textureManager.loadAll();
+    
     this.TILES = new TileList(this);
-    Overworld overworld = Overworld.create(this);
+    Overworld overworld = new Overworld(this);
     this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
-    this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, BattleArena.create(this));
+    this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, new BattleArena(this));
     
     ArcherCharacter playerEntity = new ArcherCharacter();
     overworld.addEntity(playerEntity);
@@ -129,6 +140,10 @@ public class Game implements AutoCloseable {
 
   public Screen getScreen() {
     return this.currentScreen;
+  }
+  
+  public TextureManager getTextureManager() {
+    return this.textureManager;
   }
 
   public Camera getCamera() {
