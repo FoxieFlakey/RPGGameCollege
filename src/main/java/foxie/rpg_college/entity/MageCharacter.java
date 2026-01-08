@@ -89,7 +89,17 @@ public class MageCharacter extends CharacterEntity implements Attackable {
     super.render(g, deltaTime);
     
     FloatRectangle renderBox = this.getRenderBound().get();
-    g.setColor(Color.ORANGE);
+    Color color = new Color(1.0f, 0.4f, 0.4f);
+    
+    if (this.getFlashState()) {
+      color = new Color(1.0f, 0.7f, 0.7f);
+    }
+    
+    if (this.isDead()) {
+      color = new Color(0.5f, 0.1f, 0.1f);
+    }
+    
+    g.setColor(color);
     g.fillRect(
       (int) renderBox.getTopLeftCorner().x(),
       (int) renderBox.getTopLeftCorner().y(),
