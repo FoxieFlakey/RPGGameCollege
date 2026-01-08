@@ -14,7 +14,7 @@ public class MageCharacter extends CharacterEntity implements Attackable {
     140.0f,
     200.0f
   );
-  private static final float ATTACK_COOLDOWN = 1.5f;
+  private static final float ATTACK_COOLDOWN = 0.5f;
   private static final float ATTACK_MANA = 40.0f;
   
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), MageCharacter.SIZE);
