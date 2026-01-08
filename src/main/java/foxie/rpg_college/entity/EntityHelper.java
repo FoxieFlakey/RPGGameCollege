@@ -1,5 +1,7 @@
 package foxie.rpg_college.entity;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
 import foxie.rpg_college.Camera;
@@ -38,5 +40,20 @@ public class EntityHelper {
 
   public static IVec2 fromWorldCoordToTileCoord(Vec2 coord) {
     return coord.div(Tile.SIZE.x()).round();
+  }
+  
+  public static void renderRotated(Entity e, Graphics2D g, Image texture, Vec2 renderSize) {
+    float textureWidth = texture.getWidth(null);
+    float texureHeight = texture.getHeight(null);
+    
+    FloatRectangle renderBox = EntityHelper.calculateRenderBox(e, renderSize);
+    AffineTransform transform = EntityHelper.calculateCameraTransform(e);
+    transform.translate(-renderSize.x() * 0.5f, -renderSize.y() * 0.5f);
+    transform.scale(
+      renderBox.getSize().x() / textureWidth,
+      renderBox.getSize().y() / texureHeight
+    );
+    
+    g.drawImage(texture, transform, null); 
   }
 }
