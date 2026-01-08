@@ -41,6 +41,13 @@ public class Camera {
     return coord.sub(this.getVisibleWorld().getTopLeftCorner()).mul(this.getScale());
   }
   
+  public FloatRectangle translateWorldToAWTGraphicsCoord(Vec2 pos, Vec2 size) {
+    return new FloatRectangle(
+      this.translateWorldToAWTGraphicsCoord(pos.sub(size.mul(0.5f))),
+      this.translateWorldToAWTGraphicsCoord(pos.add(size.mul(0.5f)))
+    );
+  }
+  
   public Vec2 translateAWTGraphicsToWorldCoord(Vec2 coord) {
     return coord.div(this.getScale()).add(this.getVisibleWorld().getTopLeftCorner());
   }

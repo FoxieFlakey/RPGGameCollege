@@ -13,10 +13,7 @@ public class EntityHelper {
     Camera camera = entity.getWorld().getGame().getCamera();
     Vec2 pos = entity.getPos();
     
-    return new FloatRectangle(
-      camera.translateWorldToAWTGraphicsCoord(pos.sub(size.mul(0.5f))),
-      camera.translateWorldToAWTGraphicsCoord(pos.add(size.mul(0.5f)))
-    );
+    return camera.translateWorldToAWTGraphicsCoord(pos, size);
   }
   
   public static float distanceBetween(Entity a, Entity b) {

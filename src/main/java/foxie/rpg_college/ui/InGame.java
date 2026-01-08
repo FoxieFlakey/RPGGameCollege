@@ -3,7 +3,6 @@ package foxie.rpg_college.ui;
 import java.awt.Graphics2D;
 import java.util.Optional;
 
-import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
@@ -81,12 +80,7 @@ public class InGame extends Screen {
   }
   
   void drawCorner(Graphics2D g, Vec2 pos, Vec2 size, Texture cornerTexture) {
-    Camera camera = this.getGame().getCamera();
-    
-    FloatRectangle renderBox = new FloatRectangle(
-      camera.translateWorldToAWTGraphicsCoord(pos.sub(size.mul(0.5f))),
-      camera.translateWorldToAWTGraphicsCoord(pos.add(size.mul(0.5f)))
-    );
+    FloatRectangle renderBox = this.getGame().getCamera().translateWorldToAWTGraphicsCoord(pos, size);
     
     int x = (int) renderBox.getTopLeftCorner().x();
     int y = (int) renderBox.getTopLeftCorner().y();
