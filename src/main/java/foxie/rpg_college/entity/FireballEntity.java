@@ -63,6 +63,13 @@ public class FireballEntity extends ProjectileEntity {
   }
   
   @Override
+  public void onWorldBorderCollision() {
+    super.onWorldBorderCollision();
+    this.doAreaOfEffect(this.getPos(), null);
+    this.die();
+  }
+  
+  @Override
   public void onTileCollision(IVec2 coord, Tile other) {
     super.onTileCollision(coord, other);
     this.doAreaOfEffect(this.getPos(), null);
