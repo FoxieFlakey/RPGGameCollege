@@ -15,6 +15,7 @@ public class WarriorCharacter extends CharacterEntity implements Attackable {
     250.0f
   );
   private static final float SWORD_DAMAGE = 20.0f;
+  private static final float SWORD_MANA_POINT = 20.0f;
   
   private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), WarriorCharacter.SIZE);
   private Optional<SwordEntity> sword = Optional.empty();
@@ -113,12 +114,17 @@ public class WarriorCharacter extends CharacterEntity implements Attackable {
   
   @Override
   public boolean canAttack() {
-    return this.sword.isEmpty() || this.sword.get().isDoneSwinging();
+    return (this.sword.isEmpty() || this.sword.get().isDoneSwinging()) &&
+      this.getManaPoint() >= WarriorCharacter.SWORD_MANA_POINT;
   }
 
   @Override
   public boolean attack() {
     if (!this.canAttack()) {
+      return false;
+    }
+    
+    if (!this.consumeManaPoint(WarriorCharacter.SWORD_MANA_POINT)) {
       return false;
     }
     
