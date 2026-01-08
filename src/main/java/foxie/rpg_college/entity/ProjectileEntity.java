@@ -6,6 +6,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.controller.ProjectileEntityController;
 import foxie.rpg_college.entity.controller.Controller;
 import foxie.rpg_college.tile.Tile;
 
@@ -41,6 +42,10 @@ public abstract class ProjectileEntity extends Entity {
   
   @Override
   public void tick(float deltaTime) {
+    if (this.isBeingControlled()) {
+      return;
+    }
+    
     this.timeToLive -= deltaTime;
     
     Vec2 velocity = Vec2.unitVectorOfAngle(this.getRotation()).mul(this.velocity * deltaTime);
@@ -51,8 +56,16 @@ public abstract class ProjectileEntity extends Entity {
     }
   }
   
+  public float getSpeed() {
+    return this.velocity;
+  }
+  
   void die() {
     this.getWorld().removeEntity(this);
+    
+    if (this.canDispatchControllerEvents()) {
+      this.getController().get().dispatchOnEntityNoLongerControllable();
+    }
   }
   
   public boolean hasProjectileHitSomething() {
@@ -96,12 +109,12 @@ public abstract class ProjectileEntity extends Entity {
   
   @Override
   public boolean canBeControlled() {
-    return false;
+    return true;
   }
   
   @Override
   protected Controller createController() {
-    return null;
+    return new ProjectileEntityController(this);
   }
   
   public abstract boolean canBeHit(Entity other);

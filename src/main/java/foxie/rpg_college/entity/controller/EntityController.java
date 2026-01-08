@@ -15,6 +15,11 @@ public abstract class EntityController implements Controller {
   }
   
   @Override
+  public boolean isActive() {
+    return !this.listeners.isEmpty();
+  }
+  
+  @Override
   public Entity getEntity() {
     return owner;
   }

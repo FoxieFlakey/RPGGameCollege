@@ -5,6 +5,7 @@ import foxie.rpg_college.entity.Entity;
 
 public interface Controller {
   Entity getEntity();
+  boolean isActive();
   
   // Whether control should be disabled
   // used in cases like e.g. entity which

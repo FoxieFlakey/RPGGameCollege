@@ -29,6 +29,7 @@ public abstract class Entity {
   private float rotation = 90.0f;
   private Optional<Controller> controller = Optional.empty();
   private String name;
+  
   private final HashMap<Object, Object> extraData = new HashMap<>();
   private final ArrayList<Bar> bars = new ArrayList<>();
   private final Game game;
@@ -176,6 +177,10 @@ public abstract class Entity {
         cam.translateAWTGraphicsToWorldCoord(bound.getBottomRightCorner())
       );
     });
+  }
+  
+  public boolean isBeingControlled() {
+    return this.controller.map(controller -> controller.isActive()).orElse(false);
   }
 
   // This prefer 'false', so if there two entities
