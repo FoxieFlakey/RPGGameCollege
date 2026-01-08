@@ -121,6 +121,7 @@ public class InputToControllerBridge implements AutoCloseable {
     
     Keyboard keyboard = this.getWorld().getGame().getKeyboard();
     Mouse mouse = this.getWorld().getGame().getMouse();
+    Optional<Entity> maybeEntity = this.getEntity();
     Optional<LivingEntity> maybeLiving = this.getLivingEntity();
     float spawnCooldown = 0.3f;
     
@@ -129,15 +130,18 @@ public class InputToControllerBridge implements AutoCloseable {
       this.spawnCatCooldown = -1.0f;
     }
 
+    Vec2 spawnPos = maybeLiving.map(e -> e.getLegPos())
+        .orElseGet(() -> {
+          return maybeEntity.map(e -> e.getPos())
+            .orElseGet(() -> new Vec2(0.0f));
+        });
     if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = spawnCooldown;
       
       // Spawn cat
       CatEntity cat = new CatEntity(this.getWorld().getGame());
       this.getWorld().addEntity(cat);
-      
-      Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
-      cat.setPos(pos);
+      cat.setPos(spawnPos);
     }
     
     if (keyboard.getState(Button.V).isNowPressed() && this.spawnCatCooldown < 0.0f) {
@@ -146,9 +150,7 @@ public class InputToControllerBridge implements AutoCloseable {
       // Spawn cat
       ArcherCharacter archer = new ArcherCharacter(this.getWorld().getGame());
       this.getWorld().addEntity(archer);
-      
-      Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
-      archer.setPos(pos);
+      archer.setPos(spawnPos);
     }
     
     if (keyboard.getState(Button.B).isNowPressed() && this.spawnCatCooldown < 0.0f) {
@@ -156,9 +158,7 @@ public class InputToControllerBridge implements AutoCloseable {
       
       MageCharacter mage = new MageCharacter(this.getWorld().getGame());
       this.getWorld().addEntity(mage);
-      
-      Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
-      mage.setPos(pos);
+      mage.setPos(spawnPos);
     }
     
     if (keyboard.getState(Button.N).isNowPressed() && this.spawnCatCooldown < 0.0f) {
@@ -166,9 +166,7 @@ public class InputToControllerBridge implements AutoCloseable {
       
       TurretEntity turret = new TurretEntity(this.getWorld().getGame());
       this.getWorld().addEntity(turret);
-      
-      Vec2 pos = maybeLiving.map(e -> e.getLegPos()).orElse(new Vec2(0.0f, 0.0f));
-      turret.setPos(pos);
+      turret.setPos(spawnPos);
     }
     
     if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {

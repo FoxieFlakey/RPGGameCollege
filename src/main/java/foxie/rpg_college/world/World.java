@@ -289,16 +289,15 @@ public abstract class World {
     for (Entity e : this.entities.values()) {
       e.render(g, deltaTime);
       
-      // Render direction which the entity viewing
-      Vec2 entityPosOnScreen = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos());
-      IVec2 start = entityPosOnScreen.round();
-      IVec2 end = entityPosOnScreen.add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f)).round();
-
       if (this.getGame().isDebugEnabled()) {
+        // Render direction which the entity viewing
+        IVec2 start = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos()).round();
+        IVec2 end = this.game.getCamera().translateWorldToAWTGraphicsCoord(e.getPos().add(Vec2.unitVectorOfAngle(e.getRotation()).mul(50.0f))).round();
+        
         Stroke oldStroke = g.getStroke();
         
         g.setColor(Color.GREEN);
-        g.setStroke(new BasicStroke(5.0f));
+        g.setStroke(new BasicStroke(5.0f * this.game.getRenderScale()));
         g.drawLine(
           start.x(),
           start.y(),
