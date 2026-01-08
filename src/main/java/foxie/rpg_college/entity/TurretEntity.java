@@ -17,8 +17,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
   
   // Try look for new target every 1 second
   private static final float POLL_TIME = 1.0f;
-  private static final float LOOKUP_RADIUS = 700.0f;
-  private static final float ENGAGE_DISTANCE = 400.0f;
+  private static final float LOOKUP_RADIUS = 1000.0f;
+  private static final float ENGAGE_DISTANCE = 700.0f;
   
   private final Texture turretDead;
   private final Texture turretReady;
