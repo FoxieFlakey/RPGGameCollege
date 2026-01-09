@@ -67,6 +67,8 @@ public abstract class LivingEntity extends Entity {
     
     if (this.healthPoint <= 0.0f) {
       this.healthPoint = -1.0f;
+    } else if (this.healthPoint >= this.getMaxHealth()) {
+      this.healthPoint = this.getMaxHealth();
     }
     
     this.healthBar.val = this.getHealth();
