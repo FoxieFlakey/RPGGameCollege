@@ -86,7 +86,7 @@ public class HelpScreen extends ScreenWithText {
     if (keyboard.getState(Button.ArrowRight) == State.Clicked) {
       this.currentPage += 1;
       if (this.currentPage >= HelpScreen.PAGES.length) {
-        this.currentPage = HelpScreen.PAGES.length;
+        this.currentPage = HelpScreen.PAGES.length - 1;
       }
     }
     
