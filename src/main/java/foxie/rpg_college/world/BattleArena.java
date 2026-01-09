@@ -86,7 +86,7 @@ public class BattleArena extends World {
         Optional<Entity> player = this.getGame().getPlayer();
         if (player.isPresent() && player.get() instanceof LivingEntity) {
           LivingEntity playerEntity = (LivingEntity) player.get();
-          playerEntity.setHealth(playerEntity.getMaxHealth() + playerEntity.getMaxHealth() * 0.25f);
+          playerEntity.setHealth(playerEntity.getHealth() + playerEntity.getMaxHealth() * 0.25f);
         }
       }
     } else {
