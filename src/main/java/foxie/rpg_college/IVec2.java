@@ -1,5 +1,11 @@
 package foxie.rpg_college;
 
+// Ini adalah Vec2 sama persis
+// hanya methodnya lebih sedikit
+// karena beberapa method tidak dapat
+// digunakan dengan angka bulat
+//
+// Hanya bedanya meggunakan integer
 public record IVec2(int x, int y) {
   public IVec2 add(IVec2 rhs) {
     return new IVec2(this.x + rhs.x, this.y + rhs.y);
