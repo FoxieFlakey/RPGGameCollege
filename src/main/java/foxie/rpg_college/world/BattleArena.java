@@ -2,11 +2,14 @@ package foxie.rpg_college.world;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Vec2;
+import foxie.rpg_college.entity.Entity;
+import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.entity.TurretEntity;
 import foxie.rpg_college.texture.Texture;
 
@@ -37,6 +40,10 @@ public class BattleArena extends World {
     this.addTile(new IVec2(4,0), game.TILES.LAVA_TILE);
     this.addTile(new IVec2(4,4), game.TILES.PORTAL_TO_OVERWORLD);
     
+    this.addTile(new IVec2(-3,0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(-2,0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(-1,0), game.TILES.WALL_TILE);
+    this.addTile(new IVec2(0,0), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1,0), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1,1), game.TILES.WALL_TILE);
     this.addTile(new IVec2(1,2), game.TILES.WALL_TILE);
@@ -75,6 +82,12 @@ public class BattleArena extends World {
       if (this.turretRespawnDelay < 0.0f) {
         this.allTurretDestroyed = false;
         this.spawnTurrets();
+        
+        Optional<Entity> player = this.getGame().getPlayer();
+        if (player.isPresent() && player.get() instanceof LivingEntity) {
+          LivingEntity playerEntity = (LivingEntity) player.get();
+          playerEntity.setHealth(playerEntity.getMaxHealth() + playerEntity.getMaxHealth() * 0.25f);
+        }
       }
     } else {
       // Check if all turrets destroyed
