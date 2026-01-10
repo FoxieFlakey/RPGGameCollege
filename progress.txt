@@ -25,6 +25,7 @@ foxie.rpg_college.input.Keyboard
 foxie.rpg_college.world.WorldUtil
 foxie.rpg_college.input.Mouse
 foxie.rpg_college.Window
+foxie.rpg_college.WorldManager
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -59,6 +60,5 @@ foxie.rpg_college.ui.InGame
 foxie.rpg_college.ui.DeathScreen
 foxie.rpg_college.ui.ScreenWithText
 foxie.rpg_college.ui.HelpScreen
-foxie.rpg_college.WorldManager
 foxie.rpg_college.Game
 
