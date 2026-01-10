@@ -3,7 +3,14 @@ package foxie.rpg_college;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+// Kelas ini bertugas melacak sebuah "progress"
+// atau bar, seperti health bar dari 0.0f ke 100.0f
+// dan lain-lain
+//
+// Kelas ini juga memiliki opsi untuk memodifikasi warna
+// isi nya, warna bordernya sama warna yang tidak diisi
 public class Bar {
+  // Ukuran bar
   public static final float WIDTH = 200.0f;
   public static final float HEIGHT = 20.0f;
   
@@ -35,6 +42,10 @@ public class Bar {
   }
   
   // NOTE: 'pos' is center of the bar
+  // ---------------------------------
+  // Fungsi ini merender sebuah bar pada titik pos
+  // dngan skala 'renderScale' (jika ingin megecilkan
+  // atau membesarkan bar)
   public void render(float renderScale, Graphics2D g, Vec2 pos) {
     float percent = Util.clamp((this.val - this.min) / (this.max - this.min), 0.0f, 1.0f);
     int x = (int) (pos.x() - ((Bar.WIDTH * renderScale) / 2.0f));
