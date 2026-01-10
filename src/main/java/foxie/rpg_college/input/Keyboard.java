@@ -5,6 +5,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Optional;
 
+// AutoCloseable adalah interface Java yang memungkinkan
+// kelas untuk digunakan dalam try-use untuk otomatis
+// membersihkan resource-resource yang digunakannya
 public class Keyboard implements AutoCloseable {
   private final boolean buttonStateNow[] = new boolean[Button.values().length];
   
@@ -20,40 +23,72 @@ public class Keyboard implements AutoCloseable {
     window.addKeyListener(this.listener);
   }
 
+  // Mengupdate this.buttonState dari keadaan
+  // keyboard sekarang
+  //
+  // Saat keyboard baru dibuat dianggap sebelumnya buttonStatePrev
+  // tidak ditekan. Lalu saat ada tombol ditekan listener memasukkan
+  // true di buttonStateNow mengindikasi kalau tombol telah ditekan
+  //
+  // Beberapa saat kemudian program main memanggil fungsi ini untuk
+  // memeriksa update baru di tombol contohnya sebelumnya tombol
+  // belum ditekan lalu ditekan, artinya keadaan tombolnya adalah
+  // State.Clicked artinya sudah diklik (klik adalah sebelumnya lepas
+  // sekarang tekan)
   public void updateState() {
+    // Synchronized ini diperlukan karena mengakses array yang mungkin
+    // lagi dimodifikasi oleh listener
     synchronized (this.buttonStateNow) {
       int numKeys = Button.values().length;
       
       for (int i = 0; i < numKeys; i++) {
+        // Mengambil keadaan tombol sebelum sama sekarang
         boolean prev = this.buttonStatePrev[i];
         boolean now = this.buttonStateNow[i];
 
         if (prev && now) {
+          // Jika sebelum ditekan dan sesudah ditekan artinya ditahan
           this.buttonState[i] = State.Hold;
         } else if (prev && !now) {
+          // Jika sebelum ditekan dan sesudah tidak ditekan artinya
+          // tidak di click
           this.buttonState[i] = State.Unclicked;
         } else if (!prev && now) {
+          // Jika sebelum tidak ditekan dan sesudah ditekan artinya diclick
           this.buttonState[i] = State.Clicked;
         } else if (!prev && !now) {
+          // Jika sebelum tidak ditekan dan sesudah tidak ditekan
+          // arti tidak ditahan
           this.buttonState[i] = State.Unhold;
         }
       }
 
+      // Mengupdate keadaan tombol sehingga tombol sebelumnya
+      // sama dengan sekarang agar pemanggilan berikutnya dapat
+      // melihat update baru
       for (int i = 0; i < numKeys; i++) {
         this.buttonStatePrev[i] = this.buttonStateNow[i];
       }
     }
   }
 
+  // Mengambil keadaan tombol, ini tidak memerlukan
+  // synchronized karena 'buttonState' tidak diakses
+  // oleh thread yang membaca events
   public State getState(Button button) {
     return this.buttonState[button.ordinal()];
   }
 
+  // Menutup dan melakukan cleanup sehingga listener
+  // tidak perlu lagi karena Keyboard sudah selesai
+  // dipakai.
   @Override
   public void close() throws Exception {
     this.window.removeKeyListener(this.listener);
   }
 
+  // Kelas listener yang mendengar aksi-aksi
+  // yang terjadi berkaitan dengan tombol keyboard
   private class Listener extends KeyAdapter {
     private final Keyboard owner;
 
@@ -65,9 +100,18 @@ public class Keyboard implements AutoCloseable {
     public void keyReleased(KeyEvent e) {
       Optional<Button> button = fromVirtualKey(e.getKeyCode());
       if (button.isEmpty()) {
+        // Tombol tidak dikenali lalu kacangkan/ignore saja
         return;
       }
 
+      // Pertama menggunakan block synchornized kita mengambil
+      // kunci ekslusif di array buttonStateNow sehingga game
+      // tidak bisa mengakses isi saat tengah modifikasi
+      //
+      // Ini diperlukan karena di Java AWT, method-method listener
+      // berjalan di thread berbeda dan jalannya concurrent atau
+      // bersamaan denga main thread (thread yang memanggil fungsi
+      // main dan akhirnya menjalankan kode game)
       synchronized (this.owner.buttonStateNow) {
         this.owner.buttonStateNow[button.get().ordinal()] = false;
       }
@@ -80,11 +124,17 @@ public class Keyboard implements AutoCloseable {
         return;
       }
 
+      // Sama seperti untuk method keyReleased, hanya disimpan
+      // true karena telah di tekan
       synchronized (this.owner.buttonStateNow) {
         this.owner.buttonStateNow[button.get().ordinal()] = true;
       }
     }
 
+    // Method ini mengubah tombol dari KeyEvent.VK_* menjadi
+    // salah satu varian dari Button. Untuk memudahkan penggunaan
+    //
+    // Note: ini kurang lengkap
     private static Optional<Button> fromVirtualKey(int a) {
       switch (a) {
         case KeyEvent.VK_0:
@@ -249,6 +299,7 @@ public class Keyboard implements AutoCloseable {
     }
   }
 
+  // Enum berisi semua tombol yang dikenali
   public enum Button {
     A,
     B,
