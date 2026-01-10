@@ -1,5 +1,6 @@
 package foxie.rpg_college.ui;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 import foxie.rpg_college.Game;
@@ -8,6 +9,7 @@ import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.MageCharacter;
 import foxie.rpg_college.entity.WarriorCharacter;
+import foxie.rpg_college.entity.damage.DamageSource;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.State;
 import foxie.rpg_college.input.Keyboard.Button;
@@ -63,8 +65,11 @@ public class DeathScreen extends ScreenWithText {
   }
   private static final String TEXT = DeathScreen.build();
   
-  public DeathScreen(Game game) {
+  private final Optional<DamageSource> deathReason;
+  
+  public DeathScreen(Game game, Optional<DamageSource> deathReason) {
     super(game);
+    this.deathReason = deathReason;
   }
 
   @Override
