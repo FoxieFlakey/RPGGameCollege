@@ -20,6 +20,7 @@ foxie.rpg_college.tile.TileHelper
 foxie.rpg_college.entity.EntityHelper
 foxie.rpg_college.Bar
 foxie.rpg_college.texture.Texture
+foxie.rpg_college.texture.TextureManager
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -60,5 +61,4 @@ foxie.rpg_college.ui.HelpScreen
 foxie.rpg_college.Window
 foxie.rpg_college.WorldManager
 foxie.rpg_college.Game
-foxie.rpg_college.texture.TextureManager
 
