@@ -15,6 +15,7 @@ foxie.rpg_college.entity.damage.TileDamageSource
 foxie.rpg_college.input.State
 foxie.rpg_college.entity.Attackable
 foxie.rpg_college.entity.CollisionBox
+foxie.rpg_college.Main
 
 Not done
 foxie.rpg_college.entity.EntityHelper
@@ -58,7 +59,6 @@ foxie.rpg_college.Window
 foxie.rpg_college.WorldManager
 foxie.rpg_college.Bar
 foxie.rpg_college.Game
-foxie.rpg_college.Main
 foxie.rpg_college.texture.Texture
 foxie.rpg_college.texture.TextureManager
 

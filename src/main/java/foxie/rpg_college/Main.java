@@ -7,8 +7,17 @@ import java.util.Arrays;
 /**
  * Hello world!
  */
+// Kelas main ini cukup sederhana saja menparse command line
+// argument untuk mengsetting beberapa hal
 public class Main {
   public static void main(String[] args) {
+    // args adalah array yang berisi argument-arugment command line
+    // yang diberikan saat menjalan jar melalui command line
+    //
+    // java -jar 'game.jar' <args>
+    //
+    // 'args' akan berisi args yang berasal dari command di atas
+    
     System.out.println("Hello World!");
     List<String> argsList = Arrays.asList(args);
     
@@ -35,6 +44,14 @@ public class Main {
       doubleBuffer = true;
     }
     
+    // Pertaama ada syntax Java bername try-use
+    // ini berguna untuk melepaskan resource-resource
+    // yang dipakai oleh sebuah objek secara otomatis
+    // saat keluar dari try block
+    //
+    // Disini program membuat kelas game yang berisi
+    // state game yang diperlukan lalu juga menload
+    // hal-hal lain yang dipakai di game.
     try (Game game = new Game()) {
       if (isFullscreen) {
         game.setFullscreen(true);
@@ -48,6 +65,10 @@ public class Main {
         game.setRenderScale(scaling.get());
       }
       
+      // Setelah ini hampir game memiliki loop
+      // ini yang menjalankan logika-logika game
+      // dan juga merender selama game belum
+      // ditutup
       while (!game.isClosed()) {
         game.runOnce();
 
