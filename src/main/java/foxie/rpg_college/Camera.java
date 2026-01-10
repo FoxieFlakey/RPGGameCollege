@@ -88,8 +88,8 @@ public class Camera {
     return coord.div(this.getScale()).add(this.getVisibleWorld().getTopLeftCorner());
   }
   
-  public Vec2 translateScreenToAWTGraphicsCoord(Vec2 coord) {
-    return coord.mul(this.getScale());
+  public Vec2 scaleSize(Vec2 size) {
+    return size.mul(this.getScale());
   }
   
   // Fungsi ini membuat matriks AffineTransform yang digunakan
@@ -117,7 +117,7 @@ public class Camera {
   // menentukan titik dalam dunia dimana user mengklik
   // di layar output
   public Vec2 translateScreenToWorldCoord(Vec2 coord) {
-    return this.translateAWTGraphicsToWorldCoord(this.translateScreenToAWTGraphicsCoord(coord));
+    return this.translateAWTGraphicsToWorldCoord(this.scaleSize(coord));
   }
 
   public void setPosition(Vec2 newPos) {
