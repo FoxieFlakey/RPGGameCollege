@@ -10,6 +10,7 @@ foxie.rpg_college.Camera
 foxie.rpg_college.entity.Defenseable
 foxie.rpg_college.entity.damage.DamageSource
 foxie.rpg_college.entity.damage.BasicDamageSource
+foxie.rpg_college.entity.damage.EntityDamageSource
 foxie.rpg_college.entity.damage.TileDamageSource
 
 Not done
@@ -23,7 +24,6 @@ foxie.rpg_college.entity.controller.EntityController
 foxie.rpg_college.entity.controller.InputToControllerBridge
 foxie.rpg_college.entity.controller.ProjectileEntityController
 foxie.rpg_college.entity.Attackable
-foxie.rpg_college.entity.damage.EntityDamageSource
 foxie.rpg_college.entity.CharacterEntity
 foxie.rpg_college.entity.ArcherCharacter
 foxie.rpg_college.entity.ArrowEntity
