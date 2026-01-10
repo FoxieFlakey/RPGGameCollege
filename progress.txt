@@ -7,6 +7,7 @@ foxie.rpg_college.Orientation
 foxie.rpg_college.Util
 foxie.rpg_college.Vec2
 foxie.rpg_college.Camera
+foxie.rpg_college.entity.Defenseable
 
 Not done
 foxie.rpg_college.entity.CollisionBox
@@ -24,7 +25,6 @@ foxie.rpg_college.entity.damage.BasicDamageSource
 foxie.rpg_college.entity.damage.TileDamageSource
 foxie.rpg_college.entity.damage.EntityDamageSource
 foxie.rpg_college.entity.CharacterEntity
-foxie.rpg_college.entity.Defenseable
 foxie.rpg_college.entity.ArcherCharacter
 foxie.rpg_college.entity.ArrowEntity
 foxie.rpg_college.entity.CatEntity
