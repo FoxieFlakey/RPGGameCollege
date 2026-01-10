@@ -119,15 +119,8 @@ public class CollisionBox {
   }
 
   public boolean isCollided(CollisionBox other) {
-    FloatRectangle thisRect = new FloatRectangle(
-      this.pos,
-      this.pos.add(this.size)
-    );
-
-    FloatRectangle otherRect = new FloatRectangle(
-      other.pos,
-      other.pos.add(other.size)
-    );
+    FloatRectangle thisRect = this.asRect();
+    FloatRectangle otherRect = other.asRect();
 
     return thisRect.isIntersects(otherRect);
   }
