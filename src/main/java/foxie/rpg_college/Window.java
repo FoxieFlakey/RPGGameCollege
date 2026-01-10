@@ -15,10 +15,10 @@ import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Mouse;
 
 public class Window implements AutoCloseable {
-  public Frame window;
-  public Mouse mouse;
-  public Keyboard keyboard;
-  public BufferStrategy bufferStrategy;
+  private Frame window;
+  private Mouse mouse;
+  private Keyboard keyboard;
+  private BufferStrategy bufferStrategy;
   
   private static final GraphicsEnvironment GRAPHICS_ENVIRONMENT = GraphicsEnvironment.getLocalGraphicsEnvironment();
   private static final GraphicsDevice GRAPHICS_DEVICE = GRAPHICS_ENVIRONMENT.getDefaultScreenDevice();
@@ -125,6 +125,22 @@ public class Window implements AutoCloseable {
   
   public FloatRectangle getOutputArea() {
     return this.outputArea;
+  }
+  
+  public Frame getWindow() {
+    return this.window;
+  }
+  
+  public Keyboard getKeyboard() {
+    return this.keyboard;
+  }
+  
+  public Mouse getMouse() {
+    return this.mouse;
+  }
+  
+  public BufferStrategy getBufferStrategy() {
+    return this.bufferStrategy;
   }
   
   @Override

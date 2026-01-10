@@ -188,11 +188,11 @@ public class Game implements AutoCloseable {
   }
   
   public Keyboard getKeyboard() {
-    return this.window.keyboard;
+    return this.window.getKeyboard();
   }
   
   public Mouse getMouse() {
-    return this.window.mouse;
+    return this.window.getMouse();
   }
   
   public WorldManager getWorldManager() {
@@ -452,7 +452,7 @@ public class Game implements AutoCloseable {
         g.dispose();
       }
       
-      Graphics g2 = this.window.window.getGraphics();
+      Graphics g2 = this.window.getWindow().getGraphics();
       try {
         this.translateAndClipGraphics2D((Graphics2D) g2);
         g2.drawImage(
@@ -471,7 +471,7 @@ public class Game implements AutoCloseable {
         g2.dispose();
       }
     } else {
-      Graphics g = this.window.window.getGraphics();
+      Graphics g = this.window.getWindow().getGraphics();
       try {
         this.translateAndClipGraphics2D((Graphics2D) g);
         this.renderContent((Graphics2D) g, deltaTime);
