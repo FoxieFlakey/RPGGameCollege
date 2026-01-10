@@ -12,6 +12,7 @@ foxie.rpg_college.entity.damage.DamageSource
 foxie.rpg_college.entity.damage.BasicDamageSource
 foxie.rpg_college.entity.damage.EntityDamageSource
 foxie.rpg_college.entity.damage.TileDamageSource
+foxie.rpg_college.input.State
 
 Not done
 foxie.rpg_college.entity.CollisionBox
@@ -42,7 +43,6 @@ foxie.rpg_college.world.Overworld
 foxie.rpg_college.world.World
 foxie.rpg_college.world.WorldUtil
 foxie.rpg_college.input.Keyboard
-foxie.rpg_college.input.State
 foxie.rpg_college.input.Mouse
 foxie.rpg_college.tile.TileHelper
 foxie.rpg_college.tile.TileList
