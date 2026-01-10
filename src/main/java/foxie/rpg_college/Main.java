@@ -10,24 +10,23 @@ import java.util.Arrays;
 public class Main {
   public static void main(String[] args) {
     System.out.println("Hello World!");
-    List<String> argsList = Arrays.asList(args);
     
     Optional<Float> scaling = Optional.empty();
     boolean isFullscreen = false;
     boolean doubleBuffer = true;
-    for (String arg : argsList) {
+    for (String arg : args) {
       if (arg.startsWith("scaling=")) {
         String argVal = arg.replaceFirst("^scaling=", "");
         scaling = Optional.of(Float.parseFloat(argVal));
       }
-    }
-    
-    if (argsList.contains("fullscreen")) {
-      isFullscreen = true;
-    }
       
-    if (argsList.contains("no_double_buffering")) {
-      doubleBuffer = false;
+      if (arg.equals("fullscreen")) {
+        isFullscreen = true;
+      }
+      
+      if (arg.equals("no_double_buffering")) {
+        doubleBuffer = false;
+      }
     }
     
     if (scaling.isPresent() && !doubleBuffer) {
