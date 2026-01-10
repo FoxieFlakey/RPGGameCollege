@@ -8,9 +8,11 @@ import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.CatEntity;
 import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.MageCharacter;
+import foxie.rpg_college.entity.ProjectileEntity;
 import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.entity.damage.DamageSource;
 import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.entity.damage.ProjectileDamageSource;
 import foxie.rpg_college.entity.damage.TileDamageSource;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.State;
@@ -67,14 +69,24 @@ public class DeathScreen extends ScreenWithText {
       DamageSource deathReason = this.deathReason.get();
       if (deathReason instanceof EntityDamageSource) {
         EntityDamageSource killer = (EntityDamageSource) deathReason;
-        builder.append("Killed by ");
-        builder.append(killer.getSource().getName());
+        if (killer instanceof ProjectileDamageSource) {
+          ProjectileEntity projectile = ((ProjectileDamageSource) killer).getProjectile();
+          builder.append("Shot to death by ");
+          builder.append(killer.getSource().getName());
+          builder.append("\nUsing ");
+          builder.append(projectile.getName());
+        } else {
+          builder.append("Killed by ");
+          builder.append(killer.getSource().getName());
+        }
       } else if (deathReason instanceof TileDamageSource) {
         TileDamageSource killer = (TileDamageSource) deathReason;
-        builder.append("Stepped on ");
+        builder.append("Standed on ");
         builder.append(killer.getSource().getName(killer.getCoord()));
+        builder.append(" for too long");
       } else {
-        builder.append("Unknown killer");
+        builder.append("Unknown killer: ");
+        builder.append(deathReason.getName());
       }
       builder.append(" (Damage: ");
       builder.append(deathReason.getDamagePoint());

@@ -7,7 +7,7 @@ import foxie.rpg_college.Camera;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
-import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.entity.damage.ProjectileDamageSource;
 import foxie.rpg_college.texture.Texture;
 
 public class ArrowEntity extends ProjectileEntity implements Attackable {
@@ -60,7 +60,7 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   
   @Override
   public boolean attackSpecific(LivingEntity other) {
-    other.doDamage(new EntityDamageSource(this, this.damage));
+    other.doDamage(new ProjectileDamageSource(this, this.damage));
     return true;
   }
   

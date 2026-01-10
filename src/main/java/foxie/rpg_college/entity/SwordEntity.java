@@ -13,7 +13,7 @@ import foxie.rpg_college.IVec2;
 import foxie.rpg_college.Util;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
-import foxie.rpg_college.entity.damage.BasicDamageSource;
+import foxie.rpg_college.entity.damage.EntityDamageSource;
 import foxie.rpg_college.texture.Texture;
 import foxie.rpg_college.tile.Tile;
 
@@ -161,7 +161,7 @@ public class SwordEntity extends Entity {
           this.damagedEntities.add(affected.id);
           
           // Entity is affected
-          affected.doDamage(new BasicDamageSource("sword attack", this.damage));
+          affected.doDamage(new EntityDamageSource(this.wielder, this.damage));
         }
       }
     }
