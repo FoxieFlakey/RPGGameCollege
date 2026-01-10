@@ -18,8 +18,8 @@ public abstract class ScreenWithText extends Screen {
     float width = this.getGame().getOutputWidth();
     float height = this.getGame().getOutputHeight();
     
-    Vec2 textStart = new Vec2(width * 0.25f, height * 0.25f);
-    Vec2 textEnd = new Vec2(width * 0.75f, height * 0.75f);
+    Vec2 textStart = new Vec2(width * 0.10f, height * 0.10f);
+    Vec2 textEnd = new Vec2(width * 0.90f, height * 0.90f);
     
     g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.60f));
     g.fillRect(
