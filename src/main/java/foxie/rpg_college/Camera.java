@@ -88,6 +88,9 @@ public class Camera {
     return coord.div(this.getScale()).add(this.getVisibleWorld().getTopLeftCorner());
   }
   
+  // Method ini menscale ukuran 'size'
+  // sehingga ukuran benar di pada layar
+  // output
   public Vec2 scaleSize(Vec2 size) {
     return size.mul(this.getScale());
   }
