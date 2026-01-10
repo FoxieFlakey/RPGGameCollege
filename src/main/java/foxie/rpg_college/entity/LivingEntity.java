@@ -29,6 +29,7 @@ public abstract class LivingEntity extends Entity {
   private boolean flashState = false;
   
   private float timeToDie = 5.0f;
+  private Optional<DamageSource> deathBy = Optional.empty();
 
   public static final float FLASH_DURATION = 1.2f;
   public static final float FLASH_PERIOD = 0.1f;
@@ -53,6 +54,10 @@ public abstract class LivingEntity extends Entity {
   public boolean isDead() {
     return this.healthPoint <= 0.0f;
   }
+  
+  public Optional<DamageSource> getDeathReason() {
+    return this.deathBy;
+  }
 
   public float getHealth() {
     if (this.healthPoint <= 0.0f) {
@@ -72,6 +77,10 @@ public abstract class LivingEntity extends Entity {
     }
     
     this.healthBar.val = this.getHealth();
+    
+    if (health > 0.0f) {
+      this.deathBy = Optional.empty();
+    }
   }
 
   public void doDamage(DamageSource damageSource) {
@@ -94,6 +103,10 @@ public abstract class LivingEntity extends Entity {
 
     this.setHealth(this.healthPoint - damage);
     this.flash();
+    
+    if (this.isDead()) {
+      this.deathBy = Optional.of(damageSource);
+    }
   }
 
   public void flash() {

@@ -13,6 +13,14 @@ public class TileDamageSource extends DamageSource {
     this.coord = coord;
   }
   
+  public Tile getSource() {
+    return this.source;
+  }
+  
+  public IVec2 getCoord() {
+    return this.coord;
+  }
+  
   @Override
   public String getName() {
     return this.source.getName(coord);

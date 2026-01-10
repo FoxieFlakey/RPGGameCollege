@@ -17,6 +17,7 @@ import foxie.rpg_college.entity.TurretEntity;
 import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.entity.ArcherCharacter;
 import foxie.rpg_college.entity.controller.InputToControllerBridge;
+import foxie.rpg_college.entity.damage.DamageSource;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.Keyboard.Button;
 import foxie.rpg_college.input.Mouse;
@@ -490,14 +491,16 @@ public class Game implements AutoCloseable {
     this.getWorldManager().tick(deltaTime);
     
     boolean isPlayerDead = this.getPlayer().isEmpty();
+    Optional<DamageSource> deathReason = Optional.empty();
     if (this.getPlayer().isPresent() && this.getPlayer().get() instanceof LivingEntity) {
       LivingEntity player = (LivingEntity) this.getPlayer().get();
       isPlayerDead = player.isDead();
+      deathReason = player.getDeathReason();
     }
     
     if (isPlayerDead) {
       // Player is dead
-      this.currentScreen = new DeathScreen(this);
+      this.currentScreen = new DeathScreen(this, deathReason);
     }
     
     gameTime += deltaTime;

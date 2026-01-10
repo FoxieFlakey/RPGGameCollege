@@ -51,7 +51,7 @@ public abstract class Entity {
       throw new RuntimeException("Counter for entity ID overflowed!");
     }
     
-    name = this.getClass().getName() + " #" + this.id;
+    name = this.getClass().getSimpleName() + " #" + this.id;
   }
 
   public final Vec2 getPos() {

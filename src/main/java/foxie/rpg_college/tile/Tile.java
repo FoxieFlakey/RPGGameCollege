@@ -14,7 +14,7 @@ public abstract class Tile {
   public static final Vec2 SIZE = new Vec2(64.0f, 64.0f);
 
   protected final Game game;
-  private String name = this.getClass().getName();
+  private String name = this.getClass().getSimpleName();
 
   public Tile(Game game) {
     this.game = game;
