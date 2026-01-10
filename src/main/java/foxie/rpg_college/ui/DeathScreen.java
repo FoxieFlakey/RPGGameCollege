@@ -10,6 +10,8 @@ import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.MageCharacter;
 import foxie.rpg_college.entity.WarriorCharacter;
 import foxie.rpg_college.entity.damage.DamageSource;
+import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.entity.damage.TileDamageSource;
 import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.State;
 import foxie.rpg_college.input.Keyboard.Button;
@@ -50,9 +52,36 @@ public class DeathScreen extends ScreenWithText {
     )
   };
   
-  private static String build() {
+  private final String text;
+  
+  private final Optional<DamageSource> deathReason;
+  
+  public DeathScreen(Game game, Optional<DamageSource> deathReasonOptional) {
+    super(game);
+    this.deathReason = deathReasonOptional;
+    
     StringBuilder builder = new StringBuilder();
-    builder.append("YOU ARE DEAD!\n\n");
+    builder.append("YOU ARE DEAD!\n");
+    if (this.deathReason.isPresent()) {
+      builder.append("Reason: ");
+      DamageSource deathReason = this.deathReason.get();
+      if (deathReason instanceof EntityDamageSource) {
+        EntityDamageSource killer = (EntityDamageSource) deathReason;
+        builder.append("Killed by ");
+        builder.append(killer.getSource().getName());
+      } else if (deathReason instanceof TileDamageSource) {
+        TileDamageSource killer = (TileDamageSource) deathReason;
+        builder.append("Stepped on ");
+        builder.append(killer.getSource().getName(killer.getCoord()));
+      } else {
+        builder.append("Unknown killer");
+      }
+      builder.append(" (Damage: ");
+      builder.append(deathReason.getDamagePoint());
+      builder.append(")\n");
+    }
+    
+    builder.append("\n");
     for (Respawnable current : DeathScreen.RESPAWNABLES) {
       builder.append(". Press ");
       builder.append(current.buttonInString);
@@ -61,20 +90,12 @@ public class DeathScreen extends ScreenWithText {
       builder.append("\n");
     }
     builder.append("\nGood luck on your next attempt!");
-    return builder.toString();
-  }
-  private static final String TEXT = DeathScreen.build();
-  
-  private final Optional<DamageSource> deathReason;
-  
-  public DeathScreen(Game game, Optional<DamageSource> deathReason) {
-    super(game);
-    this.deathReason = deathReason;
+    this.text = builder.toString();
   }
 
   @Override
   public String getText() {
-    return DeathScreen.TEXT;
+    return this.text;
   }
 
   @Override
