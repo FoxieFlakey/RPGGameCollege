@@ -54,8 +54,8 @@ public class Camera {
     return coord.div(this.getScale()).add(this.getVisibleWorld().getTopLeftCorner());
   }
   
-  public Vec2 translateScreenToAWTGraphicsCoord(Vec2 coord) {
-    return coord.mul(this.getScale());
+  public Vec2 scaleSize(Vec2 size) {
+    return size.mul(this.getScale());
   }
   
   public AffineTransform getWorldToAWTGraphicsAffineTransform() {
@@ -68,7 +68,7 @@ public class Camera {
   }
   
   public Vec2 translateScreenToWorldCoord(Vec2 coord) {
-    return this.translateAWTGraphicsToWorldCoord(this.translateScreenToAWTGraphicsCoord(coord));
+    return this.translateAWTGraphicsToWorldCoord(this.scaleSize(coord));
   }
 
   public void setPosition(Vec2 newPos) {
