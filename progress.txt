@@ -14,9 +14,9 @@ foxie.rpg_college.entity.damage.EntityDamageSource
 foxie.rpg_college.entity.damage.TileDamageSource
 foxie.rpg_college.input.State
 foxie.rpg_college.entity.Attackable
+foxie.rpg_college.entity.CollisionBox
 
 Not done
-foxie.rpg_college.entity.CollisionBox
 foxie.rpg_college.entity.EntityHelper
 foxie.rpg_college.entity.ProjectileEntity
 foxie.rpg_college.entity.controller.ControlEventListener

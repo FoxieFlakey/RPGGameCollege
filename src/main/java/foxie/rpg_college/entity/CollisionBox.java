@@ -3,6 +3,17 @@ package foxie.rpg_college.entity;
 import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Vec2;
 
+// kelas CollisionBox menjelaskan letak tiap-tiap
+// kotak dan "beratnya" untuk melakukan simulasi
+// "fisika" kecil seperti mendorong kotak lain,
+// menabrak kotak lain, etc. Melambat jika kotak
+// lain terlalu lambat...
+//
+// Algoritma nya copy paste di edit dari wikipedia
+// dan karena itu agak sedikit berserakan. Karena
+// saat saya coba bikin versi sendiri.. selalu ada -w-
+// error atau gagal logikanya, seperti collision nya
+// salah
 public class CollisionBox {
   private Vec2 pos;
   private Vec2 size;
@@ -26,10 +37,13 @@ public class CollisionBox {
     this.isUnmoveable = isUnmoveable;
   }
 
+  // Konstructor ini khusus untuk yang memang tidak bisa
+  // bergerak, seperti tile atau batas dunia
   public CollisionBox(Vec2 pos, Vec2 size, boolean isUnmoveable) {
     this(0.0f, pos, size, isUnmoveable);
   }
 
+  // Set  posisi baru untuk colision box
   public void setPos(Vec2 pos) {
     // The 'pos' in this class is actually top left of the box not center
     Vec2 corrected = new Vec2(
@@ -39,6 +53,7 @@ public class CollisionBox {
     this.pos = corrected;
   }
 
+  // Mendapatkan posisi tengah didalam boxnya
   public Vec2 getPos() {
     // The 'pos' in this class is actually top left of the box not center
     Vec2 corrected = new Vec2(
@@ -48,6 +63,11 @@ public class CollisionBox {
     return corrected;
   }
 
+  // Mengambil berat dari box nya
+  // kalau tidak bisa bergerak return +infinity
+  // karena secara logika kotak yang beratnya
+  // tidak terbatas, tidak bisa bergerak sama
+  // sekali
   public float getWeight() {
     if (this.isUnmoveable) {
       return Float.POSITIVE_INFINITY;
@@ -58,6 +78,14 @@ public class CollisionBox {
 
   // Returns true if collision is fixed a.k.a there was collision
   // this also fixes other box
+  // ------------------------------------------------------------
+  // Method ini memeriksa tabrakan dan perbaiki kedua kotaknya
+  // kalau ditemukan ada tabrakan maka return true dan false
+  // jika tidak ada
+  //
+  // NOTE: logika dalam disini berserakan, hasil copy paste dari
+  // wikipedia lalu diedit sembarangan untuk adaptasi ssampai
+  // kodenya bisa jalan
   public boolean checkCollisionAndFix(CollisionBox other) {
     if (!this.isCollided(other)) {
       return false;
@@ -118,6 +146,7 @@ public class CollisionBox {
     return true;
   }
 
+  // Memeriksa apakah kedua kotak bertabrakan
   public boolean isCollided(CollisionBox other) {
     FloatRectangle thisRect = new FloatRectangle(
       this.pos,
@@ -136,6 +165,9 @@ public class CollisionBox {
     return this.isUnmoveable;
   }
   
+  // Mengubah CollisionBox ini menjadi
+  // FloatRectangle yang menunjuk ukuran
+  // dan posisi kotak tabrakannya
   public FloatRectangle asRect() {
     return new FloatRectangle(
       this.pos,
