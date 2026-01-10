@@ -149,10 +149,6 @@ public class Mouse implements AutoCloseable {
     @Override
     public void mouseExited(MouseEvent e) {
       synchronized (this.owner.lock) {
-        if (!this.isInteresting(e)) {
-          return;
-        }
-        
         this.owner.buttonStateNow[0] = false;
         this.owner.buttonStateNow[1] = false;
         this.owner.buttonStateNow[2] = false;
