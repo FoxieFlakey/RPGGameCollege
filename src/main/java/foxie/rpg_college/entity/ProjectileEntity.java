@@ -62,10 +62,6 @@ public abstract class ProjectileEntity extends Entity {
   
   void die() {
     this.getWorld().removeEntity(this);
-    
-    if (this.canDispatchControllerEvents()) {
-      this.getController().get().dispatchOnEntityNoLongerControllable();
-    }
   }
   
   public boolean hasProjectileHitSomething() {

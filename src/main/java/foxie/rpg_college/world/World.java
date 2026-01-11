@@ -99,7 +99,7 @@ public abstract class World {
 
     this.entities.put(entity.id, entity);
     if (entity.getWorld() != null) {
-      entity.getWorld().removeEntity(entity);
+      entity.getWorld().doRemoveEntityButDontDispatchEvents(entity);
     }
     entity.setWorld(this);
     
@@ -109,13 +109,24 @@ public abstract class World {
     }
   }
 
-  public void removeEntity(Entity entity) {
+  // This method is called when entity is removed from
+  // current world but dont dispatch any events
+  protected void doRemoveEntityButDontDispatchEvents(Entity entity) {
     if (!this.entities.containsKey(entity.id)) {
       throw new IllegalStateException("Attempt to remove unknown entity");
     }
 
     this.entities.remove(entity.id);
+  }
+
+  public void removeEntity(Entity entity) {
+    this.doRemoveEntityButDontDispatchEvents(entity);
     entity.setWorld(null);
+    if (entity.canDispatchControllerEvents()) {
+      if (entity.getController().isPresent()) {
+        entity.getController().get().dispatchOnEntityNoLongerControllable();
+      }
+    }
   }
   
   // The iterator must not be saved as new entitity may be added later
