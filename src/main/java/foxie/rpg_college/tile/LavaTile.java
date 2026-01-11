@@ -7,10 +7,12 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.IVec2;
 import foxie.rpg_college.entity.Entity;
+import foxie.rpg_college.entity.LivingEntity;
+import foxie.rpg_college.entity.damage.TileDamageSource;
 
 public class LavaTile extends Tile {
-  public static final float DAMAGE = 15.0f;
-  public static final float BURN_PERIOD = 1.0f;
+  private static final float DAMAGE = 15.0f;
+  private static final float BURN_PERIOD = 1.0f;
 
   public LavaTile(Game game) {
     super(game);
@@ -45,5 +47,8 @@ public class LavaTile extends Tile {
   
   @Override
   public void steppedBy(Entity e, IVec2 coord) {
+    if (e instanceof LivingEntity) {
+      ((LivingEntity) e).burn(LavaTile.BURN_PERIOD, new TileDamageSource(this, coord, LavaTile.DAMAGE));
+    }
   }
 }
