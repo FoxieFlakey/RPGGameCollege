@@ -45,6 +45,7 @@ foxie.rpg_college.entity.controller.ProjectileEntityController
 foxie.rpg_college.entity.controller.LivingEntityController
 foxie.rpg_college.entity.controller.InputToControllerBridge
 foxie.rpg_college.Game
+foxie.rpg_college.entity.Entity
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -52,7 +53,6 @@ foxie.rpg_college.entity.CharacterEntity
 foxie.rpg_college.entity.ArcherCharacter
 foxie.rpg_college.entity.ArrowEntity
 foxie.rpg_college.entity.CatEntity
-foxie.rpg_college.entity.Entity
 foxie.rpg_college.entity.LivingEntity
 foxie.rpg_college.entity.MageCharacter
 foxie.rpg_college.entity.ProjectileHelper
