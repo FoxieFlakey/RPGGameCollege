@@ -182,9 +182,6 @@ public abstract class LivingEntity extends Entity {
   
   public void die() {
     this.getWorld().removeEntity(this);
-    if (this.canDispatchControllerEvents()) {
-      this.getController().get().dispatchOnEntityNoLongerControllable();
-    }
   }
   
   // All living entities can be attacked

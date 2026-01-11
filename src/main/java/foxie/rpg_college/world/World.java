@@ -171,7 +171,7 @@ public abstract class World {
     // Pertama kita meremove entitynya dari
     // dunia lain jika ada
     if (entity.getWorld() != null) {
-      entity.getWorld().removeEntity(entity);
+      entity.getWorld().doRemoveEntityButDontDispatchEvents(entity);
     }
     
     // Lalu menambahkan entity tersebut ke dunia ini
@@ -186,15 +186,26 @@ public abstract class World {
     }
   }
 
-  // Fungsi sesuai namanya meremove entity dari
-  // dunia ini
-  public void removeEntity(Entity entity) {
+  // This method is called when entity is removed from
+  // current world but dont dispatch any events
+  protected void doRemoveEntityButDontDispatchEvents(Entity entity) {
     if (!this.entities.containsKey(entity.id)) {
       throw new IllegalStateException("Attempt to remove unknown entity");
     }
 
     this.entities.remove(entity.id);
+  }
+
+  // Fungsi sesuai namanya meremove entity dari
+  // dunia ini
+  public void removeEntity(Entity entity) {
+    this.doRemoveEntityButDontDispatchEvents(entity);
     entity.setWorld(null);
+    if (entity.canDispatchControllerEvents()) {
+      if (entity.getController().isPresent()) {
+        entity.getController().get().dispatchOnEntityNoLongerControllable();
+      }
+    }
   }
   
   // The iterator must not be saved as new entitity may be added later
