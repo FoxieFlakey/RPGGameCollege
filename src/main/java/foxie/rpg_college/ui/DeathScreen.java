@@ -18,15 +18,36 @@ import foxie.rpg_college.input.Keyboard;
 import foxie.rpg_college.input.State;
 import foxie.rpg_college.input.Keyboard.Button;
 
+// Layar yang ditampil saat player mati
+//
+// Kelas ini mengextend kelas ScreenWithText untuk memudahkan
+// implementasi sehingga tidak perlu menangani bagaimana teks
+// ditampilkan. Karena itu method render tidak di override
 public class DeathScreen extends ScreenWithText {
   private static record Respawnable(
+    // Dan description berisi descripsi untuk
+    // menjelaskan nama entity yang player dapat respawn sebagai
     String description,
+
+    // Ini tombol tetapi dalam
+    // bentuk string agar user dapat baca
     String buttonInString,
+    
+    // Tombol yang menrepresentasi kan pilihan mana
     Button button,
+
+    // Sebuah objek fungsi yang menjadi
+    // konstruktor untuk entity yang
+    // player respawn sebagai. Ini mengambil
+    // reference ke Game karena diperlukan
+    //
+    // Dan menghasilkan Entity
     Function<Game, Entity> constructor
   ) {
   };
   
+  // Disini adalah sebuah array yang berisi berbagai
+  // opsi player dapat respawn sebagai
   private static final Respawnable[] RESPAWNABLES = {
     new Respawnable(
       "Cat with sword",
@@ -54,14 +75,21 @@ public class DeathScreen extends ScreenWithText {
     )
   };
   
+  // Ini menyimpan teks yang muncul di layar mati tanpa
+  // perlu membuat string baru tiap render
   private final String text;
   
+  // Ini menyimpan alasan player mati, ini optional karena
+  // mungkin memang tidak ada alasan
   private final Optional<DamageSource> deathReason;
   
   public DeathScreen(Game game, Optional<DamageSource> deathReasonOptional) {
     super(game);
     this.deathReason = deathReasonOptional;
     
+    // ini adalah kode stringbuilder yang dicopy paste dari
+    // TM (hanya sebagian, yang menulis alasan mati tidak
+    // dimasukakn ke sana)
     StringBuilder builder = new StringBuilder();
     builder.append("YOU ARE DEAD!\n");
     if (this.deathReason.isPresent()) {
@@ -112,6 +140,8 @@ public class DeathScreen extends ScreenWithText {
 
   @Override
   public boolean handleInput() {
+    // Menghandle input dan memeriksa pilihan user
+    // untuk respawn sebagai apa
     Keyboard keyboard = this.getGame().getKeyboard();
     
     for (Respawnable current : DeathScreen.RESPAWNABLES) {
@@ -126,6 +156,8 @@ public class DeathScreen extends ScreenWithText {
 
   @Override
   public boolean canTickGame() {
+    // Saat dilayar mati, tidak melakukan
+    // apa-apa game dipause
     return false;
   }
   
