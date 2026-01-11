@@ -10,6 +10,7 @@ import foxie.rpg_college.entity.Entity;
 import foxie.rpg_college.entity.LivingEntity;
 import foxie.rpg_college.entity.damage.TileDamageSource;
 
+// Salah satu kelas tile yang dapat mendamage
 public class LavaTile extends Tile {
   private static final float DAMAGE = 15.0f;
   private static final float BURN_PERIOD = 1.0f;
@@ -30,6 +31,7 @@ public class LavaTile extends Tile {
 
   @Override
   public void render(Graphics2D g, float deltaTime, IVec2 position) {
+    // Sama saja dengan WallTile tetapi warna merah
     FloatRectangle renderBox = TileHelper.calculateRenderBox(this, position);
 
     int x = (int) renderBox.getTopLeftCorner().x();
@@ -47,6 +49,8 @@ public class LavaTile extends Tile {
   
   @Override
   public void steppedBy(Entity e, IVec2 coord) {
+    // Periksa apakah entity bisa dibakar kalau
+    // ia panggil burn untuk mulai pembakaran :3
     if (e instanceof LivingEntity) {
       ((LivingEntity) e).burn(LavaTile.BURN_PERIOD, new TileDamageSource(this, coord, LavaTile.DAMAGE));
     }
