@@ -26,6 +26,7 @@ foxie.rpg_college.world.WorldUtil
 foxie.rpg_college.input.Mouse
 foxie.rpg_college.Window
 foxie.rpg_college.WorldManager
+foxie.rpg_college.world.World
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -50,7 +51,6 @@ foxie.rpg_college.entity.SwordEntity
 foxie.rpg_college.entity.WarriorCharacter
 foxie.rpg_college.world.BattleArena
 foxie.rpg_college.world.Overworld
-foxie.rpg_college.world.World
 foxie.rpg_college.tile.TileList
 foxie.rpg_college.tile.LavaTile
 foxie.rpg_college.tile.PortalTile
