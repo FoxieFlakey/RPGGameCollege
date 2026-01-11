@@ -41,12 +41,12 @@ foxie.rpg_college.ui.HelpScreen
 foxie.rpg_college.entity.controller.Controller
 foxie.rpg_college.entity.controller.ControlEventListener
 foxie.rpg_college.entity.controller.EntityController
+foxie.rpg_college.entity.controller.ProjectileEntityController
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
 foxie.rpg_college.entity.controller.LivingEntityController
 foxie.rpg_college.entity.controller.InputToControllerBridge
-foxie.rpg_college.entity.controller.ProjectileEntityController
 foxie.rpg_college.entity.CharacterEntity
 foxie.rpg_college.entity.ArcherCharacter
 foxie.rpg_college.entity.ArrowEntity
