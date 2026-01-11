@@ -31,6 +31,7 @@ foxie.rpg_college.world.Overworld
 foxie.rpg_college.world.BattleArena
 foxie.rpg_college.tile.Tile
 foxie.rpg_college.ui.InGame
+foxie.rpg_college.tile.WallTile
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -56,7 +57,6 @@ foxie.rpg_college.entity.WarriorCharacter
 foxie.rpg_college.tile.TileList
 foxie.rpg_college.tile.LavaTile
 foxie.rpg_college.tile.PortalTile
-foxie.rpg_college.tile.WallTile
 foxie.rpg_college.ui.DeathScreen
 foxie.rpg_college.ui.ScreenWithText
 foxie.rpg_college.ui.HelpScreen
