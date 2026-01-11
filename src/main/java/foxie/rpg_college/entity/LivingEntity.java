@@ -12,8 +12,6 @@ import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.controller.Controller;
 import foxie.rpg_college.entity.controller.LivingEntityController;
 import foxie.rpg_college.entity.damage.DamageSource;
-import foxie.rpg_college.entity.damage.TileDamageSource;
-import foxie.rpg_college.tile.LavaTile;
 import foxie.rpg_college.tile.Tile;
 
 public abstract class LivingEntity extends Entity {
@@ -136,17 +134,13 @@ public abstract class LivingEntity extends Entity {
     return this.flashState;
   }
   
-  @Override
-  public void onTileStep(Tile tile, IVec2 tileCoord) {
-    super.onTileStep(tile, tileCoord);
-    
-    // Harm the living entity when stepped on lava
-    if (tile == this.getWorld().getGame().TILES.LAVA_TILE) {
-      if (this.canBurn()) {
-        this.burnTimer = LavaTile.BURN_PERIOD;
-        this.doDamage(new TileDamageSource(tile, tileCoord, LavaTile.DAMAGE));
-      }
+  public void burn(float burnTime, DamageSource source) {
+    if (!this.canBurn()) {
+      return;
     }
+
+    this.burnTimer = burnTime;
+    this.doDamage(source);
   }
   
   @Override
