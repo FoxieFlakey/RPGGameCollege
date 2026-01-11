@@ -32,10 +32,32 @@ import foxie.rpg_college.world.BattleArena;
 import foxie.rpg_college.world.Overworld;
 import foxie.rpg_college.world.World;
 
+// Kelas game, kelas ini menggabung banyak hal
+// dan menjadi penyimpan utama dari berbagai bagian
+// dari game, dimulai dari rendering, manajemen dunia,
+// manajeman input/output, menghandle fullscreen/etc, etc
+//
+// Ininya kelas Game menjadi orchestrator dalam game :3
+// Seperti analoginya konduktor dalam pertunjukkan
+// musik. Mengatur dan mengarahkan banyak hal berbeda-beda
+//
+// Karena banyak hal-hal yang ingin di ikat dan di atur
+// kelas ini memang besar, tidak bisa dipisah lagi karena
+// there too many functions and splitting it is unnecessary
+// cuz there always a need for a single class that
+// manages other things -w-
 public class Game implements AutoCloseable {
+  // Boolean untuk memeriksa apakah game
+  // sedang berjalan di method Game#runOnce
+  // Itu diperlukan agar menghindar tidak sengaja
+  // memanggil method it selama game sedang
+  // berjalan
   private boolean isRunning = false;
   
   // Double buffer stuffs
+  // -----------------------
+  // Ini penting untuk fungsi double buffering
+  // manual untuk menghindar screen tearing
   private int currentWidth = 0;
   private int currentHeight = 0;
   private BufferedImage buffer = null;
@@ -43,6 +65,19 @@ public class Game implements AutoCloseable {
   
   // Render scaling (essentially what the size the game actually
   // rendering at which is window size x render scale)
+  // -------------------------------------------------------------
+  // Render scale adalah skala output game dibanding ukuran
+  // window, ini mengizinkan program merender di resolusi
+  // contohnnya 50% lebih rendah dibanding output sebenarnya
+  // salah satu kegunaan nya adalah mungkin komputer tidak
+  // sanggup merender atau menjalankan game karena memang
+  // banyak hal berjalan di satu thread dan masih belum tau
+  // mengapa proses menggambar Graphics2D's Java menggunakan
+  // CPU.
+  //
+  // Kalau berjalan di versi web, web dapat meberikan skala
+  // seperti 30% untuk merendahkan beban. web lagi pula
+  // bukan desktop semuanya di emulasi :3
   private float renderScale = 1.0f;
 
   private final Window window;
@@ -51,20 +86,40 @@ public class Game implements AutoCloseable {
   private final InputToControllerBridge player;
   private final TextureManager textureManager = new TextureManager();
   
+  // Konstanta untuk ukuran sebagai referensi untuk berbagai
+  // kode untuk sizenya. Logika game dan render berjalan
+  // seolah-olah outputnya ke 1280x720 tetapi sebenarnya kelas
+  // input, output, camera, etc otomatis mengubahnya menjadi
+  // output sebenarnya. Dari pada render fixed ke buffer sebesar
+  // 1280x720, game dapat render pada resolusi native tetapi
+  // logika/unit ukuran tetap berjalan seolah-olah di render
+  // pakai layar 1280x720
   private static final float VIEW_WIDTH = 1280.0f;
   private static final float VIEW_HEIGHT = 720.0f;
   
+  // Ukuran default dan minimum untuk window
   private static final int INITIAL_RENDER_WIDTH = 1280;
   private static final int INITIAL_RENDER_HEIGHT = 720;
   
+  // Seberapa lama seblum entity baru bisa dispawn
+  // di mode debug
   private static final float SPAWN_COOLDOWN = 0.3f;
   
+  // Menyimpan waktu terakhir render agar dapat
+  // menghitung deltaTime
   private float lastRenderTime = Util.getTime();
+  // Melacak berapa detik game berjalan
   private float gameTime = 0.0f;
+  // apakah mode debug hidup
   private boolean debugEnabled = false;
+  // cooldown untuk spawn entity pada mode debug
+  // agar tidak menspam tidak sengaja
   private float spawnCatCooldown = -1.0f;
+  // Layar sekarang lagi aktif
   private Screen currentScreen;
   
+  // Menyimpan list tiles yang ada dalam game
+  // dan ini konstanta karena tidak berubah
   public final TileList TILES;
   
   public static final int TICK_RATE = 20;
@@ -101,22 +156,42 @@ public class Game implements AutoCloseable {
     this.worldManager.addWorld(WorldManager.OVERWORLD_ID, overworld);
     this.worldManager.addWorld(WorldManager.BATTLE_ARENA_ID, new BattleArena(this));
     
+    // Menambahkan beberapa entity basic
+    // ini juga kode yang lama ada sejak
+    // awal, hanya berubah bentuk saja
     ArcherCharacter playerEntity = new ArcherCharacter(this);
     overworld.addEntity(playerEntity);
     playerEntity.setPos(new Vec2(-500.0f, 300.0f));
     
+    // Ini juga sama, ditambahkan saat ingin
+    // mentest collision dan pengendalian
+    // entity lain
     CatEntity catEntity = new CatEntity(this);
     overworld.addEntity(catEntity);
     catEntity.setPos(new Vec2(-300.0f, 300.0f));
     
+    // Setelah itu buat layar baru yang menjadi menampilan
+    // game
     this.currentScreen = new InGame(this);
+
+    // Lalu memasukkan pengendali yang dari awal
+    // mengendalikan kucing
     this.player = new InputToControllerBridge(catEntity, new Vec2(Game.VIEW_WIDTH, Game.VIEW_HEIGHT), new Vec2(this.window.getRenderWidth(), this.window.getRenderHeight()));
     
     // Tick the game once to stabilize things
+    // --------------------------------------
+    // Menjalankan game sekali untuk menstabil
+    // hal
     this.runOnce();
+
+    // Lalu buka help screen
+    // sehingga user dapat
+    // mengetahui input-input yang ada
     this.currentScreen = new HelpScreen(this, this.currentScreen);
   }
   
+  // Mengupdate keadaan window sama camera
+  // agar dapat melihat hal yant telah diupdate
   void updateState() {
     this.window.updateState();
     this.updateCamera();
@@ -126,13 +201,24 @@ public class Game implements AutoCloseable {
     this.getCamera().setOutputSize(new Vec2(this.getOutputWidth(), this.getOutputHeight()));
   }
   
+  // Meminta player untuk respawn sebagai
+  // entity iini yang masih belum ditambahkan
+  // ke dunia
   public void respawn(Entity respawnedAs) {
+    // tambahkan entity nya lalu set lokasinya
+    // ke spawn point dunia
     this.getCurrentWorld().addEntity(respawnedAs);
     respawnedAs.setPos(this.getCurrentWorld().getWorldSpawnPoint());
     
+    // Lalu mengganti entity jadi yang dikendalikan
+    // oleh player
     this.player.setNewEntityToControl(respawnedAs);
+
+    // Lalu kembali ke layar game
     this.currentScreen = new InGame(this);
     
+    // Jika entitynya hidup, buat entity kedip
+    // sekali
     if (respawnedAs instanceof LivingEntity) {
       ((LivingEntity) respawnedAs).flash();
     }
@@ -179,6 +265,10 @@ public class Game implements AutoCloseable {
     return (int) Float.max((float) this.window.getRenderWidth() * this.renderScale, Game.VIEW_WIDTH * 0.05f);
   }
   
+  // Method ini mengambil output yang utuh
+  // langsung dari window, sesuai dengan area
+  // yang ditampilkan setelah diadjust oleh
+  // algoritma letter boxing
   public int getUnscaledOutputHeight() {
     return this.window.getRenderHeight();
   }
@@ -203,18 +293,26 @@ public class Game implements AutoCloseable {
     return this.gameTime;
   }
 
+  // Menjalankan logika game
+  // sekali
   public void runOnce() {
     if (this.isRunning) {
       throw new IllegalStateException("Cannot run game inside running game");
     }
     this.isRunning = true;
 
+    // Pertama updae statemnya
     this.updateState();
 
+    // Mengambil waktu sekarang lalu mendapatkan
+    // deltaTime dan update lastRenderTime
     float now = Util.getTime();
     float deltaTime = now - this.lastRenderTime;
     this.lastRenderTime = now;
 
+    // Lalu lakukan hal berikut dalam urutan ini
+    // tangani input user, lalu jalankan logika sekali
+    // akhirnya rende routputnya :3
     this.handleInput(deltaTime);
     this.tick(deltaTime);
     this.render(deltaTime);
@@ -236,11 +334,23 @@ public class Game implements AutoCloseable {
   
   public void setRenderScale(float scale) {
     if (scale < 0.1f) {
+      // Skala secara sengaja dibatasi paling
+      // kecil 10%, agar angka-angka tidak menjadi
+      // terlalu kecil dan men glitch game.
+      // Lagi pula 10% hampir tidak ada apa-apa untuk
+      // dilahat -w-
       throw new IllegalArgumentException("scale must be above 0.1");
     }
+
+    // Setting skala juga memerlukan double
+    // buffering, karena memang butuh dua
+    // satu yang kecil/besar sesuai skala
+    // buffer kedua adalah outputnya
     this.renderScale = scale;
     this.doubleBuffer = true;
     
+    // Lalu jangan lupa update kamera juga, agar
+    // sesuai dengan ukuran output baru
     this.updateCamera();
   }
   
@@ -248,6 +358,7 @@ public class Game implements AutoCloseable {
     return this.renderScale;
   }
   
+  // handle input-input untuk mode debug
   void handleDebugInputs(float deltaTime) {
     Camera camera = this.getCamera();
     Keyboard keyboard = this.getKeyboard();
@@ -261,11 +372,27 @@ public class Game implements AutoCloseable {
       this.spawnCatCooldown = -1.0f;
     }
 
+    // Method Optional#map mengubah value dalamnya
+    // dari satu ke lain, disini kita mencoba mengambil
+    // posisi kaki kalau hidup atau mengambil posisi
+    // entity nya sendiri kalau mati. Kalau tidak ada
+    // entity sama sekali, default nya ke 0, 0 titiknya
     Vec2 spawnPos = maybeLiving.map(e -> e.getLegPos())
         .orElseGet(() -> {
           return maybeEntity.map(e -> e.getPos())
             .orElseGet(() -> new Vec2(0.0f));
         });
+    
+    // Kode-kode berikut banyak duplikat saja untuk menspawn
+    // berbagai jenis yang ditulis sebagai berikut
+    //
+    // C => Kucing
+    // V => Archer
+    // B => Mage
+    // N => Turret
+    // M => Dummy living entity (HP tidak terbatas
+    //   untuk jadi boneka test saja untuk attack)
+    // , => Spawn warrior
     if (keyboard.getState(Button.C).isNowPressed() && this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = SPAWN_COOLDOWN;
       
@@ -316,25 +443,34 @@ public class Game implements AutoCloseable {
       turret.setPos(spawnPos);
     }
     
+    // Menspawn kucing di posisi dimana mouse diklik
     if (mouse.getButtonState(Mouse.Button.Left).isNowPressed() && this.spawnCatCooldown < 0.0f) {
       this.spawnCatCooldown = 0.1f;
       
       // Spawn cat
       CatEntity cat = new CatEntity(this.player.getWorld().getGame());
       this.player.getWorld().addEntity(cat);
+
+      // pertama mengambil posisi mouse nya dan translate dari layar
+      // ke koordinat dunia melalui kamera sehingga spawnnya tepat
+      // dibawah kursor kurang lebih
       cat.setPos(camera.translateScreenToWorldCoord(mouse.getMousePosition()));
     }
     
+    // Kalau klik tengah mengendalikan entity yang dibawah
+    // kursor
     if (this.getMouse().getButtonState(Mouse.Button.Middle) == State.Clicked) {
       Vec2 selectedPoint = this.getCamera().translateScreenToWorldCoord(this.getMouse().getMousePosition());
       
       // Control other entity lol
       Iterator<Entity> eligibleEntities = this.getCurrentWorld()
         .findEntitiesOverlaps(selectedPoint)
+        // Hanya memerlukan entity yang dapat dikontrol
         .filter(e -> e.canBeControlled())
         .iterator();
       
       if (eligibleEntities.hasNext()) {
+        // Kita mengambil hasil pertama jika ada untuk dikontrol:3
         Entity entity = eligibleEntities.next();
         this.player.setNewEntityToControl(entity);
       }
@@ -343,41 +479,58 @@ public class Game implements AutoCloseable {
 
   void handleInput(float deltaTime) {
     if (this.getKeyboard().getState(Keyboard.Button.Minus) == State.Clicked) {
+      // Jika tombol minus diklik kurangi skala rendernya
       this.setRenderScale(Float.max(0.1f, this.renderScale - 0.1f));
     }
     if (this.getKeyboard().getState(Keyboard.Button.Equal) == State.Clicked) {
+      // Jika tombol sama dengan diklik naikan skala rendernya
       this.setRenderScale(Float.min(3.0f, this.renderScale + 0.1f));
     }
     
     if (this.getKeyboard().getState(Keyboard.Button.F3) == State.Clicked) {
+      // Kalau F3, toggle mode debug
       this.debugEnabled = !this.debugEnabled;
     }
     
     if (this.getKeyboard().getState(Keyboard.Button.F11) == State.Clicked) {
+      // Toggle fullscreen untuk game nya
       this.window.toggleFullscreen();
     }
     
     // Input is consumed by screen
+    // -----------------------------
+    // Coba tangani input yang mungkin layar perlu seblum input-input lain
     if (!this.getScreen().handleInput()) {
+      // Layar meminta input tidak dilanjutkan jadi return disini
       return;
     }
     
     if (this.getKeyboard().getState(Keyboard.Button.F1) == State.Clicked) {
+      // Menampilkan layar help dengan F1
       this.currentScreen = new HelpScreen(this, this.currentScreen);
       return;
     }
     
     if (this.isDebugEnabled()) {
+      // kalau dalam mode debug, tangani input untuk debug
       this.handleDebugInputs(deltaTime);
     }
     
+    // Lalu handle input-input untuk pergerakan
     this.player.handleInput(deltaTime);
   }
   
+  // Ini mengambil Graphics2D lalu mengubahnya
+  // sehingga koordinat 0, 0 tepat diarea outputnya
+  //
+  // Digunakan untuk mode yang tidak double buffering
   void translateAndClipGraphics2D(Graphics2D g) {
     FloatRectangle outputAreaInWindow = this.window.getOutputArea();
     
     // Clear posibly empty left
+    // -------------------------
+    // Sisanya menghandle untuk membersihkan pixel-pixel disisi
+    // yang kosong setelah letterboxing
     int left = (int) outputAreaInWindow.getTopLeftCorner().x();
     int right = (int) outputAreaInWindow.getBottomRightCorner().x();
     int top = (int) outputAreaInWindow.getTopLeftCorner().y();
@@ -419,6 +572,7 @@ public class Game implements AutoCloseable {
     
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+    // setelah itu diklip jadi bagian yang di tampilkan hanya di dalam output yang benar
     g.setClip(
       (int) outputAreaInWindow.getTopLeftCorner().x(),
       (int) outputAreaInWindow.getTopLeftCorner().y(),
@@ -426,6 +580,8 @@ public class Game implements AutoCloseable {
       (int) outputAreaInWindow.getSize().y()
     );
     
+    // Setelah itu mentranslate sehingga 0,0 letaknya benar di
+    // output
     g.translate((int) outputAreaInWindow.getTopLeftCorner().x(), (int) outputAreaInWindow.getTopLeftCorner().y());
   }
   
@@ -440,6 +596,8 @@ public class Game implements AutoCloseable {
       int height = this.getOutputHeight();
       
       if (this.currentWidth != width || this.currentHeight != height) {
+        // Jika ukuran output nya berubah, buat buffer baru
+        // kalau tidak pakai buffer yang sama
         this.currentWidth = width;
         this.currentHeight = height;
         this.buffer = new BufferedImage(this.currentWidth, this.currentHeight, BufferedImage.TYPE_INT_RGB);
@@ -447,11 +605,13 @@ public class Game implements AutoCloseable {
       
       Graphics2D g = this.buffer.createGraphics();
       try {
+        // Render game kedalam buffer image
         this.renderContent(g, deltaTime);
       } finally {
         g.dispose();
       }
       
+      // Setelah itu akhirnya dicopy ke hasil windownya
       Graphics g2 = this.window.getWindow().getGraphics();
       try {
         this.translateAndClipGraphics2D((Graphics2D) g2);
@@ -471,6 +631,11 @@ public class Game implements AutoCloseable {
         g2.dispose();
       }
     } else {
+      // Mode tidak ada double buffering
+      // mode ini mengasumsi kalau getGraphics untuk window
+      // sebuah instance dari Graphics2D, dan metode ini
+      // sangat rentan dengan screen tearing atau flickering
+
       Graphics g = this.window.getWindow().getGraphics();
       try {
         this.translateAndClipGraphics2D((Graphics2D) g);
@@ -488,11 +653,14 @@ public class Game implements AutoCloseable {
     }
     
     // Tick the world and stuffs :3
+    // ----------------------------
+    // Majukan simulasi dunia :3
     this.getWorldManager().tick(deltaTime);
     
     boolean isPlayerDead = this.getPlayer().isEmpty();
     Optional<DamageSource> deathReason = Optional.empty();
     if (this.getPlayer().isPresent() && this.getPlayer().get() instanceof LivingEntity) {
+      // Dapatkan value untuk apakah player mati kalau bisa juga alasan mati nya
       LivingEntity player = (LivingEntity) this.getPlayer().get();
       isPlayerDead = player.isDead();
       deathReason = player.getDeathReason();
@@ -500,6 +668,8 @@ public class Game implements AutoCloseable {
     
     if (isPlayerDead) {
       // Player is dead
+      // ----------------
+      // Player mati jadi tampilkan layar mati
       this.currentScreen = new DeathScreen(this, deathReason);
     }
     
