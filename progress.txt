@@ -37,6 +37,7 @@ foxie.rpg_college.tile.PortalTile
 foxie.rpg_college.tile.LavaTile
 foxie.rpg_college.ui.DeathScreen
 foxie.rpg_college.ui.ScreenWithText
+foxie.rpg_college.ui.HelpScreen
 
 Not done
 foxie.rpg_college.entity.ProjectileEntity
@@ -59,6 +60,5 @@ foxie.rpg_college.entity.TurretEntity
 foxie.rpg_college.entity.DummyLivingEntity
 foxie.rpg_college.entity.SwordEntity
 foxie.rpg_college.entity.WarriorCharacter
-foxie.rpg_college.ui.HelpScreen
 foxie.rpg_college.Game
 
