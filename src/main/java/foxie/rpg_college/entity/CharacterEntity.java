@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import foxie.rpg_college.Bar;
 import foxie.rpg_college.Game;
+import foxie.rpg_college.Util;
 
 public abstract class CharacterEntity extends LivingEntity {
   private float manaPoint;
@@ -28,7 +29,7 @@ public abstract class CharacterEntity extends LivingEntity {
   }
   
   public void setManaPoint(float newPoint) {
-    this.manaPoint = Math.max(0.0f, newPoint);
+    this.manaPoint = Util.clamp(newPoint, 0.0f, this.getMaxManaPoint());
     this.manaBar.val = this.manaPoint;
   }
   
@@ -56,6 +57,8 @@ public abstract class CharacterEntity extends LivingEntity {
         this.setManaPoint(Math.min(this.getMaxManaPoint(), this.manaPoint + this.getManaRefillRate()));
       }
     }
+    
+    this.manaBar.max = this.getMaxManaPoint();
   }
   
   public abstract float getManaRefillPeriod();
