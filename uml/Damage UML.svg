@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="975" height="413" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="392" y="224" width="489" height="71" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="637" y="234">foxie.rpg_college.entity.damage.EntityDamageSource</text>
+	<line stroke="black" stroke-opacity="1" x1="392" y1="241" x2="881" y2="241" />
+	<line stroke="black" stroke-opacity="1" x1="392" y1="249" x2="881" y2="249" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="396" y="259">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="413" y="259">EntityDamageSource(inout source : foxie.rpg_college.entity.Entity, in damagePoint : float)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="396" y="274">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="413" y="274">getSource() : foxie.rpg_college.entity.Entity</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="396" y="289">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="413" y="289">getName() : String</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="30" y="19" width="319" height="109" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="190" y="29">foxie.rpg_college.entity.damage.DamageSource</text>
+	<line stroke="black" stroke-opacity="1" x1="30" y1="36" x2="349" y2="36" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="46">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="51" y="46">damagePoint : float</text>
+	<line stroke="black" stroke-opacity="1" x1="30" y1="53" x2="349" y2="53" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="63">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="51" y="63">DamageSource(in damagePoint : float)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="78">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="51" y="78">setDamagePoint(in newDamage : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="93">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="51" y="93">isCanceled() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="108">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="51" y="108">getDamagePoint() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="34" y="123">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-style="italic" x="51" y="123">getName() : String</text>
+</g>
+<g>
+	<line stroke="#000000" stroke-opacity="1" x1="552" y1="223" x2="331" y2="131" />
+	<line stroke="#000000" stroke-opacity="1" x1="326" y1="129" x2="329" y2="136" />
+	<line stroke="#000000" stroke-opacity="1" x1="326" y1="129" x2="333" y2="125" />
+	<line stroke="#000000" stroke-opacity="1" x1="329" y1="136" x2="333" y2="125" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="387" y="345" width="543" height="55" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="659" y="355">foxie.rpg_college.entity.damage.ProjectileDamageSource</text>
+	<line stroke="black" stroke-opacity="1" x1="387" y1="362" x2="930" y2="362" />
+	<line stroke="black" stroke-opacity="1" x1="387" y1="370" x2="930" y2="370" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="391" y="380">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="408" y="380">ProjectileDamageSource(inout source : foxie.rpg_college.entity.ProjectileEntity, in damagePoint : f...</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="391" y="395">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="408" y="395">getProjectile() : foxie.rpg_college.entity.ProjectileEntity</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="419" y="46" width="543" height="85" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="691" y="56">foxie.rpg_college.entity.damage.TileDamageSource</text>
+	<line stroke="black" stroke-opacity="1" x1="419" y1="63" x2="962" y2="63" />
+	<line stroke="black" stroke-opacity="1" x1="419" y1="71" x2="962" y2="71" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="423" y="81">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="440" y="81">TileDamageSource(inout source : foxie.rpg_college.tile.Tile, inout coord : foxie.rpg_college.IVec2,...</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="423" y="96">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="440" y="96">getSource() : foxie.rpg_college.tile.Tile</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="423" y="111">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="440" y="111">getCoord() : foxie.rpg_college.IVec2</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="423" y="126">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="440" y="126">getName() : String</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="9" y="217" width="353" height="65" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="186" y="227">foxie.rpg_college.entity.damage.BasicDamageSource</text>
+	<line stroke="black" stroke-opacity="1" x1="9" y1="234" x2="362" y2="234" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="13" y="244">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="30" y="244">name : String {readOnly}</text>
+	<line stroke="black" stroke-opacity="1" x1="9" y1="251" x2="362" y2="251" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="13" y="261">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="30" y="261">BasicDamageSource(in name : String, in damagePoint : float)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="13" y="276">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="30" y="276">getName() : String</text>
+</g>
+<g>
+	<line stroke="#000000" stroke-opacity="1" x1="186" y1="216" x2="187" y2="134" />
+	<line stroke="#000000" stroke-opacity="1" x1="188" y1="129" x2="181" y2="134" />
+	<line stroke="#000000" stroke-opacity="1" x1="188" y1="129" x2="193" y2="135" />
+	<line stroke="#000000" stroke-opacity="1" x1="181" y1="134" x2="193" y2="135" />
+</g>
+<g>
+	<line stroke="#000000" stroke-opacity="1" x1="418" y1="80" x2="355" y2="77" />
+	<line stroke="#000000" stroke-opacity="1" x1="350" y1="77" x2="355" y2="83" />
+	<line stroke="#000000" stroke-opacity="1" x1="350" y1="77" x2="356" y2="71" />
+	<line stroke="#000000" stroke-opacity="1" x1="355" y1="83" x2="356" y2="71" />
+</g>
+<g>
+	<line stroke="#000000" stroke-opacity="1" x1="633" y1="344" x2="634" y2="301" />
+	<line stroke="#000000" stroke-opacity="1" x1="635" y1="296" x2="628" y2="301" />
+	<line stroke="#000000" stroke-opacity="1" x1="635" y1="296" x2="640" y2="302" />
+	<line stroke="#000000" stroke-opacity="1" x1="628" y1="301" x2="640" y2="302" />
+</g>
+</svg>

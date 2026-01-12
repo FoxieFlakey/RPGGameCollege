@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1401" height="695" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="88" y="86" width="409" height="87" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-anchor="middle" x="293" y="96">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="293" y="113">foxie.rpg_college.entity.Attackable</text>
+	<line stroke="black" stroke-opacity="1" x1="88" y1="120" x2="497" y2="120" />
+	<line stroke="black" stroke-opacity="1" x1="88" y1="128" x2="497" y2="128" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="92" y="138">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="109" y="138">canAttack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="92" y="153">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="109" y="153">attackSpecific(inout other : foxie.rpg_college.entity.LivingEntity) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="92" y="168">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="109" y="168">attack() : boolean</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="540" y="46" width="427" height="73" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-anchor="middle" x="754" y="56">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="754" y="73">foxie.rpg_college.entity.Defenseable</text>
+	<line stroke="black" stroke-opacity="1" x1="540" y1="80" x2="967" y2="80" />
+	<line stroke="black" stroke-opacity="1" x1="540" y1="88" x2="967" y2="88" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="544" y="98">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="561" y="98">canDefense() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="544" y="113">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="561" y="113">defend(inout source : foxie.rpg_college.entity.damage.DamageSource) : void</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="905" y="331" width="383" height="289" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="1097" y="341">foxie.rpg_college.entity.MageCharacter</text>
+	<line stroke="black" stroke-opacity="1" x1="905" y1="348" x2="1288" y2="348" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="358">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="926" y="358">ATTACK_COOLDOWN : float =  0.5f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="373">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="926" y="373">ATTACK_MANA : float =  40.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="388">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="388">attackCooldown : float =  -1.0f</text>
+	<line stroke="black" stroke-opacity="1" x1="905" y1="395" x2="1288" y2="395" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="405">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="405">MageCharacter(inout game : foxie.rpg_college.Game)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="420">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="420">getManaRefillPeriod() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="435">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="435">getManaRefillRate() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="450">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="450">getMaxManaPoint() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="465">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="465">getLegBox() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="480">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="480">getMaxHealth() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="495">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="495">getMovementSpeed() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="510">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="510">canCollideWith(inout other : foxie.rpg_college.entity.Entity) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="525">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="525">getCollisionBox() : foxie.rpg_college.entity.CollisionBox</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="540">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="540">isVisible(inout cam : foxie.rpg_college.Camera) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="555">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="555">getRenderBound() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="570">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="570">render(inout g : Graphics2D, in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="585">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="585">canAttack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="600">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="600">tick(in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="909" y="615">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="926" y="615">attack() : boolean</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="24" y="322" width="383" height="259" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="216" y="332">foxie.rpg_college.entity.WarriorCharacter</text>
+	<line stroke="black" stroke-opacity="1" x1="24" y1="339" x2="407" y2="339" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="349">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="45" y="349">SWORD_DAMAGE : float =  20.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="364">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="45" y="364">SWORD_MANA_POINT : float =  20.0f {readOnly}</text>
+	<line stroke="black" stroke-opacity="1" x1="24" y1="371" x2="407" y2="371" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="381">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="381">WarriorCharacter(inout game : foxie.rpg_college.Game)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="396">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="396">getManaRefillPeriod() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="411">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="411">getManaRefillRate() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="426">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="426">getMaxManaPoint() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="441">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="441">getLegBox() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="456">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="456">getMaxHealth() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="471">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="471">getMovementSpeed() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="486">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="486">canCollideWith(inout other : foxie.rpg_college.entity.Entity) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="501">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="501">getCollisionBox() : foxie.rpg_college.entity.CollisionBox</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="516">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="516">isVisible(inout cam : foxie.rpg_college.Camera) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="531">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="531">getRenderBound() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="546">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="546">render(inout g : Graphics2D, in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="561">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="561">canAttack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="28" y="576">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="45" y="576">attack() : boolean</text>
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="441" y="317" width="429" height="365" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="656" y="327">foxie.rpg_college.entity.ArcherCharacter</text>
+	<line stroke="black" stroke-opacity="1" x1="441" y1="334" x2="870" y2="334" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="344">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="462" y="344">ATTACK_MANA_POINT : float =  7.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="359">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="462" y="359">MINIMAL_MANA_POINT_TO_DODGE : float =  50.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="374">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="462" y="374">MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT : float =  30.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="389">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="462" y="389">DODGE_MANA_POINT : float =  15.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="404">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="462" y="404">REDUCE_ARROW_DAMAGE_MANA_POINT : float =  10.0f {readOnly}</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="419">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="419">fireArrowCooldown : float =  -1.0f</text>
+	<line stroke="black" stroke-opacity="1" x1="441" y1="426" x2="870" y2="426" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="436">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="436">ArcherCharacter(inout game : foxie.rpg_college.Game)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="451">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="451">getMaxHealth() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="466">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="466">getMaxManaPoint() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="481">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="481">getManaRefillRate() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="496">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="496">getManaRefillPeriod() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="511">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="511">render(inout g : Graphics2D, in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="526">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="526">isVisible(inout cam : foxie.rpg_college.Camera) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="541">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="541">getCollisionBox() : foxie.rpg_college.entity.CollisionBox</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="556">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="556">canCollideWith(inout other : foxie.rpg_college.entity.Entity) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="571">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="571">getLegBox() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="586">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="586">getMovementSpeed() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="601">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="601">tick(in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="616">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="616">attack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="631">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="631">canAttack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="646">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="646">canDefense() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="661">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="661">defend(inout source : foxie.rpg_college.entity.damage.DamageSource) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="445" y="676">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="462" y="676">getRenderBound() : foxie.rpg_college.FloatRectangle</text>
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="#000000" stroke-opacity="1" x1="475" y1="316" x2="340" y2="178" />
+	<line stroke="#000000" stroke-opacity="1" x1="336" y1="174" x2="335" y2="182" />
+	<line stroke="#000000" stroke-opacity="1" x1="336" y1="174" x2="344" y2="174" />
+	<line stroke="#000000" stroke-opacity="1" x1="335" y1="182" x2="344" y2="174" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="#000000" stroke-opacity="1" x1="698" y1="316" x2="742" y2="125" />
+	<line stroke="#000000" stroke-opacity="1" x1="744" y1="120" x2="736" y2="124" />
+	<line stroke="#000000" stroke-opacity="1" x1="744" y1="120" x2="748" y2="127" />
+	<line stroke="#000000" stroke-opacity="1" x1="736" y1="124" x2="748" y2="127" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="#000000" stroke-opacity="1" x1="904" y1="391" x2="403" y2="176" />
+	<line stroke="#000000" stroke-opacity="1" x1="398" y1="174" x2="401" y2="181" />
+	<line stroke="#000000" stroke-opacity="1" x1="398" y1="174" x2="405" y2="170" />
+	<line stroke="#000000" stroke-opacity="1" x1="401" y1="181" x2="405" y2="170" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="#000000" stroke-opacity="1" x1="245" y1="321" x2="279" y2="179" />
+	<line stroke="#000000" stroke-opacity="1" x1="281" y1="174" x2="273" y2="178" />
+	<line stroke="#000000" stroke-opacity="1" x1="281" y1="174" x2="285" y2="181" />
+	<line stroke="#000000" stroke-opacity="1" x1="273" y1="178" x2="285" y2="181" />
+</g>
+<g>
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="1005" y="70" width="383" height="215" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="1197" y="80">foxie.rpg_college.entity.CatEntity</text>
+	<line stroke="black" stroke-opacity="1" x1="1005" y1="87" x2="1388" y2="87" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="97">-</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" text-decoration="underline" x="1026" y="97">SWORD_DAMAGE : float =  35.0f {readOnly}</text>
+	<line stroke="black" stroke-opacity="1" x1="1005" y1="104" x2="1388" y2="104" />
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="114">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="114">CatEntity(inout game : foxie.rpg_college.Game)</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="129">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="129">getMaxHealth() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="144">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="144">canCollideWith(inout other : foxie.rpg_college.entity.Entity) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="159">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="159">getCollisionBox() : foxie.rpg_college.entity.CollisionBox</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="174">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="174">isVisible(inout cam : foxie.rpg_college.Camera) : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="189">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="189">render(inout g : Graphics2D, in deltaTime : float) : void</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="204">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="204">getLegBox() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="219">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="219">getLegPos() : foxie.rpg_college.Vec2</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="234">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="234">getMovementSpeed() : float</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="249">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="249">getRenderBound() : foxie.rpg_college.FloatRectangle</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="264">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="264">canAttack() : boolean</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" font-weight="bold" x="1009" y="279">+</text>
+	<text font-family="MS Shell Dlg 2" font-size="8" fill="#000000" xml:space="preserve" x="1026" y="279">attack() : boolean</text>
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="#000000" stroke-opacity="1" x1="1004" y1="167" x2="503" y2="140" />
+	<line stroke="#000000" stroke-opacity="1" x1="498" y1="140" x2="503" y2="146" />
+	<line stroke="#000000" stroke-opacity="1" x1="498" y1="140" x2="504" y2="134" />
+	<line stroke="#000000" stroke-opacity="1" x1="503" y1="146" x2="504" y2="134" />
+</g>
+</svg>
