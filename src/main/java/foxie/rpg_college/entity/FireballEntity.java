@@ -39,12 +39,20 @@ public class FireballEntity extends ProjectileEntity {
 
   @Override
   public void onHit(Entity other) {
+    // Bola api menabrak langsug ke entity jadi lakukan damage ke entity nya
+    // dengan jumlah damage yang berbeda, karena tabrakan langsung lebih
+    // tinggi damagenya
     LivingEntity living = (LivingEntity) other;
     living.doDamage(new EntityDamageSource(this, FireballEntity.DAMAGE_DIRECT_HIT));
+    
+    // Setelah itu apply effect damage ke sekitar :3
+    // dan hindari entity yang kita baru damage
     this.doAreaOfEffect(other.getPos(), living);
   }
   
   void doAreaOfEffect(Vec2 pos, Entity avoidThis) {
+    // Disini mencari entity-enity yang valid untuk
+    // didamage oleh are of effect fireball
     Iterator<Entity> entitiesInEffect = this.getWorld()
       .findEntities(pos, EFFECT_RADIUS)
       .iterator();
@@ -64,6 +72,9 @@ public class FireballEntity extends ProjectileEntity {
   
   @Override
   public void onWorldBorderCollision() {
+    // Bola api telah menabrak ujung dunia -w-
+    // jadi lakukan "ledakan" dimana entity
+    // entity disekitar kena damage
     super.onWorldBorderCollision();
     this.doAreaOfEffect(this.getPos(), null);
     this.die();
@@ -71,6 +82,9 @@ public class FireballEntity extends ProjectileEntity {
   
   @Override
   public void onTileCollision(IVec2 coord, Tile other) {
+    // Bola api telah menabrak tile -w-
+    // jadi lakukan "ledakan" dimana entity
+    // entity disekitar kena damage
     super.onTileCollision(coord, other);
     this.doAreaOfEffect(this.getPos(), null);
     this.die();
