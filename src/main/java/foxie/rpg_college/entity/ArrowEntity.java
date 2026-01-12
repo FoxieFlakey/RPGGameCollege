@@ -10,7 +10,7 @@ import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.ProjectileDamageSource;
 import foxie.rpg_college.texture.Texture;
 
-public class ArrowEntity extends ProjectileEntity implements Attackable {
+public class ArrowEntity extends ProjectileEntity {
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
   private static final Vec2 COLLISION_SIZE = new Vec2(5.0f, 5.0f);
   
@@ -49,24 +49,7 @@ public class ArrowEntity extends ProjectileEntity implements Attackable {
   @Override
   public void onHit(Entity other) {
     LivingEntity living = (LivingEntity) other;
-    this.attackSpecific(living);
-  }
-  
-  @Override
-  public boolean attack() {
-    // Arrow cannot attack "generically", so does nothing it is acceptable
-    return false;
-  }
-  
-  @Override
-  public boolean attackSpecific(LivingEntity other) {
-    other.doDamage(new ProjectileDamageSource(this, this.damage));
-    return true;
-  }
-  
-  @Override
-  public boolean canAttack() {
-    return this.hasProjectileHitSomething();
+    living.doDamage(new ProjectileDamageSource(this, this.damage));
   }
   
   @Override
