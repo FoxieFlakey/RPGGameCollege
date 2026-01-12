@@ -225,6 +225,18 @@ public class InputToControllerBridge implements AutoCloseable {
     //
     // Normalize mengubah multiplier menjadi panjang 1.0f
     moveMultiplier = moveMultiplier.normalize();
+    
+    // Pergerakan dari input harus di normalkan dulu
+    // sehingga panjang vektor tetap 1.0f, Tanpa
+    // baris ini, pergerakan entity yang di kontrol
+    // bergerak pada kecepatan ~140% dari kecepatan normal
+    // dikarenakan sifat pythogoras. 140% berasal dari
+    // sqrt(1^2 + 1^2) = ~1.4142...
+    //
+    // Ini adalah kesalahan sering dilakukan oleh
+    // penulis game yang baru atau kurang mengenali
+    //
+    // Normalize mengubah multiplier menjadi panjang 1.0f
     moveMultiplier = moveMultiplier.mul(deltaTime);
     
     if (keyboard.getState(Button.Shift).isNowPressed()) {
