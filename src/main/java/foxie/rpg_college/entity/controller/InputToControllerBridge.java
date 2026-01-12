@@ -225,6 +225,7 @@ public class InputToControllerBridge implements AutoCloseable {
     //
     // Normalize mengubah multiplier menjadi panjang 1.0f
     moveMultiplier = moveMultiplier.normalize();
+    moveMultiplier = moveMultiplier.mul(deltaTime);
     
     if (keyboard.getState(Button.Shift).isNowPressed()) {
       moveMultiplier = moveMultiplier.mul(3.0f);
