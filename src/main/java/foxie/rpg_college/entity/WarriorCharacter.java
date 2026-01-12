@@ -14,10 +14,14 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
     175.0f,
     250.0f
   );
+  
+  // Damage dari pedang sama mana point nya yang dipakai
   private static final float SWORD_DAMAGE = 20.0f;
   private static final float SWORD_MANA_POINT = 20.0f;
   
   private final CollisionBox collisionBox = new CollisionBox(1.0f, new Vec2(0.0f, 0.0f), WarriorCharacter.SIZE);
+  
+  // Pedang yang lagi dipegang
   private Optional<SwordEntity> sword = Optional.empty();
   
   public WarriorCharacter(Game game) {
@@ -88,6 +92,8 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
   public void render(Graphics2D g, float deltaTime) {
     super.render(g, deltaTime);
     
+    // Warrior di render sebagai kotak saja, untuk sekarang karena
+    // belum ada texture
     FloatRectangle renderBox = this.getRenderBound().get();
     Color color = new Color(0.8f, 0.4f, 0.8f);
     
@@ -108,12 +114,15 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
     );
     
     if (this.sword.isPresent() && !this.sword.get().isDoneSwinging()) {
+      // Jika ada pedang, mulai mengayunkan nya
       this.sword.get().renderSword(g, deltaTime);
     }
   }
   
   @Override
   public boolean canAttack() {
+    // Hanya bisa menyerang jika pedang tidak ada pedang
+    // atau pedang selesai mengayun
     return (this.sword.isEmpty() || this.sword.get().isDoneSwinging()) &&
       this.getManaPoint() >= WarriorCharacter.SWORD_MANA_POINT;
   }
@@ -130,6 +139,7 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
     
     boolean isClockwise;
     
+    // Tentukan arah dimana pedang mengayun
     switch (this.getOrientation()) {
       case Right:
       case Down:
@@ -142,6 +152,8 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
         break;
     }
     
+    // Setelah itu membuat pedang baru denan
+    // damage dan arah ayung yang diinginkan
     SwordEntity sword = new SwordEntity(
       this.getGame(),
       this, WarriorCharacter.SWORD_DAMAGE,
@@ -159,6 +171,8 @@ public class WarriorCharacter extends HeroCharacter implements Attackable {
     this.getWorld().addEntity(sword);
     sword.updatePos();
     
+    // Setelah itu simpan pedangnya agar
+    // dapat diperiksa nanti
     this.sword = Optional.of(sword);
     return true;
   }
