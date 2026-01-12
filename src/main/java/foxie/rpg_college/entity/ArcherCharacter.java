@@ -12,7 +12,7 @@ import foxie.rpg_college.entity.damage.DamageSource;
 import foxie.rpg_college.entity.damage.EntityDamageSource;
 import foxie.rpg_college.texture.Texture;
 
-public class ArcherCharacter extends CharacterEntity implements Attackable, Defenseable {
+public class ArcherCharacter extends HeroCharacter implements Attackable, Defenseable {
   private static final Vec2 SIZE = new Vec2(
     140.0f,
     200.0f

@@ -9,7 +9,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 
-public class MageCharacter extends CharacterEntity implements Attackable {
+public class MageCharacter extends HeroCharacter implements Attackable {
   private static final Vec2 SIZE = new Vec2(
     140.0f,
     200.0f

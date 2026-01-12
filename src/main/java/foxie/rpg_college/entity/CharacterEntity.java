@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import foxie.rpg_college.Bar;
 import foxie.rpg_college.Game;
+import foxie.rpg_college.Util;
 
 // CharacterEntity adalah makhluk-makhluk hidup  yang memiliki
 // mana
@@ -32,7 +33,7 @@ public abstract class CharacterEntity extends LivingEntity {
   public void setManaPoint(float newPoint) {
     // Set value mana dan batasi sehingga tidak
     // melebihi batas dan update bar mana nya
-    this.manaPoint = Math.max(0.0f, newPoint);
+    this.manaPoint = Util.clamp(newPoint, 0.0f, this.getMaxManaPoint());
     this.manaBar.val = this.manaPoint;
   }
   
@@ -69,6 +70,8 @@ public abstract class CharacterEntity extends LivingEntity {
         this.setManaPoint(Math.min(this.getMaxManaPoint(), this.manaPoint + this.getManaRefillRate()));
       }
     }
+    
+    this.manaBar.max = this.getMaxManaPoint();
   }
   
   // Tiap karakter mengisi mananya pada kecepatan yang berbeda
