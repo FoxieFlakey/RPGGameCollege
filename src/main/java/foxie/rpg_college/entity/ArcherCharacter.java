@@ -9,7 +9,7 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 import foxie.rpg_college.entity.damage.DamageSource;
-import foxie.rpg_college.entity.damage.EntityDamageSource;
+import foxie.rpg_college.entity.damage.ProjectileDamageSource;
 import foxie.rpg_college.texture.Texture;
 
 public class ArcherCharacter extends HeroCharacter implements Attackable, Defenseable {
@@ -176,9 +176,9 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
   
   @Override
   public void defend(DamageSource source) {
-    if (source instanceof EntityDamageSource) {
-      EntityDamageSource entitySource = (EntityDamageSource) source;
-      if (entitySource.getSource() instanceof ArrowEntity) {
+    if (source instanceof ProjectileDamageSource) {
+      ProjectileDamageSource entitySource = (ProjectileDamageSource) source;
+      if (entitySource.getProjectile() instanceof ArrowEntity) {
         if (this.getManaPoint() >= ArcherCharacter.MINIMAL_MANA_POINT_TO_DODGE) {
           if (this.consumeManaPoint(ArcherCharacter.DODGE_MANA_POINT)) {
             source.setDamagePoint(0.0f);
