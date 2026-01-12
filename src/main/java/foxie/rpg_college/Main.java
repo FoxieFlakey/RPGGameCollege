@@ -1,8 +1,6 @@
 package foxie.rpg_college;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Arrays;
 
 /**
  * Hello world!
