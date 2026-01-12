@@ -56,6 +56,7 @@ foxie.rpg_college.entity.LivingEntity
 foxie.rpg_college.entity.CharacterEntity
 foxie.rpg_college.entity.SwordEntity
 foxie.rpg_college.entity.TurretEntity
+foxie.rpg_college.entity.HeroCharacter
 
 Not done
 foxie.rpg_college.entity.ArcherCharacter
