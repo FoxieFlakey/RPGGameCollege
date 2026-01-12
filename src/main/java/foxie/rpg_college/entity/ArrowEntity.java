@@ -11,9 +11,12 @@ import foxie.rpg_college.entity.damage.ProjectileDamageSource;
 import foxie.rpg_college.texture.Texture;
 
 public class ArrowEntity extends ProjectileEntity {
+  // Ukuran arrow yang tertampil sebenarnya lebih besar dari kotak tabraknnya :3
   private static final Vec2 RENDER_SIZE = new Vec2(12.0f, 28.0f).mul(2.5f);
   private static final Vec2 COLLISION_SIZE = new Vec2(5.0f, 5.0f);
   
+  // berat arrow dibuat sangat ringan karena arrow ringan relatif
+  // banyak target
   private CollisionBox collisionBox = new CollisionBox(0.0001f, new Vec2(0.0f, 0.0f), ArrowEntity.COLLISION_SIZE);
   
   private float damage = 5.0f;
@@ -31,10 +34,16 @@ public class ArrowEntity extends ProjectileEntity {
       LivingEntity living = (LivingEntity) other;
       if (living.isDead()) {
         // Dont collide with dead entity
+        // -------------------------------
+        // Entity yang sudah mati tidak bisa
+        // ditabrak
         return false;
       }
       return true;
     }
+    
+    // Arrow hanya melakukan damage ke entity
+    // hidup
     return false;
   }
   
@@ -48,6 +57,13 @@ public class ArrowEntity extends ProjectileEntity {
   
   @Override
   public void onHit(Entity other) {
+    // Arrow telah menyentuh atau menabrak target
+    // ini castnya safe karena onHit tidak akan dipanggil
+    // kalau canBeHit returnya false
+    //
+    // Jika disini dipanggil berarti canBeHit returnya true
+    // dan dimethod tersebut yang true hanya kalau 'other'
+    // bisa di cast ke LivingEntity
     LivingEntity living = (LivingEntity) other;
     living.doDamage(new ProjectileDamageSource(this, this.damage));
   }
