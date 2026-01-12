@@ -57,9 +57,9 @@ foxie.rpg_college.entity.CharacterEntity
 foxie.rpg_college.entity.SwordEntity
 foxie.rpg_college.entity.TurretEntity
 foxie.rpg_college.entity.HeroCharacter
+foxie.rpg_college.entity.ArcherCharacter
 
 Not done
-foxie.rpg_college.entity.ArcherCharacter
 foxie.rpg_college.entity.MageCharacter
 foxie.rpg_college.entity.WarriorCharacter
 

@@ -17,8 +17,12 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
     140.0f,
     200.0f
   );
+  
+  // Poin mana dipakai saat archer menyerang
   private static final float ATTACK_MANA_POINT = 7.0f;
   
+  // Lalu untuk point-point untuk berbagai aksi seperti
+  // mengelak, mengurangi damage arrow, kalau memenuhi minimum
   private static final float MINIMAL_MANA_POINT_TO_DODGE = 50.0f;
   private static final float MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT = 30.0f;
   private static final float DODGE_MANA_POINT = 15.0f;
@@ -27,6 +31,7 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
   private final CollisionBox collisionBox = new CollisionBox(10.0f, new Vec2(0.0f, 0.0f), ArcherCharacter.SIZE);
   private float fireArrowCooldown = -1.0f;
   
+  // Texture-texture untuk archer berbagai arah
   private final Texture facingDownTexture;
   private final Texture facingDownTextureFlashed;
   private final Texture deadTexture;
@@ -36,6 +41,7 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
     this.facingDownTexture = game.getTextureManager().getTexture("character/archer/facing_down");
     this.deadTexture = game.getTextureManager().getTexture("character/archer/dead");
     
+    // Mengubah warna sehingga lebih cerah untuk flashed
     float[] scale = { 2.0f, 1.3f, 1.3f, 1.0f };
     float[] offset = new float[4];
     this.facingDownTextureFlashed = new Texture(new RescaleOp(scale, offset, null).filter(this.facingDownTexture.image(), null));
@@ -68,13 +74,18 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
     Texture texture = this.facingDownTexture;
     
     if (this.getFlashState()) {
+      // Kalau mati berkedip memakai texture cerahnya
       texture = this.facingDownTextureFlashed;
     }
     
     if (this.isDead()) {
+      // Kalau mati memakai texture mati
       texture = this.deadTexture;
     }
     
+    // Sisa method ini sederhana saja
+    // merender texture dari yang sudah ditentukan
+    // ke output di Graphics2D
     FloatRectangle renderBox = EntityHelper.calculateRenderBox(this, ArcherCharacter.SIZE);
 
     int x = (int) renderBox.getTopLeftCorner().x();
@@ -118,6 +129,7 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
     Vec2 topLeftCollision = collision.getTopLeftCorner();
     Vec2 bottomRightCollision = collision.getBottomRightCorner();
     
+    // Kaki di archer technically di setangah kotak yang di bawah
     return new FloatRectangle(
       new Vec2(
         topLeftCollision.x(),
@@ -135,6 +147,8 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
   @Override
   public void tick(float deltaTime) {
     super.tick(deltaTime);
+    
+    // Majukan waktu untuk cooldown arrow
     this.fireArrowCooldown -= deltaTime;
     if (this.fireArrowCooldown < 0.0f) {
       this.fireArrowCooldown = -1.0f;
@@ -148,6 +162,7 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
     }
     
     if (!this.consumeManaPoint(ArcherCharacter.ATTACK_MANA_POINT)) {
+      // Jika mana tidak bisa di konsumsi, jadi tidak serang
       return false;
     }
     
@@ -169,6 +184,8 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
   
   @Override
   public boolean canDefense() {
+    // Archer bisa bertahan jika ada mana cukup unutk mengelak atau
+    // mengurangi damage
     return
       this.getManaPoint() >= ArcherCharacter.MINIMAL_MANA_POINT_TO_DODGE ||
       this.getManaPoint() >= ArcherCharacter.MINIMAL_REDUCED_ARROW_DAMAGE_MANA_POINT;
@@ -177,8 +194,12 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
   @Override
   public void defend(DamageSource source) {
     if (source instanceof ProjectileDamageSource) {
+      // Jika sumber damage nya adalah arrow coba mulai bertahan
       ProjectileDamageSource entitySource = (ProjectileDamageSource) source;
       if (entitySource.getProjectile() instanceof ArrowEntity) {
+        
+        // Kalau cukup mana untuk mengelak maka, set damage menjadi
+        // 0.0f seperti mengelak
         if (this.getManaPoint() >= ArcherCharacter.MINIMAL_MANA_POINT_TO_DODGE) {
           if (this.consumeManaPoint(ArcherCharacter.DODGE_MANA_POINT)) {
             source.setDamagePoint(0.0f);
@@ -187,6 +208,9 @@ public class ArcherCharacter extends HeroCharacter implements Attackable, Defens
           if (this.consumeManaPoint(ArcherCharacter.REDUCE_ARROW_DAMAGE_MANA_POINT)) {
             // Take 75% less damage from arrows. So only 25% of
             // damage is inflicted
+            // ---------------------------------------------------
+            // Jika tidak cukup untuk mengelak maka hanya damage 25%
+            // yang tertinggal untuk diddamage
             source.setDamagePoint(source.getDamagePoint() * 0.25f);
           }
         }
