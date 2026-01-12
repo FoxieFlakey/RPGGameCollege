@@ -9,6 +9,13 @@ import foxie.rpg_college.FloatRectangle;
 import foxie.rpg_college.Game;
 import foxie.rpg_college.Vec2;
 
+// Entity yang hidup dengan HP tidak terbatas
+//
+// Banyak method yang return langsung satu value saja
+// karena entity ini tidak ada logik atau fungsi special
+// yang special hanya HP nya tidak bisa dikurangi/edit
+//
+// And become a little test dummy :3
 public class DummyLivingEntity extends LivingEntity {
   private static final Vec2 SIZE = new Vec2(
     140.0f,
@@ -57,6 +64,9 @@ public class DummyLivingEntity extends LivingEntity {
   
   @Override
   public void setHealth(float health) {
+    // Input ke sethealth di ignore saja, karena HP
+    // "tidak terbatas" karena semua set disini maka
+    // tidak bisa kurangi atau diedit apa pun
     super.setHealth(this.getMaxHealth() * 0.9f);
   }
   
@@ -64,6 +74,8 @@ public class DummyLivingEntity extends LivingEntity {
   public void render(Graphics2D g, float deltaTime) {
     super.render(g, deltaTime);
     
+    // Method render sederhana saja, sebuah kotak hijau terang
+    // untuk entity ini
     FloatRectangle renderBox = this.getRenderBound().get();
     Color color = new Color(0.4f, 1.0f, 0.4f);
     
