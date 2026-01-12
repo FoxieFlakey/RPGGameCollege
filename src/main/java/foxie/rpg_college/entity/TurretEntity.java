@@ -13,18 +13,28 @@ import foxie.rpg_college.tile.Tile;
 
 public class TurretEntity extends LivingEntity implements Attackable {
   private static final Vec2 SIZE = Tile.SIZE;
+  
+  // Cooldown antara penembakan :3
   private static final float COOLDOWN = 0.5f;
   
   // Try look for new target every 1 second
+  // ---------------------------------------
+  // Konstanta-konstant init menetukan sebera sering
+  // turret mencari target, lallu menentukan sejauh
+  // apa turret mencari dan akhirnya menentukan jarak
+  // dimana turret mulai menembak
   private static final float POLL_TIME = 1.0f;
   private static final float LOOKUP_RADIUS = 2000.0f;
   private static final float ENGAGE_DISTANCE = 1300.0f;
   
+  // Texture-texture untuk beberapa turret dalam keadaan
+  // berbeda
   private final Texture turretDead;
   private final Texture turretReady;
   private final Texture turretNotReady;
   private final CollisionBox collisionBox = new CollisionBox(new Vec2(0.05f), TurretEntity.SIZE, true);
   
+  // Melacak waktu-waktung yang tertinggal sebelum cooldown dan pemeriksaan entity
   private float cooldown = -1.0f;
   private float pollDelay = -1.0f;
   private Optional<LivingEntity> currentTarget = Optional.empty();
@@ -39,6 +49,7 @@ public class TurretEntity extends LivingEntity implements Attackable {
 
   @Override
   public FloatRectangle getLegBox() {
+    // "Kaki" diambil dari kotak tabrakannya saja
     return collisionBox.asRect();
   }
 
@@ -49,11 +60,16 @@ public class TurretEntity extends LivingEntity implements Attackable {
 
   @Override
   public float getMovementSpeed() {
+    // Turret tidak bisa bergerak jadi return 0.0f saja
     return 0.0f;
   }
 
   @Override
   public boolean canCollideWith(Entity other) {
+    // Ini memeriksa apakah entity yang menabrak itu
+    // projectile, kalau iya, periksa apakah yang menembak
+    // itu juga turret lain, kalau iya jangan menabrak
+    // dengan projectile nya
     if (other instanceof ProjectileEntity && ((ProjectileEntity) other).getShooter() instanceof TurretEntity) {
       // Turret cannot be harmed by projectiles from turrets
       return false;
@@ -81,14 +97,19 @@ public class TurretEntity extends LivingEntity implements Attackable {
     super.render(g, deltaTime);
     
     Texture texture = this.turretNotReady;
+    
+    // Jika turret bisa menyerang pakai texture
+    // ready
     if (this.canAttack()) {
       texture = this.turretReady;
     }
     
     if (this.isDead()) {
+      // Kalau mati pakai texture untuk turret yang mana
       texture = this.turretDead;
     }
     
+    // Setelah render textture nya
     EntityHelper.renderRotated(this, g, texture.image(), TurretEntity.SIZE);
   }
 
@@ -110,28 +131,36 @@ public class TurretEntity extends LivingEntity implements Attackable {
       this.cooldown = -1.0f;
     }
     
+    // Jika bisa dicari, lakukan pencarian sekali
     if (this.pollDelay < 0.0f) {
       this.pollDelay = TurretEntity.POLL_TIME;
       this.tryLookForTarget();
     }
     
+    // Setelah itu periksa dimana targetnya
+    // kalau pindah dunia, turret lupakan
     if (this.currentTarget.isPresent() && this.currentTarget.get().getWorld() != this.getWorld()) {
       // Target moved to different world, forget them
       this.currentTarget = Optional.empty();
     }
     
+    // Kalau target mati, maka cari baru langsung
+    // tanpa menunggu
     if (this.currentTarget.isPresent() && this.currentTarget.get().isDead()) {
       this.pollDelay = TurretEntity.POLL_TIME;
       this.currentTarget = Optional.empty();
       this.tryLookForTarget();
     }
     
+    // Jika target masih hidup hadap ke targetnya
     if (this.currentTarget.isPresent() && !this.currentTarget.get().isDead()) {
       // Target still alive try aim to them
       LivingEntity target = this.currentTarget.get();
       this.setRotation(target.getPos().sub(this.getPos()).calculateAngle());
     }
     
+    // Jika jarak turret sama entity cukup dekat maka turret dapat mulai
+    // menyerak
     if (this.canAttack() && this.currentTarget.isPresent()) {
       LivingEntity target = this.currentTarget.get();
       if (EntityHelper.distanceBetween(this, target) <= TurretEntity.ENGAGE_DISTANCE) {
@@ -143,6 +172,10 @@ public class TurretEntity extends LivingEntity implements Attackable {
   
   private void tryLookForTarget() {
     // Looking for new target
+    // ---------------------------
+    // Mencari target baru yang bukan
+    // dirinya sama targetnya hidup dalam
+    // jarak tertentu
     Iterator<LivingEntity> potentialTargets = this.getWorld()
       .findEntities(this.getPos(), TurretEntity.LOOKUP_RADIUS)
       .filter(e -> e != this)
@@ -152,6 +185,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
       .filter(e -> !e.isDead())
       .iterator();
     
+    // Variabel-variabel untuk melacak entity
+    // yang terdekat
     LivingEntity bestEntity = null;
     float bestDistance = Float.POSITIVE_INFINITY;
     
@@ -159,12 +194,15 @@ public class TurretEntity extends LivingEntity implements Attackable {
       LivingEntity candidate = potentialTargets.next();
       float candidateDistance = EntityHelper.distanceBetween(this, candidate);
       
+      // Untuk tiap hasil, jika kandidat terbaik ditemukan
+      // maka update variabel-variabel nya
       if (candidateDistance < bestDistance) {
         bestEntity = candidate;
         bestDistance = candidateDistance;
       }
     }
     
+    // Jika temukan target, update targetnya
     if (bestEntity != null) {
       // We have found new target
       this.currentTarget = Optional.of(bestEntity);
@@ -177,6 +215,8 @@ public class TurretEntity extends LivingEntity implements Attackable {
       return false;
     }
     
+    // Spawn arrow pada posisi turretnya sama
+    // menghadap sama arah dengan turret
     this.cooldown = TurretEntity.COOLDOWN;
     ArrowEntity arrow = new ArrowEntity(this.getGame(), this);
     this.getWorld().addEntity(arrow);
