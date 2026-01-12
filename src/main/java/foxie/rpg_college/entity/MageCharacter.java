@@ -14,6 +14,9 @@ public class MageCharacter extends HeroCharacter implements Attackable {
     140.0f,
     200.0f
   );
+  
+  // Cooldown untuk penyerangan nya, Mage fireballny besar dan
+  // menyerang beberapa entity jadi mana dipakai sangat banyak
   private static final float ATTACK_COOLDOWN = 0.5f;
   private static final float ATTACK_MANA = 40.0f;
   
@@ -88,6 +91,7 @@ public class MageCharacter extends HeroCharacter implements Attackable {
   public void render(Graphics2D g, float deltaTime) {
     super.render(g, deltaTime);
     
+    /// Menampilkan mage sebagai kotak saja, belum ada texture
     FloatRectangle renderBox = this.getRenderBound().get();
     Color color = new Color(1.0f, 0.4f, 0.4f);
     
@@ -135,6 +139,8 @@ public class MageCharacter extends HeroCharacter implements Attackable {
     
     this.attackCooldown = MageCharacter.ATTACK_COOLDOWN;
     
+    // Spawn fireball untuk menyerang pada arah yang sedang
+    // di tunjukkan
     FireballEntity fireball = new FireballEntity(this.getGame(), this);
     this.getWorld().addEntity(fireball);
     fireball.setRotation(this.getRotation());
